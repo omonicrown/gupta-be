@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\Api\Links;
+
+// use ShortURL;
+use Exception;
+use App\Models\Link;
+use App\Models\LinkInfo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use AshAllenDesign\ShortURL\Facades\ShortURL;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
+class CreateCatalogController extends Controller
+{
+    /**
+     * Create Link
+     * @param Request $request
+     */
+    public function __invoke(Request $request)
+    {
+        try {
+
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required',
+                    'phone_number' => 'required'
+                ]
+            );
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
+            DB::beginTransaction();
+
+            $link = Link::create([
+                'name' => str_replace(' ', '', $request->name),
+                'type' => 'catalog',
+                'user_id' => auth()->user()->id
+            ]);
+
+            $shortURL = ShortURL::destinationUrl(
+                'https://www.whatsapp.com/catalog/'.substr($request->phone_number, 1)
+            )->urlKey(
+                $link->name
+            )->trackVisits()->make();
+
+            $info = LinkInfo::updateOrCreate(
+                [
+                    'link_id' => $link->id
+                ],
+                [
+                    'phone_number' => $request->phone_number,
+                ]
+            );
+
+            $link->update([
+               'short_url_id' => $shortURL->id
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Catalog Link Created Successfully',
+                'info' => $info,
+                'link' => $link,
+                'url'  => $shortURL->default_short_url
+            ], 200);
+
+        } catch(Exception $e) {
+
+            DB::rollback();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'link name already in use'
+            ], 500);
+        }
+    }
+}
+
