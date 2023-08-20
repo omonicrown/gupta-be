@@ -19,7 +19,7 @@ class AddLinksToTieredLink extends Controller
     public function __invoke(Request $request)
     {
         try {
-            DB::beginTransaction();
+            DB::beginTransaction(); 
             $link = MultiLink::create([
                 'link_id' => $request->id,
                 'attach_links' =>  $request->title,

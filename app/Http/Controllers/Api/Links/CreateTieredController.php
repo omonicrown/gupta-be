@@ -21,11 +21,18 @@ class CreateTieredController extends Controller
         try {
 
             DB::beginTransaction();
+            $uploadedFile2 = $request->logo;
+            $pin = mt_rand(10, 99);
+            $pics_2 = $uploadedFile2->hashName();
+            $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
+
+            $students = preg_split("/[,]/", $request->attach_links);
+
             $link = Link::create([
                 'name' => str_replace(' ', '', $request->name),
                 'title' =>  $request->title,
                 'type' =>  'tiered',
-                'logo' =>  $request->logo,
+                'logo' =>  $pics_2,
                 'bio' => $request->bio,
                 'business_website' => $request->business_website,
                 'business_policy' => $request->business_policy,
@@ -33,10 +40,17 @@ class CreateTieredController extends Controller
                 'user_id' => auth()->user()->id
             ]);
 
-        //    MultiLink::create([
-        //         'link_id' => $link->id,
-        //         'attach_links' =>  $request->title,
-        //    ]);
+            foreach ($students as $key => $value) {
+                MultiLink::create([
+                    'link_id' => $link->id,
+                    'attach_links' =>  $value,
+               ]);
+            }
+
+            //    MultiLink::create([
+            //         'link_id' => $link->id,
+            //         'attach_links' =>  $request->title,
+            //    ]);
 
 
             DB::commit();

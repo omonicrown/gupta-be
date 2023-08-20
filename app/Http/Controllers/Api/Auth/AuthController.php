@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Link;
+use App\Models\LinkInfo;
+use App\Models\Short;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -111,9 +113,17 @@ class AuthController extends Controller
      */
     public function session(Request $request): JsonResponse
     {
-        // return url click stats and add tracking to urls
         return response()->json(
             $request->user()->load('link', 'link.linkInfo', 'link.shortUrl', 'link.shortUrl.visits')
+        );
+    }
+
+    public function getLinks(Request $request): JsonResponse
+    {
+        return response()->json([
+            'status'=>true,
+            'data' => Link::where('type','message')->where('user_id',Auth::user()->id)->get()
+        ]
         );
     }
 

@@ -12,7 +12,9 @@ use App\Http\Controllers\Api\Links\CheckLinkController;
 use App\Http\Controllers\Api\Links\UpdateLinkInfoController;
 use App\Http\Controllers\Api\Links\CreateRandomLinkController;
 use App\Http\Controllers\Api\Links\CreateCatalogController;
+use App\Http\Controllers\Api\Links\CreateRandomUrlController;
 use App\Http\Controllers\Api\Links\CreateTieredController;
+use App\Http\Controllers\Api\Links\UpdateTieredController;
 use App\Http\Controllers\Api\Search\SearchLinksController;
 use App\Http\Controllers\Api\Profile\GetProfileController;
 use App\Http\Controllers\Api\Profile\UpdatePasswordController;
@@ -29,13 +31,15 @@ use App\Http\Controllers\Api\Profile\UpdateProfileController;
 |
 */
 
-Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/register', [AuthController::class, 'createUser']); 
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
+Route::post('/link/create-random-url', CreateRandomUrlController::class);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () { 
 
     Route::get('session', [AuthController::class, 'session']);
+    Route::get('getlinks', [AuthController::class, 'getLinks']);
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::prefix('profile')->group(function (Router $profile) {
@@ -57,6 +61,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('links')->group(function (Router $link) {
         $link->post('catalog', CreateCatalogController::class);
+        $link->delete('delete-tiered-link/{id}',[UpdateTieredController::class, 'DeleteLink']);
+        $link->put('update-tiered-link/{id}',[UpdateTieredController::class, 'updateTieredLink']);
+        $link->put('update-tiered-image/{id}',[UpdateTieredController::class, 'updateLogo']);
+        $link->get('get-tiered-links/{linkName}',[UpdateTieredController::class, 'getLinkDetails']);
         $link->post('tiered', CreateTieredController::class);
     });
 

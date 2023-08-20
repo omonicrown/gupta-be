@@ -7,7 +7,10 @@ use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
+use App\Models\LinkInfo;
+use App\Models\Short;
+use AshAllenDesign\ShortURL\Models\ShortURL;
+use AshAllenDesign\ShortURL\Models\ShortURLVisit;
 
 class DeleteLinksController extends Controller
 {
@@ -20,8 +23,12 @@ class DeleteLinksController extends Controller
         try {
 
             DB::beginTransaction();
-
-            $link = Link::whereId($id)->delete();
+            $link = Link::whereId($id)->first();
+            $short = ShortURL::where('url_key',$link->name)->first();
+            ShortURLVisit::where('short_url_id',$short->id)->forceDelete();
+            ShortURL::where('url_key',$link->name)->forceDelete();
+            $link = Link::whereId($id)->forceDelete();
+            $link = LinkInfo::where('link_id',$id)->forceDelete();
 
             DB::commit();
 

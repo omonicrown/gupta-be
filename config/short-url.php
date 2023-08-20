@@ -13,6 +13,8 @@ return [
     */
     'prefix' => null,
 
+    // 'default_url' => "samodex.com",
+
     /*
     |--------------------------------------------------------------------------
     | Middleware
@@ -98,7 +100,7 @@ return [
     | generated keys are unique.
     |
     */
-    'key_salt'              => 'AshAllenDesign\ShortURL',
+    'key_salt' => 'AshAllenDesign\ShortURL',
 
     /*
     |--------------------------------------------------------------------------
@@ -110,7 +112,7 @@ return [
     | and cannot contain spaces.
     |
     */
-    'alphabet'              => 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+    'alphabet' => 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
 
     /*
     |--------------------------------------------------------------------------

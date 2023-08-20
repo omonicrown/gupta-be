@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use OpenAI\Laravel\Facades\OpenAI;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', static fn () => response()->json(['status' => 'OK']));
+// Route::get('/', static fn () => response()->json(['status' => 'OK']));
+
+
+Route::get('/', function (){
+    $result = OpenAI::completions()->create([
+        'model' => 'text-davinci-003',
+        'prompt' => 'php',
+        'max_tokens' => 16,
+        // 'n' => 1
+    ]);
+    return response()->json($result['choices'][0]['text']);
+});
