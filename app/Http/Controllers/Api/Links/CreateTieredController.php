@@ -21,12 +21,15 @@ class CreateTieredController extends Controller
         try {
 
             DB::beginTransaction();
-            $uploadedFile2 = $request->logo;
-            $pin = mt_rand(10, 99);
-            $pics_2 = $uploadedFile2->hashName();
-            $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
-
+            $pics_2='';
+            if($request->logo !== '1'){
+                $uploadedFile2 = $request->logo;
+                $pin = mt_rand(10, 99);
+                $pics_2 = $uploadedFile2->hashName();
+                $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
+            }
             $students = preg_split("/[,]/", $request->attach_links);
+           
 
             $link = Link::create([
                 'name' => str_replace(' ', '', $request->name),
@@ -63,7 +66,7 @@ class CreateTieredController extends Controller
             DB::rollback();
             return response()->json([
                 'status' => false,
-                'message' => 'link name already in use'
+                'message' => ($e->getMessage())
             ], 500);
         }
     }

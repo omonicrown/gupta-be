@@ -41,7 +41,7 @@ class AddInfoToLinkController extends Controller
             }
 
             DB::beginTransaction();
-            if (Link::where('user_id', auth()->user()->id)->count() <= 5) {
+            // if (Link::where('user_id', auth()->user()->id)->count() <= 5) {
                 $link = Link::create([
                     'name' => str_replace(' ', '', $request->name),
                     'type' => 'message',
@@ -78,14 +78,14 @@ class AddInfoToLinkController extends Controller
                     'url'  => $shortURL->default_short_url,
                     'created' => Link::where('user_id', auth()->user()->id)->count()
                 ], 200);
-            }else{
-                return response()->json([
-                    'status' => true,
-                    'message' => 'You have used up your Limit.Upgrade to Pro',
-                    'error' => 1,
-                    'created' => Link::where('user_id', auth()->user()->id)->count()
-                ], 200);
-            }
+            // }else{
+            //     return response()->json([
+            //         'status' => true,
+            //         'message' => 'You have used up your Limit.Upgrade to Pro',
+            //         'error' => 1,
+            //         'created' => Link::where('user_id', auth()->user()->id)->count()
+            //     ], 200);
+            // }
         } catch (Exception $e) {
 
             DB::rollback();

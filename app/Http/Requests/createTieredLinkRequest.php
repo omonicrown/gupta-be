@@ -17,7 +17,7 @@ class createTieredLinkRequest extends FormRequest
             'name' =>['required', 'string'],
             'title' =>  ['required', 'string'],
             'id' =>  '',
-            'logo' =>  'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' =>  '',
             'bio' => ['required', 'string'],
             'attach_links' => ['required','string'],
             'business_website' => ['required', 'string'],

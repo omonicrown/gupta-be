@@ -51,8 +51,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function multiLink(): HasMany  
+    {
+        return $this->hasMany(Link::class)->where('type','tiered');
+    }
+
+    public function allLink(): HasMany  
+    {
+        return $this->hasMany(Link::class)->where('type','message');
+    }
+
     public function link(): HasMany
     {
-        return $this->hasMany(Link::class);
+        return $this->hasMany(Link::class)->where('type','message')->orWhere('type','catalog');
     }
 }

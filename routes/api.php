@@ -14,7 +14,10 @@ use App\Http\Controllers\Api\Links\CreateRandomLinkController;
 use App\Http\Controllers\Api\Links\CreateCatalogController;
 use App\Http\Controllers\Api\Links\CreateRandomUrlController;
 use App\Http\Controllers\Api\Links\CreateTieredController;
+use App\Http\Controllers\Api\Links\GetSingleLinksController;
 use App\Http\Controllers\Api\Links\UpdateTieredController;
+use App\Http\Controllers\Api\MarketPlace\MarketLinkController;
+use App\Http\Controllers\Api\MarketPlace\ProductController;
 use App\Http\Controllers\Api\Search\SearchLinksController;
 use App\Http\Controllers\Api\Profile\GetProfileController;
 use App\Http\Controllers\Api\Profile\UpdatePasswordController;
@@ -36,10 +39,16 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);
 
+Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
+
 Route::middleware('auth:sanctum')->group(function () { 
 
     Route::get('session', [AuthController::class, 'session']);
-    Route::get('getlinks', [AuthController::class, 'getLinks']);
+    Route::get('getlinks', [AuthController::class, 'getLinks']);  
+    Route::get('get-multi-links', [AuthController::class, 'getMultiLinks']);
+
+    Route::get('getlinksByName/{name}', [AuthController::class, 'getlinksByName']);
+
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::prefix('profile')->group(function (Router $profile) {
@@ -48,10 +57,11 @@ Route::middleware('auth:sanctum')->group(function () {
         $profile->post('password', UpdatePasswordController::class);
     });
 
-    Route::post('search', SearchLinksController::class);
+    Route::post('search', SearchLinksController::class); 
 
     Route::prefix('links')->group(function (Router $link) {
         $link->post('', CreateLinksController::class);
+        $link->get('link-details/{id}', GetSingleLinksController::class);
         $link->put('update/{id}', UpdateLinksController::class);
         $link->delete('delete/{id}', DeleteLinksController::class);
         $link->post('add-info', AddInfoToLinkController::class);
@@ -59,12 +69,18 @@ Route::middleware('auth:sanctum')->group(function () {
         $link->put('update-link-info/{id}', UpdateLinkInfoController::class);
     });
 
+    Route::prefix('market-links')->group(function (Router $link) {
+        $link->post('', [MarketLinkController::class,'CreateMarketLink']);
+        $link->post('create-product', [ProductController::class,'CreateProduct']);
+    });
+
     Route::prefix('links')->group(function (Router $link) {
         $link->post('catalog', CreateCatalogController::class);
         $link->delete('delete-tiered-link/{id}',[UpdateTieredController::class, 'DeleteLink']);
-        $link->put('update-tiered-link/{id}',[UpdateTieredController::class, 'updateTieredLink']);
-        $link->put('update-tiered-image/{id}',[UpdateTieredController::class, 'updateLogo']);
+        $link->post('update-tiered-link',[UpdateTieredController::class, 'updateTieredLink']);
+        $link->put('update-tiered-image/{id}',[UpdateTieredController::class, 'updateLogo']); 
         $link->get('get-tiered-links/{linkName}',[UpdateTieredController::class, 'getLinkDetails']);
+        // $link->get('get-tiered-link/{linkName}',[UpdateTieredController::class, 'getLinkDetailByName']);
         $link->post('tiered', CreateTieredController::class);
     });
 

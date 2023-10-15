@@ -17,14 +17,14 @@ class UpdateTieredController extends Controller
      * Create Link
      * @param Request $request
      */
-    public function updateTieredLink(createTieredLinkRequest $request, $id)
+    public function updateTieredLink(Request $request)
     {
         try {
-
+            // if ($data['article_image2'] !== 'No selected file') {
             DB::beginTransaction();
             $students = preg_split("/[,]/", $request->attach_links);
 
-            $Link = Link::where('id', $id);
+            $Link = Link::where('id', $request->id)->first();
             $Link->name = str_replace(' ', '', $request->name);
             $Link->title = $request->title;
             $Link->bio = $request->bio;
@@ -34,10 +34,10 @@ class UpdateTieredController extends Controller
             $Link->title = $request->title;
             $Link->save();
 
-            MultiLink::where('link_id', $id)->forceDelete();
+            MultiLink::where('link_id', $request->id)->forceDelete();
             foreach ($students as $key => $value) {
                 MultiLink::create([
-                    'link_id' => $id,
+                    'link_id' => $request->id,
                     'attach_links' =>  $value,
                 ]);
             }
@@ -51,7 +51,7 @@ class UpdateTieredController extends Controller
             DB::rollback();
             return response()->json([
                 'status' => false,
-                'message' => 'link name already in use'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
@@ -61,12 +61,29 @@ class UpdateTieredController extends Controller
     {
         try {
             $link = Link::where('id',$linkName)->first();
-            $MultiLink = MultiLink::where('link_id',$link->id)->get();
+            $MultiLink = MultiLink::where('link_id',$link->id)->get(['attach_links']);
             return $this->success( 'Fetched Successfully',['multiLinks'=>$link,'attachLinks'=>$MultiLink]);
         } catch (Exception $th) {
-            return $this->error($th);
-        }
-       
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        } 
+
+    }
+
+    public function getLinkDetailByName($linkName)
+    {
+        try {
+            $link = Link::where('name',$linkName)->where('type','tiered')->first();
+            $MultiLink = MultiLink::where('link_id',$link->id)->get(['attach_links']);
+            return $this->success( 'Fetched Successfully',['multiLinks'=>$link,'attachLinks'=>$MultiLink]);
+        } catch (Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        } 
 
     }
 

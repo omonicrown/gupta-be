@@ -109,20 +109,49 @@ class AuthController extends Controller
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @return JsonResponse  
      */
+
+     
+
+
     public function session(Request $request): JsonResponse
+    { 
+        return response()->json(
+            $request->user()->load("link", 'link.linkInfo', 'link.shortUrl', 'link.shortUrl.visits')
+        );
+    } 
+
+    public function allLinks(Request $request): JsonResponse
+    { 
+        return response()->json(
+            $request->user()->load("allLink", 'allLink.linkInfo', 'allLink.shortUrl', 'allLink.shortUrl.visits')
+        );
+    } 
+
+    public function getMultiLinks(Request $request): JsonResponse
     {
         return response()->json(
-            $request->user()->load('link', 'link.linkInfo', 'link.shortUrl', 'link.shortUrl.visits')
+            $request->user()->load("multiLink", 'multiLink.linkInfo', 'multiLink.shortUrl', 'multiLink.shortUrl.visits')
         );
-    }
+    } 
 
     public function getLinks(Request $request): JsonResponse
     {
         return response()->json([
             'status'=>true,
-            'data' => Link::where('type','message')->where('user_id',Auth::user()->id)->get()
+            'data' => Link::where('type','message')->where('user_id',Auth::user()->id)->get(['name'])
+        ]
+        );
+    }
+
+    public function getlinksByName(Request $request,$name): JsonResponse
+    {
+        $Link = Link::where('type','tiered')->where('name',$name)->first();
+        $Links = Link::where('type','message')->where('user_id',$Link->user_id)->get(['name']);
+        return response()->json([
+            'status'=>true,
+            'data' => $Links
         ]
         );
     }
