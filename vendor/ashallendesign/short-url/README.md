@@ -47,6 +47,7 @@
             - [Default Tracking](#default-tracking)
             - [Tracking Fields](#tracking-fields)
         - [Config Validation](#config-validation)
+        - [Custom Database Connection](#custom-database-connection)
     - [Helper Methods](#helper-methods)
         - [Visits](#visits)
         - [Find by URL Key](#find-by-url-key)
@@ -318,13 +319,13 @@ $shortURLObject = $builder->activateAt(\Carbon\Carbon::now()->addDay())
 
 #### Using a Custom Seed
 
-By default, the package will use the ID of the last inserted short URL as the seed for generating a short URL's key. In some cases, you may want to use a custom seed instead. To do this, you can pass an integer to the `generateUsing` method like so:
+By default, the package will use the ID of the last inserted short URL as the seed for generating a short URL's key. In some cases, you may want to use a custom seed instead. To do this, you can pass an integer to the `generateKeyUsing` method like so:
 
  ```php
 $builder = new \AshAllenDesign\ShortURL\Classes\Builder();
  
 $shortURLObject = $builder->destinationUrl('https://destination.com')
-    ->generateUsing(12345)
+    ->generateKeyUsing(12345)
     ->make();
  ```
 
@@ -564,6 +565,16 @@ following option in the config:
 ```
 'validate_config' => true,
 ``` 
+
+#### Custom Database Connection
+
+By default, Short URL will use your application's default database connection. But there may be times that you'd like to use a different connection. For example, you might be building a multi-tenant application that uses a separate connection for each tenant, and you may want to store the short URLs in a central database.
+
+To do this, you can set the connection name using the `connection` config value in the `config/short-url.php` file like so:
+
+```
+'connection' => 'custom_database_connection_name',
+```
 
 ### Helper Methods
 #### Visits

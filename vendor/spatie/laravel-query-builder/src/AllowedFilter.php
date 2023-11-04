@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\Filters\Filter;
 use Spatie\QueryBuilder\Filters\FiltersBeginsWithStrict;
 use Spatie\QueryBuilder\Filters\FiltersCallback;
+use Spatie\QueryBuilder\Filters\FiltersEndsWithStrict;
 use Spatie\QueryBuilder\Filters\FiltersExact;
 use Spatie\QueryBuilder\Filters\FiltersPartial;
 use Spatie\QueryBuilder\Filters\FiltersScope;
@@ -28,6 +29,12 @@ class AllowedFilter
     /** @var mixed */
     protected $default;
 
+    /** @var bool */
+    protected $hasDefault = false;
+
+    /** @var bool */
+    protected $nullable = false;
+
     public function __construct(string $name, Filter $filterClass, ?string $internalName = null)
     {
         $this->name = $name;
@@ -43,7 +50,7 @@ class AllowedFilter
     {
         $valueToFilter = $this->resolveValueForFiltering($value);
 
-        if (is_null($valueToFilter)) {
+        if (! $this->nullable && is_null($valueToFilter)) {
             return;
         }
 
@@ -76,6 +83,13 @@ class AllowedFilter
         static::setFilterArrayValueDelimiter($arrayValueDelimiter);
 
         return new static($name, new FiltersBeginsWithStrict($addRelationConstraint), $internalName);
+    }
+
+    public static function endsWithStrict(string $name, $internalName = null, bool $addRelationConstraint = true, string $arrayValueDelimiter = null): self
+    {
+        static::setFilterArrayValueDelimiter($arrayValueDelimiter);
+
+        return new static($name, new FiltersEndsWithStrict($addRelationConstraint), $internalName);
     }
 
     public static function scope(string $name, $internalName = null, string $arrayValueDelimiter = null): self
@@ -135,7 +149,12 @@ class AllowedFilter
 
     public function default($value): self
     {
+        $this->hasDefault = true;
         $this->default = $value;
+
+        if (is_null($value)) {
+            $this->nullable(true);
+        }
 
         return $this;
     }
@@ -147,7 +166,14 @@ class AllowedFilter
 
     public function hasDefault(): bool
     {
-        return isset($this->default);
+        return $this->hasDefault;
+    }
+
+    public function nullable(bool $nullable = true): self
+    {
+        $this->nullable = $nullable;
+
+        return $this;
     }
 
     protected function resolveValueForFiltering($value)

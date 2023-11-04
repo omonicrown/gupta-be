@@ -29,8 +29,12 @@ trait AddsIncludesToQuery
                     return collect([$include]);
                 }
 
-                if (Str::endsWith($include, config('query-builder.count_suffix'))) {
+                if (Str::endsWith($include, config('query-builder.count_suffix', 'Count'))) {
                     return AllowedInclude::count($include);
+                }
+
+                if (Str::endsWith($include, config('query-builder.exists_suffix', 'Exists'))) {
+                    return AllowedInclude::exists($include);
                 }
 
                 return AllowedInclude::relationship($include);

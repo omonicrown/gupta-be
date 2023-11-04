@@ -2,9 +2,12 @@
 
 namespace Spatie\QueryBuilder;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\Includes\IncludedCallback;
 use Spatie\QueryBuilder\Includes\IncludedCount;
+use Spatie\QueryBuilder\Includes\IncludedExists;
 use Spatie\QueryBuilder\Includes\IncludedRelationship;
 use Spatie\QueryBuilder\Includes\IncludeInterface;
 
@@ -40,12 +43,18 @@ class AllowedInclude
                 ]);
 
                 if (! Str::contains($relationship, '.')) {
-                    $suffix = config('query-builder.count_suffix');
+                    $countSuffix = config('query-builder.count_suffix', 'Count');
+                    $existsSuffix = config('query-builder.exists_suffix', 'Exists');
 
-                    $includes = $includes->merge(self::count(
-                        $alias.$suffix,
-                        $relationship.$suffix
-                    ));
+                    $includes = $includes
+                        ->merge(self::count(
+                            $alias.$countSuffix,
+                            $relationship.$countSuffix
+                        ))
+                        ->merge(self::exists(
+                            $alias.$existsSuffix,
+                            $relationship.$existsSuffix
+                        ));
                 }
 
                 return $includes;
@@ -56,6 +65,20 @@ class AllowedInclude
     {
         return collect([
             new static($name, new IncludedCount(), $internalName),
+        ]);
+    }
+
+    public static function exists(string $name, ?string $internalName = null): Collection
+    {
+        return collect([
+            new static($name, new IncludedExists(), $internalName),
+        ]);
+    }
+
+    public static function callback(string $name, Closure $callback, ?string $internalName = null): Collection
+    {
+        return collect([
+            new static($name, new IncludedCallback($callback), $internalName),
         ]);
     }
 

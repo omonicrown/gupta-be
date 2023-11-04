@@ -34,7 +34,7 @@ class QueryBuilderRequest extends Request
 
     public function includes(): Collection
     {
-        $includeParameterName = config('query-builder.parameters.include');
+        $includeParameterName = config('query-builder.parameters.include', 'include');
 
         $includeParts = $this->getRequestData($includeParameterName);
 
@@ -47,7 +47,7 @@ class QueryBuilderRequest extends Request
 
     public function appends(): Collection
     {
-        $appendParameterName = config('query-builder.parameters.append');
+        $appendParameterName = config('query-builder.parameters.append', 'append');
 
         $appendParts = $this->getRequestData($appendParameterName);
 
@@ -60,22 +60,42 @@ class QueryBuilderRequest extends Request
 
     public function fields(): Collection
     {
-        $fieldsParameterName = config('query-builder.parameters.fields');
+        $fieldsParameterName = config('query-builder.parameters.fields', 'fields');
+        $fieldsData = $this->getRequestData($fieldsParameterName);
 
-        $fieldsPerTable = collect($this->getRequestData($fieldsParameterName));
+        $fieldsPerTable = collect(is_string($fieldsData) ? explode(static::getFieldsArrayValueDelimiter(), $fieldsData) : $fieldsData);
 
         if ($fieldsPerTable->isEmpty()) {
             return collect();
         }
 
-        return $fieldsPerTable->map(function ($fields) {
-            return explode(static::getFieldsArrayValueDelimiter(), $fields);
+        $fields = [];
+
+        $fieldsPerTable->each(function ($tableFields, $model) use (&$fields) {
+            if (is_numeric($model)) {
+                // If the field is in dot notation, we'll grab the table without the field.
+                // If the field isn't in dot notation we want the base table. We'll use `_` and replace it later.
+                $model = Str::contains($tableFields, '.') ? Str::beforeLast($tableFields, '.') : '_';
+            }
+
+            if (! isset($fields[$model])) {
+                $fields[$model] = [];
+            }
+
+            // If the field is in dot notation, we'll grab the field without the tables:
+            $tableFields = array_map(function (string $field) {
+                return Str::afterLast($field, '.');
+            }, explode(static::getFieldsArrayValueDelimiter(), $tableFields));
+
+            $fields[$model] = array_merge($fields[$model], $tableFields);
         });
+
+        return collect($fields);
     }
 
     public function sorts(): Collection
     {
-        $sortParameterName = config('query-builder.parameters.sort');
+        $sortParameterName = config('query-builder.parameters.sort', 'sort');
 
         $sortParts = $this->getRequestData($sortParameterName);
 
@@ -88,7 +108,7 @@ class QueryBuilderRequest extends Request
 
     public function filters(): Collection
     {
-        $filterParameterName = config('query-builder.parameters.filter');
+        $filterParameterName = config('query-builder.parameters.filter', 'filter');
 
         $filterParts = $this->getRequestData($filterParameterName, []);
 
@@ -137,11 +157,7 @@ class QueryBuilderRequest extends Request
 
     protected function getRequestData(?string $key = null, $default = null)
     {
-        if (config('query-builder.request_data_source') === 'body') {
-            return $this->input($key, $default);
-        }
-
-        return $this->get($key, $default);
+        return $this->input($key, $default);
     }
 
     public static function setIncludesArrayValueDelimiter(string $includesArrayValueDelimiter): void
