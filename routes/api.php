@@ -39,6 +39,8 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);
 
+Route::get('get-products-by-link-name/{name}', [ProductController::class,'getProductsByLinkName']);
+
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
 
 Route::middleware('auth:sanctum')->group(function () { 
@@ -69,9 +71,17 @@ Route::middleware('auth:sanctum')->group(function () {
         $link->put('update-link-info/{id}', UpdateLinkInfoController::class);
     });
 
-    Route::prefix('market-links')->group(function (Router $link) {
-        $link->post('', [MarketLinkController::class,'CreateMarketLink']);
+    Route::prefix('market-links')->group(function (Router $link) {  
+        $link->post('', [MarketLinkController::class,'CreateMarketLink']);  
+        $link->post('check-market-link', [MarketLinkController::class,'checkMarketLink']);   
         $link->post('create-product', [ProductController::class,'CreateProduct']);
+        $link->post('update-product', [ProductController::class,'UpdateProduct']);
+        $link->get('get-market-links', [MarketLinkController::class,'getLinks']); 
+        $link->get('get-products', [ProductController::class,'getAllProducts']); 
+        $link->get('get-single-product/{id}', [ProductController::class,'getSingleProduct']); 
+        $link->delete('delete-product/{id}', [ProductController::class,'deleteProduct']); 
+        $link->post('update-image-1', [ProductController::class,'updateProductImage1']); 
+        $link->post('update-product-data', [ProductController::class,'updateProductData']);
     });
 
     Route::prefix('links')->group(function (Router $link) {

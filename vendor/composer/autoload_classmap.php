@@ -51,6 +51,7 @@ return array(
     'App\\Models\\LinkInfo' => $baseDir . '/app/Models/LinkInfo.php',
     'App\\Models\\MarketPlaceLink' => $baseDir . '/app/Models/MarketPlaceLink.php',
     'App\\Models\\MultiLink' => $baseDir . '/app/Models/MultiLink.php',
+    'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
     'App\\Models\\Short' => $baseDir . '/app/Models/Short.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',

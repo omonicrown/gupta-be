@@ -26,7 +26,11 @@ return new class extends Migration
             $table->text('product_image_1')->nullable();
             $table->text('product_image_2')->nullable();
             $table->text('product_image_3')->nullable();
+            $table->text('product_image_id_1')->nullable();
+            $table->text('product_image_id_2')->nullable();
+            $table->text('product_image_id_3')->nullable();
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

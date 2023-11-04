@@ -654,6 +654,7 @@ class ComposerStaticInit29a2ae15cd32cc137f7fcc4b4ea52786
         'App\\Models\\LinkInfo' => __DIR__ . '/../..' . '/app/Models/LinkInfo.php',
         'App\\Models\\MarketPlaceLink' => __DIR__ . '/../..' . '/app/Models/MarketPlaceLink.php',
         'App\\Models\\MultiLink' => __DIR__ . '/../..' . '/app/Models/MultiLink.php',
+        'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
         'App\\Models\\Short' => __DIR__ . '/../..' . '/app/Models/Short.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

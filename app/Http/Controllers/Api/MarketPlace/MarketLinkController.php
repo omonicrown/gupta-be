@@ -12,6 +12,7 @@ use App\Http\Requests\MarketPlace\MarketLinkRequest;
 use App\Models\MarketPlaceLink;
 use App\Models\MultiLink;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Auth;
 use JD\Cloudder\Facades\Cloudder;
 
 class MarketLinkController extends Controller
@@ -24,8 +25,8 @@ class MarketLinkController extends Controller
     {
         try {
             DB::beginTransaction();
-        //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
-            dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
+            //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
+            // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
             $link = MarketPlaceLink::create([
                 'link_name' => str_replace(' ', '-', $request->link_name),
                 'user_id' => auth()->user()->id
@@ -46,19 +47,36 @@ class MarketLinkController extends Controller
         }
     }
 
-    public function CreateProductLink(MarketLinkRequest $request)
+
+    public function checkMarketLink(Request $request)
     {
         try {
             DB::beginTransaction();
-            $link = MarketPlaceLink::create([
-                'link_name' => str_replace(' ', '-', $request->link_name),
-                'user_id' => auth()->user()->id
-            ]);
-
+            $link = MarketPlaceLink::where('link_name', '=', $request->link_name)->count();
             DB::commit();
             return response()->json([
                 'status' => true,
-                'message' => 'Market Link Created Successfully',
+                'message' => $link <= 0 ? 'Available' : 'Taken',
+                'link' => $link,
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => false,
+                'message' => ($e->getMessage())
+            ], 500);
+        }
+    }
+
+    public function getLinks()
+    {
+        try {
+            DB::beginTransaction();
+            $link = MarketPlaceLink::where('user_id', Auth::user()->id)->get();
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'message' =>'success',
                 'link' => $link,
             ], 200);
         } catch (Exception $e) {
