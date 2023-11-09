@@ -142,7 +142,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status'=>true,
-            'data' => Link::where('type','message')->where('user_id',Auth::user()->id)->get(['name'])
+            'data' => Link::get()
         ]
         );
     }
