@@ -37,10 +37,10 @@ class GetSingleLinksController extends Controller
                 ->select(
                     "id",
                     DB::raw("(count(short_url_id)) as total_click"),
-                    DB::raw("(DATE_FORMAT(created_at, '%Y-%M')) as month_year")
+                    DB::raw("(to_char(created_at, 'YYYY-MM')) as month_year")
                 )
                 ->orderBy('created_at')
-                ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
+                ->groupBy(DB::raw("to_char(created_at, 'YYYY-MM')"))
                 ->get();
 
             $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
