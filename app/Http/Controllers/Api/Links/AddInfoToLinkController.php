@@ -40,7 +40,7 @@ class AddInfoToLinkController extends Controller
                 ], 401);
             }
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
             // if (Link::where('user_id', auth()->user()->id)->count() <= 5) {
                 $link = Link::create([
                     'name' => str_replace(' ', '', $request->name),
@@ -68,7 +68,7 @@ class AddInfoToLinkController extends Controller
                     'short_url_id' => $shortURL->id
                 ]);
 
-                DB::commit();
+                // DB::commit();
 
                 return response()->json([
                     'status' => true,
