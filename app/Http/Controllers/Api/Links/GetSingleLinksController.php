@@ -47,13 +47,13 @@ class GetSingleLinksController extends Controller
             $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
                 ->select(
                     "id",
-                    DB::raw("COUNT(CASE WHEN browser = 'Chrome' THEN browser ELSE null END)) as chrome"),
-                    DB::raw("COUNT(CASE WHEN browser = 'Safari' THEN browser ELSE null END)) as safari"),
-                    DB::raw("COUNT(CASE WHEN operating_system = 'OS X' THEN operating_system ELSE null END)) as android"),
-                    DB::raw("COUNT(CASE WHEN operating_system = 'iOS' THEN operating_system ELSE null END)) as ios"),
+                    DB::raw("COUNT(case when browser = 'Chrome' then browser else null end)) as chrome"),
+                    DB::raw("COUNT(case when browser = 'Safari' then browser else null end)) as safari"),
+                    DB::raw("COUNT(case when operating_system = 'OS X' then operating_system else null end)) as android"),
+                    DB::raw("COUNT(case when operating_system = 'iOS' then operating_system else null end)) as ios"),
                     DB::raw("COUNT(id) as visit"),
                 )
-                ->groupBy('id')
+                // ->groupBy('id')
                 // ->orderBy('browser')
                 // ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
                 ->get();
