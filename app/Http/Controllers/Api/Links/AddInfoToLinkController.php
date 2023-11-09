@@ -92,7 +92,7 @@ class AddInfoToLinkController extends Controller
 
             return response()->json([
                 'status' => false,
-                'message' => 'link name already in use'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
