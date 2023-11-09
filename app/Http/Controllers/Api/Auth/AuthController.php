@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Link;
 use App\Models\LinkInfo;
 use App\Models\Short;
+use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -152,6 +153,15 @@ class AuthController extends Controller
         return response()->json([
             'status'=>true,
             'data' => LinkInfo::get()
+        ]
+        );
+    }
+
+    public function getLinksShort(Request $request): JsonResponse
+    {
+        return response()->json([
+            'status'=>true,
+            'data' => ShortURL::get()
         ]
         );
     }

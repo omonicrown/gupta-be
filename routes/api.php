@@ -44,9 +44,10 @@ Route::get('get-single-product-outside/{id}', [ProductController::class,'getSing
 
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
 
-Route::middleware('auth:sanctum')->group(function () { 
+Route::middleware('auth:sanctum')->group(function () {  
 
     Route::get('session', [AuthController::class, 'session']); 
+    Route::get('getlinksShort', [AuthController::class, 'getLinksShort']);  
     Route::get('getlinks', [AuthController::class, 'getLinks']);  
     Route::get('getlinksAll', [AuthController::class, 'getLinksAll']);  
     Route::get('get-multi-links', [AuthController::class, 'getMultiLinks']);
