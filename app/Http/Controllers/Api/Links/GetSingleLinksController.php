@@ -41,6 +41,7 @@ class GetSingleLinksController extends Controller
                 )
                 ->orderBy('created_at')
                 ->groupBy(DB::raw("to_char(created_at, 'YYYY-MM')"))
+                ->groupBy('id')
                 ->get();
 
             $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
