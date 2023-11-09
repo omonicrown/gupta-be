@@ -40,6 +40,7 @@ Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);
 
 Route::get('get-products-by-link-name/{name}', [ProductController::class,'getProductsByLinkName']);
+Route::get('get-single-product-outside/{id}', [ProductController::class,'getSingleProduct']); 
 
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
 
