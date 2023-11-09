@@ -53,7 +53,7 @@ class GetSingleLinksController extends Controller
                     DB::raw("COUNT(case when operating_system = 'iOS' then operating_system end) as ios"),
                     DB::raw("COUNT(id) as visit"),
                 )
-                ->groupBy('id')
+                // ->groupBy('id')
                 // ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
                 ->get();
 
