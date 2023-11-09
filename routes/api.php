@@ -46,8 +46,9 @@ Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 
 
 Route::middleware('auth:sanctum')->group(function () { 
 
-    Route::get('session', [AuthController::class, 'session']);
+    Route::get('session', [AuthController::class, 'session']); 
     Route::get('getlinks', [AuthController::class, 'getLinks']);  
+    Route::get('getlinksAll', [AuthController::class, 'getLinksAll']);  
     Route::get('get-multi-links', [AuthController::class, 'getMultiLinks']);
 
     Route::get('getlinksByName/{name}', [AuthController::class, 'getlinksByName']);

@@ -147,6 +147,15 @@ class AuthController extends Controller
         );
     }
 
+    public function getLinksAll(Request $request): JsonResponse
+    {
+        return response()->json([
+            'status'=>true,
+            'data' => LinkInfo::get()
+        ]
+        );
+    }
+
     public function getlinksByName(Request $request,$name): JsonResponse
     {
         $Link = Link::where('type','tiered')->where('name',$name)->first();
