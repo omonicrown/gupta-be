@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "ashallendesign/short-url": "^7.6",
         "cloudinary-labs/cloudinary-laravel": "^2.0",
         "genealabs/laravel-caffeine": "^9.0",
         "guzzlehttp/guzzle": "^7.2",
@@ -46,22 +45,14 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ],
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "ssh-keygen -t rsa -b 4096 -f ./storage/id_rsa && mv ./storage/id_rsa ./storage/oauth-private.key && mv ./storage/id_rsa.pub ./storage/oauth-public.key",
-            "@php artisan clear-compiled",
-            "@php artisan optimize",
-            "@php artisan migrate --force",
-            "@php artisan passport:install --force"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ]
     },
     "extra": {
