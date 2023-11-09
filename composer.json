@@ -9,6 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-bcmath": "*",
+        "ashallendesign/short-url": "^7.6",
         "cloudinary-labs/cloudinary-laravel": "^2.0",
         "genealabs/laravel-caffeine": "^9.0",
         "guzzlehttp/guzzle": "^7.2",

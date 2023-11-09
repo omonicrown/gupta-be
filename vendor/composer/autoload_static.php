@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit44374e332db67d40b75e58bd939432ad
+class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -135,6 +135,8 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         'J' => 
         array (
             'Jenssegers\\Model\\' => 17,
+            'Jenssegers\\Agent\\' => 17,
+            'Jaybizzle\\CrawlerDetect\\' => 24,
         ),
         'I' => 
         array (
@@ -186,6 +188,7 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         ),
         'A' => 
         array (
+            'AshAllenDesign\\ShortURL\\' => 24,
             'App\\' => 4,
         ),
     );
@@ -460,6 +463,14 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         array (
             0 => __DIR__ . '/..' . '/jenssegers/model/src',
         ),
+        'Jenssegers\\Agent\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jenssegers/agent/src',
+        ),
+        'Jaybizzle\\CrawlerDetect\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable',
@@ -560,6 +571,10 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
+        'AshAllenDesign\\ShortURL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ashallendesign/short-url/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -573,6 +588,13 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
             'JD\\Cloudder' => 
             array (
                 0 => __DIR__ . '/..' . '/jrm2k6/cloudder/src',
+            ),
+        ),
+        'D' => 
+        array (
+            'Detection' => 
+            array (
+                0 => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/namespaced',
             ),
         ),
     );
@@ -635,6 +657,20 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Services\\Account\\AccountService' => __DIR__ . '/../..' . '/app/Services/Account/AccountService.php',
+        'AshAllenDesign\\ShortURL\\Classes\\Builder' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Classes/Builder.php',
+        'AshAllenDesign\\ShortURL\\Classes\\KeyGenerator' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Classes/KeyGenerator.php',
+        'AshAllenDesign\\ShortURL\\Classes\\Resolver' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Classes/Resolver.php',
+        'AshAllenDesign\\ShortURL\\Classes\\Validation' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Classes/Validation.php',
+        'AshAllenDesign\\ShortURL\\Controllers\\ShortURLController' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Controllers/ShortURLController.php',
+        'AshAllenDesign\\ShortURL\\Events\\ShortURLVisited' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Events/ShortURLVisited.php',
+        'AshAllenDesign\\ShortURL\\Exceptions\\ShortURLException' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Exceptions/ShortURLException.php',
+        'AshAllenDesign\\ShortURL\\Exceptions\\ValidationException' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Exceptions/ValidationException.php',
+        'AshAllenDesign\\ShortURL\\Facades\\ShortURL' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Facades/ShortURL.php',
+        'AshAllenDesign\\ShortURL\\Models\\Factories\\ShortURLFactory' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Models/Factories/ShortURLFactory.php',
+        'AshAllenDesign\\ShortURL\\Models\\Factories\\ShortURLVisitFactory' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Models/Factories/ShortURLVisitFactory.php',
+        'AshAllenDesign\\ShortURL\\Models\\ShortURL' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Models/ShortURL.php',
+        'AshAllenDesign\\ShortURL\\Models\\ShortURLVisit' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Models/ShortURLVisit.php',
+        'AshAllenDesign\\ShortURL\\Providers\\ShortURLProvider' => __DIR__ . '/..' . '/ashallendesign/short-url/src/Providers/ShortURLProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
@@ -1420,6 +1456,7 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         'DeepCopy\\TypeFilter\\Spl\\SplDoublyLinkedListFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/Spl/SplDoublyLinkedListFilter.php',
         'DeepCopy\\TypeFilter\\TypeFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/TypeFilter.php',
         'DeepCopy\\TypeMatcher\\TypeMatcher' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeMatcher/TypeMatcher.php',
+        'Detection\\MobileDetect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/namespaced/Detection/MobileDetect.php',
         'Dflydev\\DotAccessData\\Data' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/Data.php',
         'Dflydev\\DotAccessData\\DataInterface' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/DataInterface.php',
         'Dflydev\\DotAccessData\\Exception\\DataException' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/Exception/DataException.php',
@@ -3441,6 +3478,14 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         'JD\\Cloudder\\CloudderServiceProvider' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/CloudderServiceProvider.php',
         'JD\\Cloudder\\CloudinaryWrapper' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/CloudinaryWrapper.php',
         'JD\\Cloudder\\Facades\\Cloudder' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/Facades/Cloudder.php',
+        'Jaybizzle\\CrawlerDetect\\CrawlerDetect' => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src/CrawlerDetect.php',
+        'Jaybizzle\\CrawlerDetect\\Fixtures\\AbstractProvider' => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src/Fixtures/AbstractProvider.php',
+        'Jaybizzle\\CrawlerDetect\\Fixtures\\Crawlers' => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src/Fixtures/Crawlers.php',
+        'Jaybizzle\\CrawlerDetect\\Fixtures\\Exclusions' => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src/Fixtures/Exclusions.php',
+        'Jaybizzle\\CrawlerDetect\\Fixtures\\Headers' => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src/Fixtures/Headers.php',
+        'Jenssegers\\Agent\\Agent' => __DIR__ . '/..' . '/jenssegers/agent/src/Agent.php',
+        'Jenssegers\\Agent\\AgentServiceProvider' => __DIR__ . '/..' . '/jenssegers/agent/src/AgentServiceProvider.php',
+        'Jenssegers\\Agent\\Facades\\Agent' => __DIR__ . '/..' . '/jenssegers/agent/src/Facades/Agent.php',
         'Jenssegers\\Model\\MassAssignmentException' => __DIR__ . '/..' . '/jenssegers/model/src/MassAssignmentException.php',
         'Jenssegers\\Model\\Model' => __DIR__ . '/..' . '/jenssegers/model/src/Model.php',
         'Laravel\\Sail\\Console\\AddCommand' => __DIR__ . '/..' . '/laravel/sail/src/Console/AddCommand.php',
@@ -3852,6 +3897,7 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
         'League\\MimeTypeDetection\\GeneratedExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/GeneratedExtensionToMimeTypeMap.php',
         'League\\MimeTypeDetection\\MimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/MimeTypeDetector.php',
         'League\\MimeTypeDetection\\OverridingExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/OverridingExtensionToMimeTypeMap.php',
+        'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
         'Mockery\\Adapter\\Phpunit\\MockeryPHPUnitIntegration' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegration.php',
         'Mockery\\Adapter\\Phpunit\\MockeryPHPUnitIntegrationAssertPostConditions' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegrationAssertPostConditions.php',
         'Mockery\\Adapter\\Phpunit\\MockeryTestCase' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryTestCase.php',
@@ -6679,10 +6725,10 @@ class ComposerStaticInit44374e332db67d40b75e58bd939432ad
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit44374e332db67d40b75e58bd939432ad::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit44374e332db67d40b75e58bd939432ad::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit44374e332db67d40b75e58bd939432ad::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit44374e332db67d40b75e58bd939432ad::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1::$classMap;
 
         }, null, ClassLoader::class);
     }
