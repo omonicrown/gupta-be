@@ -17,7 +17,6 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "openai-php/laravel": "^0.6.3",
         "spatie/laravel-query-builder": "^5.0"
     },
     "require-dev": {
