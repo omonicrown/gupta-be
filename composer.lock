@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f010311e52bca861944e72a5ebc48f5f",
+    "content-hash": "45f3bfbeaca78119770c0698e40e28f3",
     "packages": [
         {
             "name": "ashallendesign/short-url",
@@ -776,6 +776,69 @@
             "time": "2023-10-12T05:21:21+00:00"
         },
         {
+            "name": "genealabs/laravel-caffeine",
+            "version": "9.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GeneaLabs/laravel-caffeine.git",
+                "reference": "243f2f061e4891a9dcb3ac92822874c05756ea15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GeneaLabs/laravel-caffeine/zipball/243f2f061e4891a9dcb3ac92822874c05756ea15",
+                "reference": "243f2f061e4891a9dcb3ac92822874c05756ea15",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/routing": "^9.0",
+                "illuminate/support": "^9.0",
+                "jenssegers/model": "^1.5"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.0",
+                "orchestra/testbench-browser-kit": "^7.0",
+                "orchestra/testbench-dusk": "^7.0",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpmd/phpmd": "^2.7",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "GeneaLabs\\LaravelCaffeine\\Providers\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GeneaLabs\\LaravelCaffeine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mike Bronner",
+                    "email": "hello@genealabs.com"
+                }
+            ],
+            "description": "Keeping Your Laravel Forms Awake",
+            "support": {
+                "issues": "https://github.com/GeneaLabs/laravel-caffeine/issues",
+                "source": "https://github.com/GeneaLabs/laravel-caffeine/tree/9.0.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/mikebronner",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-03-07T17:22:33+00:00"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.1",
             "source": {
@@ -1445,6 +1508,57 @@
                 }
             ],
             "time": "2020-06-13T08:05:20+00:00"
+        },
+        {
+            "name": "jenssegers/model",
+            "version": "v1.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jenssegers/model.git",
+                "reference": "148133d79707cc818b914204048a9e7c64ff7353"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jenssegers/model/zipball/148133d79707cc818b914204048a9e7c64ff7353",
+                "reference": "148133d79707cc818b914204048a9e7c64ff7353",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "illuminate/support": "^4.0|^5.0|^6.0|^7.0|^8.0|^9.0|^10.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "*",
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jenssegers\\Model\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jens Segers",
+                    "homepage": "https://jenssegers.com"
+                }
+            ],
+            "description": "An Laravel eloquent-like model class, for Laravel and other frameworks",
+            "homepage": "https://github.com/jenssegers/model",
+            "keywords": [
+                "eloquent",
+                "laravel",
+                "model"
+            ],
+            "support": {
+                "issues": "https://github.com/jenssegers/model/issues",
+                "source": "https://github.com/jenssegers/model/tree/v1.5.1"
+            },
+            "time": "2023-03-21T13:03:12+00:00"
         },
         {
             "name": "jrm2k6/cloudder",
@@ -9228,5 +9342,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
