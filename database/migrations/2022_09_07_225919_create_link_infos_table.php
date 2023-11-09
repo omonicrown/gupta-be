@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone_number');
             $table->string('message')->nullable();
-            $table->string('link_id');
+            $table->foreignid('link_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
