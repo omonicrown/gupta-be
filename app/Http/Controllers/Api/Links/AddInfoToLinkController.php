@@ -54,10 +54,7 @@ class AddInfoToLinkController extends Controller
                     $link->name
                 )->trackVisits()->make();
 
-                $info = LinkInfo::updateOrCreate(
-                    [
-                        'link_id' => $link->id
-                    ],
+                $info = LinkInfo::create(
                     [
                         'phone_number' => $request->phone_number,
                         'message' => $request->message,
