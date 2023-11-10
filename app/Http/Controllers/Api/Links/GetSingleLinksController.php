@@ -35,7 +35,7 @@ class GetSingleLinksController extends Controller
             $visitors = ShortURLVisit::where('short_url_id', $link->short_url_id)
                 // ->whereYear('created_at', '2023')
                 ->select(
-                    DB::raw("(count(short_url_id)) as total_click"),
+                    DB::raw("(count(short_url_id )) as total_click"),
                     DB::raw("(to_char(created_at, 'MM-DD')) as month_day")
                 )
                 // ->groupBy('created_at')
@@ -47,7 +47,8 @@ class GetSingleLinksController extends Controller
                     
                     DB::raw("COUNT(case when browser = 'Chrome' then browser end) as chrome"),
                     DB::raw("COUNT(case when browser = 'Safari' then browser end) as safari"),
-                    DB::raw("COUNT(case when operating_system = 'OS X' then operating_system end) as android"),
+                    DB::raw("COUNT(case when operating_system = 'OS X' then operating_system end) as windows"), 
+                    DB::raw("COUNT(case when operating_system = 'AndroidOS' then operating_system end) as android"),
                     DB::raw("COUNT(case when operating_system = 'iOS' then operating_system end) as ios"),
                     DB::raw("COUNT(id) as visit"),
                 )
