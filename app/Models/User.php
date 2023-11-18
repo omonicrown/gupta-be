@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Link::class)->where('type','message')->orWhere('type','catalog');
     }
+
+    public function redirectLinks(): HasMany
+    {
+        return $this->hasMany(Link::class)->where('type','url');
+    }
 }

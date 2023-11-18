@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Links\UpdateLinkInfoController;
 use App\Http\Controllers\Api\Links\CreateRandomLinkController;
 use App\Http\Controllers\Api\Links\CreateCatalogController;
 use App\Http\Controllers\Api\Links\CreateRandomUrlController;
+use App\Http\Controllers\Api\Links\CreateRedirectController;
 use App\Http\Controllers\Api\Links\CreateTieredController;
 use App\Http\Controllers\Api\Links\GetSingleLinksController;
 use App\Http\Controllers\Api\Links\UpdateTieredController;
@@ -44,9 +45,10 @@ Route::get('get-single-product-outside/{id}', [ProductController::class,'getSing
 
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
 
-Route::middleware('auth:sanctum')->group(function () {  
+Route::middleware('auth:sanctum')->group(function () {   
 
     Route::get('session', [AuthController::class, 'session']); 
+    Route::get('getRedirectLinks', [AuthController::class, 'redirectLinks']); 
     Route::get('getlinksShort', [AuthController::class, 'getLinksShort']);  
     Route::get('getlinks', [AuthController::class, 'getLinks']);  
     Route::get('getlinksAll', [AuthController::class, 'getLinksAll']);  
@@ -66,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('links')->group(function (Router $link) {
         $link->post('', CreateLinksController::class);
+        $link->post('create-redirect-link', CreateRedirectController::class);
         $link->get('link-details/{id}', GetSingleLinksController::class);
         $link->put('update/{id}', UpdateLinksController::class);
         $link->delete('delete/{id}', DeleteLinksController::class);

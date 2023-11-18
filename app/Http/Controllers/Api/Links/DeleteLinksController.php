@@ -21,7 +21,7 @@ class DeleteLinksController extends Controller
     public function __invoke(Request $request, $id)
     {
         try {
-
+            // return ($id);
             DB::beginTransaction();
             $link = Link::whereId($id)->first();
             $short = ShortURL::where('url_key',$link->name)->first();

@@ -115,13 +115,19 @@ class AuthController extends Controller
      * @return JsonResponse  
      */
 
-     
-
+    
 
     public function session(Request $request): JsonResponse
     { 
         return response()->json(
             $request->user()->load("link", 'link.linkInfo', 'link.shortUrl', 'link.shortUrl.visits')
+        );
+    } 
+
+    public function redirectLinks(Request $request): JsonResponse
+    { 
+        return response()->json(
+            $request->user()->load("redirectLinks", 'redirectLinks.linkInfo', 'redirectLinks.shortUrl', 'redirectLinks.shortUrl.visits')
         );
     } 
 
