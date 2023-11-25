@@ -611,6 +611,7 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
         'App\\Http\\Controllers\\Api\\Links\\CreateLinksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/CreateLinksController.php',
         'App\\Http\\Controllers\\Api\\Links\\CreateRandomLinkController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/CreateRandomLinkController.php',
         'App\\Http\\Controllers\\Api\\Links\\CreateRandomUrlController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/CreateRandomUrlController.php',
+        'App\\Http\\Controllers\\Api\\Links\\CreateRedirectController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/CreateRedirectController.php',
         'App\\Http\\Controllers\\Api\\Links\\CreateTieredController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/CreateTieredController.php',
         'App\\Http\\Controllers\\Api\\Links\\DeleteLinksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/DeleteLinksController.php',
         'App\\Http\\Controllers\\Api\\Links\\GetSingleLinksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Links/GetSingleLinksController.php',

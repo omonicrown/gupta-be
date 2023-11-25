@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\Reciept;
+use Carbon\Carbon;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -17,30 +18,20 @@ use Illuminate\Support\Facades\Mail;
 */
 
 Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
+    $Year = Carbon::now()->isoFormat('YYYY-MM-DD');
+    $now =Carbon::now()->isoFormat('YYYY-MM-DD');
+    
+    $this->comment($now);
 })->purpose('Display an inspiring quote');
 
 
-Artisan::command('nurse-program', function () {
+Artisan::command('logs:clear', function() {
+    
+    exec('rm -f ' . storage_path('logs/*.log'));
 
-    $reveiverEmailAddress = "samuelfemi85@gmail.com";
-        $details = [
-            'name' => 'Bendolf Malcom',
-            'email' => 'samuelfemi85@gmail.com',
-            'code' => '#67679732'
-        ];
+    exec('rm -f ' . base_path('*.log'));
+    
+    $this->comment('Logs have been cleared!');
+    
+})->describe('Clear log files');
 
-       
-        Mail::to($reveiverEmailAddress)->send(new Reciept($details));
-        dd('success');
-
-       
-        if (Mail::failures() != 0) {
-            return "Email has been sent successfully.";
-        }
-        return "Oops! There was some error sending the email.";
-
-    // $this->comment(Inspiring::quote());
-
-
-})->purpose('Display an inspiring quote');

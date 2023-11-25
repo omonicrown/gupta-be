@@ -17,6 +17,7 @@ return array(
     'App\\Http\\Controllers\\Api\\Links\\CreateLinksController' => $baseDir . '/app/Http/Controllers/Api/Links/CreateLinksController.php',
     'App\\Http\\Controllers\\Api\\Links\\CreateRandomLinkController' => $baseDir . '/app/Http/Controllers/Api/Links/CreateRandomLinkController.php',
     'App\\Http\\Controllers\\Api\\Links\\CreateRandomUrlController' => $baseDir . '/app/Http/Controllers/Api/Links/CreateRandomUrlController.php',
+    'App\\Http\\Controllers\\Api\\Links\\CreateRedirectController' => $baseDir . '/app/Http/Controllers/Api/Links/CreateRedirectController.php',
     'App\\Http\\Controllers\\Api\\Links\\CreateTieredController' => $baseDir . '/app/Http/Controllers/Api/Links/CreateTieredController.php',
     'App\\Http\\Controllers\\Api\\Links\\DeleteLinksController' => $baseDir . '/app/Http/Controllers/Api/Links/DeleteLinksController.php',
     'App\\Http\\Controllers\\Api\\Links\\GetSingleLinksController' => $baseDir . '/app/Http/Controllers/Api/Links/GetSingleLinksController.php',

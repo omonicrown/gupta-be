@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Links\CreateLinksController;
+use App\Http\Controllers\Api\Auth\AuthController; 
+use App\Http\Controllers\Api\Links\CreateLinksController; 
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\ManageUsersController;
 use App\Http\Controllers\Api\Links\UpdateLinksController;
 use App\Http\Controllers\Api\Links\DeleteLinksController;
 use App\Http\Controllers\Api\Links\AddInfoToLinkController;
@@ -98,6 +100,23 @@ Route::middleware('auth:sanctum')->group(function () {
         $link->get('get-tiered-links/{linkName}',[UpdateTieredController::class, 'getLinkDetails']);
         // $link->get('get-tiered-link/{linkName}',[UpdateTieredController::class, 'getLinkDetailByName']);
         $link->post('tiered', CreateTieredController::class);
+    });
+
+
+    Route::prefix('admin')->group(function (Router $link) { 
+        Route::group(['middleware' =>['isAdmin', 'SubStatus']], function (Router $link) {
+            //dashboard Apis
+            $link->get('get-links-count', [DashboardController::class, 'getLinksCount']);
+            //manage user api
+            $link->get('get-all-users', [ManageUsersController::class, 'getAllUsers']);
+            $link->get('get-all-details/{id}', [ManageUsersController::class, 'getUserDetails']); 
+            $link->put('update-user-status/{id}', [ManageUsersController::class, 'updateUserStatus']);  
+            $link->get('get-user-whatsapp-link/{id}', [ManageUsersController::class, 'getUserWhatsappLinks']);
+            $link->get('get-user-url-link/{id}', [ManageUsersController::class, 'getUserUrlLinks']);
+            $link->get('get-user-multi-link/{id}', [ManageUsersController::class, 'getUserMultiLinks']);
+            $link->get('get-user-market-link/{id}', [ManageUsersController::class, 'getUserMarketLinks']);
+            $link->post('tiered', CreateTieredController::class);
+        });
     });
 
 });

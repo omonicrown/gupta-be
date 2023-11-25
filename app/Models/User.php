@@ -25,7 +25,11 @@ class User extends Authenticatable
         'phone_number',
         'account_type',
         'country',
-        'business_category'
+        'business_category',
+        'sub_status',
+        'sub_start',
+        'sub_end',
+        'role'
     ];
 
     /**
