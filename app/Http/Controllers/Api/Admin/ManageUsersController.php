@@ -63,6 +63,16 @@ class ManageUsersController extends Controller
         }
     }
 
+    public function updateUserRole(Request $request,ManageUsersService $userService,$id): JsonResponse
+    {
+        try {
+            return 
+                $userService->updateUserRole($request,$id);
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
     public function getUserMultiLinks(ManageUsersService $userService,$id): JsonResponse
     {
         try {

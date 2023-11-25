@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Api\BaseController;  
-use App\Models\User; 
+use App\Http\Controllers\Api\BaseController;
+use App\Models\User;
 use App\Models\Link;
 use App\Models\MarketPlaceLink;
 use Faker\Core\File;
@@ -22,7 +22,7 @@ class ManageUsersService extends BaseController
             $email = $request->query('email');
             $sub_status = $request->query('sub_status');
             // $all = $request->query('all');
-          
+
             $getData = User::query()
                 ->where('name', 'LIKE', "%{$name}%")
                 ->where('email', 'LIKE', "%{$email}%")
@@ -37,12 +37,18 @@ class ManageUsersService extends BaseController
     }
 
 
-    
-
-    public function updateUserStatus($data,$id)
+    public function updateUserStatus($data, $id)
     {
         $updateUser = User::find($id);
         $updateUser->sub_status = $data['sub_status'];
+        $updateUser->save();
+        return $this->sendResponse($updateUser, 'Updated successful');
+    }
+
+    public function updateUserRole($data, $id)
+    {
+        $updateUser = User::find($id);
+        $updateUser->role = $data['role'];
         $updateUser->save();
         return $this->sendResponse($updateUser, 'Updated successful');
     }
@@ -55,12 +61,12 @@ class ManageUsersService extends BaseController
     public function getUserWhatsappLinks($id)
     {
         return $this->sendResponse(Link::where('user_id', $id)->whereIn('type', ['message', 'catalog'])->paginate(10), 'Fetched successful');
-    } 
+    }
 
     public function getUserUrlLinks($id)
     {
         return $this->sendResponse(Link::where('user_id', $id)->whereIn('type', ['url'])->paginate(10), 'Fetched successful');
-    } 
+    }
 
     public function getUserMultiLinks($id)
     {
@@ -72,13 +78,13 @@ class ManageUsersService extends BaseController
         return $this->sendResponse(MarketPlaceLink::where('user_id', $id)->paginate(10), 'Fetched successful');
     }
 
-    public function deletePartnerCourse($id)
-    {
-        DB::beginTransaction();
-        return $this->sendResponse(PartnerCourses::where('id', $id)->delete(), 'Deleted successfully');
-    }
+    // public function deletePartnerCourse($id)
+    // {
+    //     DB::beginTransaction();
+    //     return $this->sendResponse(PartnerCourses::where('id', $id)->delete(), 'Deleted successfully');
+    // }
 
     //Create partner school updatePartnerSchool
 
-   
+
 }

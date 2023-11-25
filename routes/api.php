@@ -42,6 +42,8 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);
 
+Route::put('update-user-role/{id}', [ManageUsersController::class, 'updateUserRole']);
+
 Route::get('get-products-by-link-name/{name}', [ProductController::class, 'getProductsByLinkName']);
 Route::get('get-single-product-outside/{id}', [ProductController::class, 'getSingleProduct']);
 
