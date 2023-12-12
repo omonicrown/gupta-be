@@ -28,4 +28,4 @@ use OpenAI\Laravel\Facades\OpenAI;
 // });
 
 
-Route::get('/', static fn () =>  Redirect::to('www.mygupta.co'));
+Route::get('/', static fn () =>  redirect()->away('https://www.mygupta.co'));
