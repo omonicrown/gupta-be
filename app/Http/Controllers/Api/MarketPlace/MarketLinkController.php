@@ -25,6 +25,18 @@ class MarketLinkController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            $links = MarketPlaceLink::where('user_id', Auth::user()->id)->count();
+            if ($links >= Auth::user()->no_of_mlink) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.Auth::user()->no_of_mlink,
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
+
             //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
             // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
             $link = MarketPlaceLink::create([

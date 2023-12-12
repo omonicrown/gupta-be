@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Links;
 
+use Auth;
 use Exception;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -21,6 +22,17 @@ class CreateTieredController extends Controller
         try {
 
             DB::beginTransaction();
+
+            $links = Link::where('user_id', Auth::user()->id)->where('type','tiered')->count();
+            if ($links >= Auth::user()->no_of_mlink) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.Auth::user()->no_of_mlink,
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
             $pics_2='';
             if($request->logo !== '1'){
                 $uploadedFile2 = $request->logo;

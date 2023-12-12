@@ -35,3 +35,28 @@ Artisan::command('logs:clear', function() {
     
 })->describe('Clear log files');
 
+
+
+Artisan::command('nurse', function () {
+
+    $reveiverEmailAddress = "samuelfemi85@gmail.com";
+        $details = [
+            'name' => 'Omolade Samuel Femi',
+            'email' => 'samuelfemi85@gmail.com',
+            'code' => '#33419649'
+        ];
+
+       
+        Mail::to($reveiverEmailAddress)->send(new Reciept($details));
+        dd('success');
+
+       
+        if (Mail::failures() != 0) {
+            return "Email has been sent successfully.";
+        }
+        return "Oops! There was some error sending the email.";
+
+    // $this->comment(Inspiring::quote());
+
+
+})->purpose('Display an inspiring quote');

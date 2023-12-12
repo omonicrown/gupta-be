@@ -18,6 +18,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+     
     protected $fillable = [
         'name',
         'email',
@@ -29,7 +31,11 @@ class User extends Authenticatable
         'sub_status',
         'sub_start',
         'sub_end',
-        'role'
+        'role',
+        'no_of_wlink',
+        'no_of_rlink',
+        'no_of_mlink',
+        'no_of_mstore'
     ];
 
     /**
@@ -58,11 +64,6 @@ class User extends Authenticatable
     public function multiLink(): HasMany  
     {
         return $this->hasMany(Link::class)->where('type','tiered');
-    }
-
-    public function allLink(): HasMany  
-    {
-        return $this->hasMany(Link::class)->where('type','message');
     }
 
     public function link(): HasMany

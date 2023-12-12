@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Links;
 
 // use ShortURL;
+use Auth;
 use Exception;
 use App\Models\Link;
 use App\Models\LinkInfo;
@@ -39,6 +40,20 @@ class CreateCatalogController extends Controller
             }
 
             DB::beginTransaction();
+
+            $links = Link::where('user_id', Auth::user()->id)->where([
+                ['type', '=', 'message'],
+                ['type', '=', 'catalog'],
+            ])->count();
+            if ($links >= Auth::user()->no_of_wlink) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.(Auth::user()->no_of_wlink),
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
 
             $link = Link::create([
                 'name' => str_replace(' ', '', $request->name),

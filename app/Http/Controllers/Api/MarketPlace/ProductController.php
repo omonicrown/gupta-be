@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\MarketPlace;
 
+use Auth;
 use Exception;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -25,6 +26,18 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            $links = Product::where('user_id', Auth::user()->id)->count();
+            if ($links >= Auth::user()->no_of_mstore) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.Auth::user()->no_of_mstore,
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
+
             $link = Product::create(
                 [
                     'link_name' => str_replace(' ', '-', $request->link_name),

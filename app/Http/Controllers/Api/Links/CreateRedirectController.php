@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Links;
 
 use AshAllenDesign\ShortURL\Facades\ShortURL;
+use Auth;
 use Exception;
 use App\Models\Link;
 use App\Models\LinkInfo;
@@ -40,6 +41,18 @@ class CreateRedirectController extends Controller
             }
 
             DB::beginTransaction();
+
+            $links = Link::where('user_id', Auth::user()->id)->where('type','url')->count();
+
+            
+            if ($links >= (Auth::user()->no_of_rlink+0)) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.(Auth::user()->no_of_wlink),
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
 
             $link = Link::create([
                 'name' => $request->name,

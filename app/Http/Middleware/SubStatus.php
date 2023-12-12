@@ -20,6 +20,11 @@ class SubStatus extends Controller
         if (auth()->user()->sub_status === 'active') {
             return $next($request);
         }
+
+        if (auth()->user()->sub_status === 'trial') {
+            return $next($request);
+        }
+
         return $this->success('Subscription Expired','sub_expired');
     }
 }

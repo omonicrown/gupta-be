@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Links;
 
 use AshAllenDesign\ShortURL\Facades\ShortURL;
+use Auth;
 use Exception;
 use App\Models\Link;
 use App\Models\LinkInfo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -19,7 +21,7 @@ class AddInfoToLinkController extends Controller
      * @param Request $request
      * @return Link
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): JsonResponse
     {
         try {
 
@@ -40,45 +42,62 @@ class AddInfoToLinkController extends Controller
                 ], 401);
             }
 
-            DB::beginTransaction();
-            // if (Link::where('user_id', auth()->user()->id)->count() <= 5) {
-                $link = Link::create([
-                    'name' => str_replace(' ', '', $request->name),
-                    'type' => 'message',
-                    'user_id' => auth()->user()->id
-                ]);
 
-                $shortURL = ShortURL::destinationUrl(
-                    'https://api.whatsapp.com/send?phone=' . substr($request->phone_number, 1) . '&text=' . $request->message
-                )->urlKey(
+
+            DB::beginTransaction();
+
+            $links = Link::where('user_id', Auth::user()->id)->where([
+                ['type', '=', 'message'],
+                ['type', '=', 'catalog'],
+            ])->count();
+            if ($links >= (Auth::user()->no_of_wlink+0)) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Link exceeded '.(Auth::user()->no_of_wlink),
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
+
+            // if (Link::where('user_id', auth()->user()->id)->count() <= 5) {
+            $link = Link::create([
+                'name' => str_replace(' ', '', $request->name),
+                'type' => 'message',
+                'user_id' => auth()->user()->id
+            ]);
+
+            $shortURL = ShortURL::destinationUrl(
+                'https://api.whatsapp.com/send?phone=' . substr($request->phone_number, 1) . '&text=' . $request->message
+            )->urlKey(
                     $link->name
                 )->trackVisits()->make();
 
-                $info = LinkInfo::updateOrCreate(
-                    [
-                        'link_id' => (string) $link->id
-                    ],
-                    [
-                        'phone_number' => $request->phone_number,
-                        'message' => $request->message,
-                        'link_id' => (string) $link->id
-                    ]
-                );
+            $info = LinkInfo::updateOrCreate(
+                [
+                    'link_id' => (string) $link->id
+                ],
+                [
+                    'phone_number' => $request->phone_number,
+                    'message' => $request->message,
+                    'link_id' => (string) $link->id
+                ]
+            );
 
-                $link->update([
-                    'short_url_id' => $shortURL->id
-                ]);
+            $link->update([
+                'short_url_id' => $shortURL->id
+            ]);
 
-                DB::commit();
+            DB::commit();
 
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Link Created Successfully',
-                    'info' => $info,
-                    'link' => $link,
-                    'url'  => $shortURL->default_short_url,
-                    'created' => Link::where('user_id', auth()->user()->id)->count()
-                ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Link Created Successfully',
+                'info' => $info,
+                'link' => $link,
+                'url' => $shortURL->default_short_url,
+                'created' => Link::where('user_id', auth()->user()->id)->count()
+            ], 200);
             // }else{
             //     return response()->json([
             //         'status' => true,
