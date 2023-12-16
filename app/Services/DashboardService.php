@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Link;
 use App\Models\Short;
 use App\Models\MarketPlaceLink;
+use App\Models\Product;
 use Faker\Core\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class DashboardService extends BaseController
            $totalRedirectLink = Link::whereIn('type', ['url'])->count();
            $totalMultiLink = Link::whereIn('type', ['tiered'])->count();
            $totalMarketLink = MarketPlaceLink::count();
+           $totalProducts = Product::count();
            $totalCustomers = User::count();
            $totlaClicks = Short::count();
 
@@ -32,9 +34,10 @@ class DashboardService extends BaseController
             'total_market_link'=>$totalMarketLink,
             'total_users'=>$totalCustomers,
             'total_Clicks'=>$totlaClicks,
+            'total_products' => $totalProducts
         ],'Fetched Successfully');
         } catch (\Throwable $th) {
-            return $this->sendError('Something went wrong');
+            return $this->sendError($th->getMessage());
         }
     }
 }

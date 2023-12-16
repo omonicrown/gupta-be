@@ -35,7 +35,9 @@ class User extends Authenticatable
         'no_of_wlink',
         'no_of_rlink',
         'no_of_mlink',
-        'no_of_mstore'
+        'no_of_mstore',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -47,8 +49,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'email_verified_at',
-        'created_at',
-        'updated_at',
         'deleted_at'
     ];
 

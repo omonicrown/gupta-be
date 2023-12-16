@@ -12,6 +12,7 @@
         "ext-bcmath": "*",
         "ashallendesign/short-url": "^7.6",
         "cloudinary-labs/cloudinary-laravel": "^2.0",
+        "doctrine/dbal": "^2.13.9",
         "genealabs/laravel-caffeine": "^9.0",
         "guzzlehttp/guzzle": "^7.2",
         "hashids/hashids": "^5.0",

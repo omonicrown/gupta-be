@@ -18,17 +18,16 @@ class ManageUsersService extends BaseController
     public function getAllUsers($request)
     {
         try {
-            $name = $request->query('name');
-            $email = $request->query('email');
-            $sub_status = $request->query('sub_status');
-            // $all = $request->query('all');
-
-            $getData = User::query()
-                ->where('name', 'LIKE', "%{$name}%")
-                ->where('email', 'LIKE', "%{$email}%")
-                ->where('sub_status', 'LIKE', "%{$sub_status}%")
-                // ->where('*', 'LIKE', "%{$sub_status}%")
-                ->paginate(10);
+            $type = $request->query('search');
+            if ($type !== '') {
+                $getData = User::query()
+                    ->where('name', 'LIKE', "%{$type}%")
+                    ->orWhere('email', 'LIKE', "%{$type}%")
+                    ->orWhere('sub_status', 'LIKE', "%{$type}%")
+                    ->paginate(20);
+            } else {
+                $getData = User::paginate(20);
+            }
 
             return $this->sendResponse($getData, 'Fetched Successfully');
         } catch (\Throwable $th) {
