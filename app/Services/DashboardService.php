@@ -8,6 +8,7 @@ use App\Models\Link;
 use App\Models\Short;
 use App\Models\MarketPlaceLink;
 use App\Models\Product;
+use AshAllenDesign\ShortURL\Models\ShortURLVisit;
 use Faker\Core\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,7 @@ class DashboardService extends BaseController
            $totalMarketLink = MarketPlaceLink::count();
            $totalProducts = Product::count();
            $totalCustomers = User::count();
-           $totlaClicks = Short::count();
+           $totlaClicks = ShortURLVisit::where('operating_system','!=','0')->count();
 
            return $this->sendResponse([
             'total_whatsapp_link'=>$totalWhatsappLink,
