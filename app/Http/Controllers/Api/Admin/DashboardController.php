@@ -19,4 +19,14 @@ class DashboardController extends Controller
             return $this->exception($exception);
         }
     }
+
+
+    public function getSingleUser(Request $request, DashboardService $dashboardService,$id): JsonResponse
+    {
+        try {
+            return $dashboardService->getSingleUser($id);
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
 }

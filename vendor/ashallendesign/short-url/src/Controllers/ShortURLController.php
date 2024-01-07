@@ -5,8 +5,10 @@ namespace AshAllenDesign\ShortURL\Controllers;
 use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Http\RedirectResponse;
+use App\Models\Link;
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class ShortURLController
 {
     /**
@@ -21,7 +23,17 @@ class ShortURLController
      */
     public function __invoke(Request $request, Resolver $resolver, string $shortURLKey): RedirectResponse
     {
+        $getLinkData = Link::where('name', $shortURLKey)->firstOrFail();
+
+        $user = User::where('id',$getLinkData->user_id)->firstOrFail();
+
+        if($user->sub_end <= Carbon::today()->toDateString()){
+            return redirect('');
+        }
+
         $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
+
+
 
         $resolver->handleVisit(request(), $shortURL);
 

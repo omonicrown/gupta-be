@@ -5,173 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        body {
-            background-color: #f6f6f6;
-            font-family: sans-serif;
-            -webkit-font-smoothing: antialiased;
-            font-size: 14px;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        img {
-            border: none;
-            -ms-interpolation-mode: bicubic;
-            max-width: 40%;
-            max-height: 50%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        p {
-            text-align: justify;
-            text-justify: inter-word;
-            color: #707070;
-        }
-
-        .content {
-            box-sizing: border-box;
-            display: block;
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .wrapper {
-            margin-top: 50px;
-        }
-
-        .img-container {
-            position: relative;
-            text-align: center;
-            color: white;
-        }
-
-        .centered {
-            position: absolute;
-            top: 30%;
-            left: 30%;
-
-
-        }
-
-        .button {
-            background-color: #1DB459;
-            /* Green */
-            border: none;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 4px 2px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-        }
-
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        h1 {
-            font-size: 20px;
-            color: #1B212F;
-            /* text-align: center; */
-        }
-
-        .card {
-            background-color: #1DB459;
-            color: white;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            margin: 6px;
-            height: 170px;
-            border-radius: 5px;
-        }
-
-        .footer {
-            clear: both;
-            margin-top: 30px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .footer p,
-        .footer a {
-            color: #999999;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        /* -------------------------------------
-          RESPONSIVE AND MOBILE FRIENDLY STYLES
-      ------------------------------------- */
-        @media only screen and (max-width: 620px) {
-            h1 {
-                font-size: 16px;
-
-            }
-
-            .content {
-                margin-left: 10px;
-                margin-right: 10px;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
 </head>
+<style>
+    body {
+        background-color: #ffffff;
+        font-family: sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        /* line-height: 1.4; */
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .wrapper {
+        background-color: #F2F5F8;
+        margin: auto;
+        margin-top: 50px;
+        margin-bottom: 40px;
+        width: 640px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 32px;
+        padding-right: 32px;
+
+    }
+
+    .content {
+        background-color: white;
+        width: 576px;
+        margin: auto;
+        margin-top: 20px;
+        padding: 32px;
+    }
+
+    .header h3 {
+        font-size: 16px;
+        color: #333333;
+    }
+
+    .text-content {
+        margin-top: 20px;
+    }
+
+    .text-content p {
+        font-size: 14px;
+        color: #333333;
+    }
+
+    .button {
+        border: none;
+        background-color: #0071BC;
+        color: #ffffff;
+        padding: 12px 22px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 20px;
+    }
+
+    .footer {
+        padding: 32px;
+    }
+
+    .footer p {
+        font-size: 14px;
+        color: #333333;
+    }
+
+    .footer-end {
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+    .footer-end h3 {
+        color: #6A7C94;
+        font-style: italic;
+
+    }
+
+    .footer-social img {
+        padding-left: 10px;
+        margin-top: 8px;
+    }
+
+    .logo img {
+        text-align: center;
+        position: relative;
+       
+    }
+</style>
 
 <body>
     <div class="wrapper">
+        <div class="logo">
+            <img src="https://www.mygupta.co/gupta.jpeg" />
+        </div>
         <div class="content">
-            <!-- <img src="www.afriproedu.com/images/logo.svg" alt="www.afriproedu.com/images/logo192.png"/> -->
-            <!-- <div class="card">Design</div> -->
-            <div class="img-container">
 
-                <img src="https://afriproedu.com/logo192.png" alt="https://afriproedu.com/logo192.png" class="img" />
-                <!-- <div class="centered">Welcome to AfriProEdu:<br/> Your Gateway to a Bright Future in Finland!</div> -->
+            <div class="header">
+                <h3>Welcome to Gupta! 🎉</h3>
+                <h3> Dear {{$details['custname']}},</h3>
+                <h3>Welcome to Gupta! We're thrilled to have you on board. 🚀
+                </h3>
             </div>
+            <div class="text-content">
+                <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
+                    feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
+                    the Gupta community:</p>
+                <p>Feel free to reach out if you have any questions or need assistance. We're here to help!</p>
+                <p>Best regards,</p>
+            </div>
+            <div class="btn">
+                <a href="https://afripay.netlify.app/email-verify/{{$details['email']}}">
+                    <button class="button">Confirm Email</button>
+                </a>
+            </div>
+        </div>
 
-            <h1>Welcome {{$details['custname']}},</h1>
 
 
-            <p> Thank you for choosing Afripay! </p>
-
-            <p>Kindly click on the verification link below to proceed:</p>
-            
-            <p>https://goafripay.com/email-verify/{{$details['email']}}</p>
-                <br />
-                Sincerely,<br />
-                The AfriPay Team
+        <div class="footer">
+            <p>This email was sent to gawas.sachin@gmail.com. If you’d rather not receive this kind of email, you can
+                unsubscribe or manage your email preferences.
             </p>
-
-
-            <!-- <div class="btn">
-                <button class="button button1">Call To Action</button>
-            </div> -->
-
+            <p> Stripe, 510 Townsend Street, San Francisco CA 94103</p>
+        </div>
+        <div class="footer-end">
+            <div>
+                <h3>Gupta</h3>
+            </div>
+            <div class="footer-social">
+                <img src="https://www.mygupta.co/twitter.jpeg" />
+                <img src="https://www.mygupta.co/facebook.jpeg" />
+                <img src="https://www.mygupta.co/linkedin.jpeg" />
+            </div>
         </div>
     </div>
-    <!-- START FOOTER -->
-    <div class="footer">
-        <p>Sent by AfriProEdu © 2023. All Rights Reserved.</p>
-    </div>
-    <!-- END FOOTER -->
-
-
 </body>
 
 </html>

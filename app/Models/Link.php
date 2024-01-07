@@ -30,11 +30,12 @@ class Link extends Model
         'redirect_link',
         'type',
         'user_id',
-        'short_url_id'
+        'short_url_id',
+        'created_at',
     ];
 
     protected $hidden = [
-        'created_at',
+       
         'updated_at',
         'deleted_at'
     ];

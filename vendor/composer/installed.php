@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '7249975e6e0a81e816233ed6fa714d8ab078466d',
+        'reference' => '275dae9cfdfc7549153362797c94bd4ef286243f',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -484,6 +484,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'kingflamez/laravelrave' => array(
+            'pretty_version' => 'v4.2.1',
+            'version' => '4.2.1.0',
+            'reference' => '4443497c306e0b912feb77156d8947c1456e05b4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../kingflamez/laravelrave',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -502,7 +511,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '7249975e6e0a81e816233ed6fa714d8ab078466d',
+            'reference' => '275dae9cfdfc7549153362797c94bd4ef286243f',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

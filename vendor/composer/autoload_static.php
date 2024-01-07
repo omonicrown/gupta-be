@@ -132,6 +132,10 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
             'Laravel\\Sanctum\\' => 16,
             'Laravel\\Sail\\' => 13,
         ),
+        'K' => 
+        array (
+            'KingFlamez\\Rave\\' => 16,
+        ),
         'J' => 
         array (
             'Jenssegers\\Model\\' => 17,
@@ -463,6 +467,10 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
         array (
             0 => __DIR__ . '/..' . '/laravel/sail/src',
         ),
+        'KingFlamez\\Rave\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kingflamez/laravelrave/src',
+        ),
         'Jenssegers\\Model\\' => 
         array (
             0 => __DIR__ . '/..' . '/jenssegers/model/src',
@@ -662,6 +670,7 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Middleware\\isAdmin' => __DIR__ . '/../..' . '/app/Http/Middleware/isAdmin.php',
+        'App\\Http\\Middleware\\isLinkExpired' => __DIR__ . '/../..' . '/app/Http/Middleware/isLinkExpired.php',
         'App\\Http\\Requests\\MarketPlace\\CreateProductRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MarketPlace/CreateProductRequest.php',
         'App\\Http\\Requests\\MarketPlace\\MarketLinkRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MarketPlace/MarketLinkRequest.php',
         'App\\Http\\Requests\\Profile\\UpdatePasswordRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Profile/UpdatePasswordRequest.php',
@@ -3848,6 +3857,14 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
         'Jenssegers\\Agent\\Facades\\Agent' => __DIR__ . '/..' . '/jenssegers/agent/src/Facades/Agent.php',
         'Jenssegers\\Model\\MassAssignmentException' => __DIR__ . '/..' . '/jenssegers/model/src/MassAssignmentException.php',
         'Jenssegers\\Model\\Model' => __DIR__ . '/..' . '/jenssegers/model/src/Model.php',
+        'KingFlamez\\Rave\\Facades\\Rave' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Facades/Rave.php',
+        'KingFlamez\\Rave\\Helpers\\Banks' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Helpers/Banks.php',
+        'KingFlamez\\Rave\\Helpers\\Beneficiary' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Helpers/Beneficiary.php',
+        'KingFlamez\\Rave\\Helpers\\Bills' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Helpers/Bills.php',
+        'KingFlamez\\Rave\\Helpers\\Payments' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Helpers/Payments.php',
+        'KingFlamez\\Rave\\Helpers\\Transfers' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Helpers/Transfers.php',
+        'KingFlamez\\Rave\\Rave' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/Rave.php',
+        'KingFlamez\\Rave\\RaveServiceProvider' => __DIR__ . '/..' . '/kingflamez/laravelrave/src/RaveServiceProvider.php',
         'Laravel\\Sail\\Console\\AddCommand' => __DIR__ . '/..' . '/laravel/sail/src/Console/AddCommand.php',
         'Laravel\\Sail\\Console\\Concerns\\InteractsWithDockerComposeServices' => __DIR__ . '/..' . '/laravel/sail/src/Console/Concerns/InteractsWithDockerComposeServices.php',
         'Laravel\\Sail\\Console\\InstallCommand' => __DIR__ . '/..' . '/laravel/sail/src/Console/InstallCommand.php',

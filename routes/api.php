@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Api\Payment\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -107,11 +107,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 
+    Route::prefix('payment')->group(function () { 
+        Route::post('make-payment', [PaymentController::class, 'makePayment']);
+        Route::get('callback', [PaymentController::class, 'paymentCallback']);
+        Route::post('pay-for-course', [PaymentController::class, 'payForCourse']);
+        Route::get('get-wallet-details', [PaymentController::class, 'walletDetails']);
+    });
+
 
     Route::prefix('admin')->group(function (Router $link) {
         Route::group(['middleware' => ['isAdmin']], function (Router $link) {
             //dashboard Apis
             $link->get('get-links-count', [DashboardController::class, 'getLinksCount']);
+            Route::get('get-single-user/{id}', [DashboardController::class, 'getSingleUser']);
             //manage user api
             $link->get('get-all-users', [ManageUsersController::class, 'getAllUsers']);
             $link->get('get-all-details/{id}', [ManageUsersController::class, 'getUserDetails']);
