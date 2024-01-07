@@ -88,7 +88,7 @@ class PaymentService extends BaseController
                 'amount' => $data['amount'],
                 'currency' => 'USD',
                 'payment_options' => 'card',
-                'redirect_url' => 'http://localhost:3000/subscription', //replace with yours
+                'redirect_url' => 'https://www.mygupta.co/subscription', //replace with yours
                 'customer' => [
                     'email' => Auth()->user()->email,
                     'name' => Auth()->user()->name,
