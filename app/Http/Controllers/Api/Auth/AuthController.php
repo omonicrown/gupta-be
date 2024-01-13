@@ -248,7 +248,7 @@ class AuthController extends Controller
 
             return $this->success('We sent an OTP to ' . $user->email . '', 'Password Reset Link Sent Successfully.');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
+            return $this->error($th->getMessage());
         }
 
 
