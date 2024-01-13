@@ -48,6 +48,8 @@ class CreateRandomLinkController extends Controller
 
             $shortURL = ShortURL::destinationUrl(
                 'https://api.whatsapp.com/send?phone='.$request->phone_number.'&text='.$request->message
+            )->urlKey(
+                $link->name
             )->trackVisits()->make();
 
             $info = LinkInfo::updateOrCreate(

@@ -48,10 +48,14 @@ class CreateRandomUrlController extends Controller
             if(substr($request->url, 0, 5) == 'https' || substr($request->url, 0, 4) == 'http'){
                 $shortURL = ShortURL::destinationUrl(
                     $request->url
+                )->urlKey(
+                    $link->name
                 )->trackVisits()->make();
              }else{
                 $shortURL = ShortURL::destinationUrl(
                     "https://".$request->url
+                )->urlKey(
+                    $link->name
                 )->trackVisits()->make();
              }
             

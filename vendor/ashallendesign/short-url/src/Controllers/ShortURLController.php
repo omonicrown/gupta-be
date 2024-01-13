@@ -23,13 +23,17 @@ class ShortURLController
      */
     public function __invoke(Request $request, Resolver $resolver, string $shortURLKey): RedirectResponse
     {
-        $getLinkData = Link::where('name', $shortURLKey)->firstOrFail();
+        
+        $getLinkData = Link::where('name', $shortURLKey)->first();
 
-        $user = User::where('id',$getLinkData->user_id)->firstOrFail();
-
-        if($user->sub_end <= Carbon::today()->toDateString()){
-            return redirect('');
+        if($getLinkData->user_id !==null){
+            $user = User::where('id',$getLinkData->user_id)->firstOrFail();
+            if($user->sub_end <= Carbon::today()->toDateString()){
+                return redirect('www.google.com');
+            }
         }
+
+       
 
         $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
 
