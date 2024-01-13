@@ -106,32 +106,24 @@
         <div class="content">
 
             <div class="header">
-                <h3>Welcome to Gupta! 🎉</h3>
-                <h3> Dear {{$details['custname']}},</h3>
-                <h3>Welcome to Gupta! We're thrilled to have you on board. 🚀
-                </h3>
+                
+                <h3> Hello {{$details['custname']}},</h3>
+                <h3>You have requested to reset your password. 🚀</h3>
             </div>
             <div class="text-content">
-                <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
-                    feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
-                    the Gupta community.</p>
-                <p>Kindly click on the link below to proceed.</p>
+            <p>Your One Time Password is : <b>{{$details['otp']}}</b></p>
+            <p>This password will expire in the next 30 minutes.</p>
+                <p>In any case this is not your action, kindly ignore the message</p>
+                <p>Feel free to reach out if you have any questions or need assistance. We're here to help!</p>
                 <p>Best regards,</p>
-            </div>
-            <div class="btn">
-                <a href="https://www.mygupta.co/email-verify/{{$details['email']}}">
-                    <button class="button">Confirm Email</button>
-                </a>
             </div>
         </div>
 
 
 
         <div class="footer">
-            <p>This email was sent to gawas.sachin@gmail.com. If you’d rather not receive this kind of email, you can
-                unsubscribe or manage your email preferences.
+            <p>This email was sent from hello@mygupta.co.
             </p>
-            <p> Stripe, 510 Townsend Street, San Francisco CA 94103</p>
         </div>
         <div class="footer-end">
             <div>

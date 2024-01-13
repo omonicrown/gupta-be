@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Mail\EmailVerify;
 use App\Mail\NewUserMail;
+use App\Mail\ResetPassword;
 use App\Mail\WelcomeUserMail;
+use App\Models\passwordReset;
 use Exception;
 use App\Models\User;
+use Http;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -180,7 +185,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'name' => $user->name,
-                'data'=> $user,
+                'data' => $user,
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
         } catch (Exception $e) {
@@ -191,12 +196,108 @@ class AuthController extends Controller
         }
     }
 
+
+    public function forgot(ForgotPasswordRequest $request)
+    {
+
+        try {
+            $user = ($query = User::query());
+            $user = $user->where($query->qualifyColumn('email'), $request->input('email'))->first();
+
+            if (!$user || !$user->email) {
+                return $this->sendError('No Record', 'No Record Found');
+            }
+
+            $resetPasswordToken = str_pad(random_int(1, 999), 4, '0', STR_PAD_LEFT);
+
+            if (!$userPassReset = passwordReset::where('email', $user->email)->first()) {
+                passwordReset::create([
+                    'email' => $user->email,
+                    'token' => $resetPasswordToken
+                ]);
+            } else {
+                $userPassReset->update([
+                    'email' => $user->email,
+                    'token' => $resetPasswordToken
+                ]);
+            }
+
+            // $response = Http::post('https://api.ng.termii.com/api/sms/send', [
+            //     'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
+            //     'type' => 'plain',
+            //     'to' => $user->phone_number,
+            //     'from' => 'Afriproedu',
+            //     'channel' => 'generic',
+            //     'sms' => "Hello,your OTP is " . $resetPasswordToken . ". This will expire in the next 30 minutes.",
+
+            // ]);
+
+            $reveiverEmailAddress = $user->email;
+            $details = [
+                'custname' => $user->name,
+                'otp' => $resetPasswordToken,
+            ];
+
+
+            Mail::to($reveiverEmailAddress)->send(new ResetPassword($details));
+
+
+            // dd($response);
+
+            // echo $response;
+
+            return $this->success('We sent an OTP to ' . $user->email . '', 'Password Reset Link Sent Successfully.');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
+
+
+    }
+
+    public function reset(ResetPasswordRequest $request)
+    {
+
+        try {
+            $attribute = $request->validated();
+            $user = User::where('email', $attribute['email'])->first();
+            // $user = ($query = User::query());
+            // $user = $user->where($query->qualifyColumn('email'),$request->input('email'))->first();
+    
+            if (!$user) {
+                return $this->sendError('No Record', 'Incorrect email address provided');
+            }
+    
+            $resetRequest = passwordReset::where('email', $user->email)->first();
+            // dd($resetRequest->token);
+    
+            if (!$resetRequest || $request->token != $resetRequest->token) {
+                return $this->error('An Error Occured', 'Token Mis-match,try again');
+            }
+    
+            $user->fill([
+                'password' => Hash::make($attribute['password']),
+            ]);
+    
+            $user->save();
+    
+            $user->tokens()->delete();
+            $resetRequest->delete();
+            // $success['token'] = $user->createToken('MyAuth')->plainTextToken;
+            $success['name'] = $user->name;
+            // $success['role'] =  $user->role;
+            $success['account_id'] = $user->id;
+    
+            return $this->success('Pasword Reset Successfully!',$success);
+        } catch (\Throwable $th) {
+           dd($th->getMessage());
+        }
+        
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse  
      */
-
-
 
     public function session(Request $request): JsonResponse
     {
@@ -224,24 +325,26 @@ class AuthController extends Controller
         return response()->json(
             $request->user()->load("link")
         );
-        
+
     }
 
     public function getLinksAll(Request $request): JsonResponse
     {
-        return response()->json([
-            'status' => true,
-            'data' => LinkInfo::get()
-        ]
+        return response()->json(
+            [
+                'status' => true,
+                'data' => LinkInfo::get()
+            ]
         );
     }
 
     public function getLinksShort(Request $request): JsonResponse
     {
-        return response()->json([
-            'status' => true,
-            'data' => ShortURL::get()
-        ]
+        return response()->json(
+            [
+                'status' => true,
+                'data' => ShortURL::get()
+            ]
         );
     }
 
@@ -249,10 +352,11 @@ class AuthController extends Controller
     {
         $Link = Link::where('type', 'tiered')->where('name', $name)->first();
         $Links = Link::where('type', 'message')->where('user_id', $Link->user_id)->get(['name']);
-        return response()->json([
-            'status' => true,
-            'data' => $Links
-        ]
+        return response()->json(
+            [
+                'status' => true,
+                'data' => $Links
+            ]
         );
     }
 

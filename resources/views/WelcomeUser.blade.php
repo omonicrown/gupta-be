@@ -201,7 +201,7 @@
     </div>
     <!-- START FOOTER -->
     <div class="footer">
-        <p>Sent by Gupta © 2023. All Rights Reserved.</p>
+        <p>Sent by Gupta © 2024. All Rights Reserved.</p>
     </div>
     <!-- END FOOTER -->
 
