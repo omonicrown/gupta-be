@@ -9,6 +9,7 @@ use App\Mail\NewUserMail;
 use App\Mail\ResetPassword;
 use App\Mail\WelcomeUserMail;
 use App\Models\passwordReset;
+use App\Models\VendorWallet;
 use Exception;
 use App\Models\User;
 use Http;
@@ -33,6 +34,33 @@ class AuthController extends Controller
      * @param Request $request
      * @return User
      */
+
+
+   
+
+    public function testChunk(Request $request)
+    {
+
+        try {
+            $rows = collect();
+       $userAll = User::chunk(5, function ($users) use($rows) {
+            foreach ($users as $user) {
+               return($user);	
+                // sleep(2);
+                // break;
+            }
+        });
+        return $userAll;
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
+
+      
+    }
+
+
+
+
     public function createUser(Request $request)
     {
         try {
@@ -69,6 +97,16 @@ class AuthController extends Controller
                 'no_of_mlink' => '2',
                 'no_of_mstore' => '1',
                 'password' => Hash::make($request->password)
+            ]);
+
+
+             VendorWallet::create([
+                'user_id' => $user->id,
+                'total_amount' => '0',
+                'previous_amount' => '0',
+                'user_email' => $user->email,
+                'user_phone_number' => $user->phone_number,
+                'last_tnx_ref' => '0'
             ]);
 
             $reveiverEmailAddress = $request->email;

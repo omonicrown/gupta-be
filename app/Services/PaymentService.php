@@ -3,15 +3,19 @@
 namespace App\Services;
 
 use App\Mail\Program;
+use App\Models\Subscription;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\userAccountDetail;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Models\NursingPayments;
 use App\Models\NursingProgram;
 use App\Models\userCoursePayment;
+use App\Models\VendorWallet;
 use App\Models\Waiter;
 use Carbon\CarbonImmutable;
 use Dotenv\Exception\ValidationException;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -22,63 +26,6 @@ use GuzzleHttp\Psr7\Message;
 
 class PaymentService extends BaseController
 {
-    public function makePaymentWithFlutterwave($data)
-    {
-
-        // return $data;
-        $request = [
-            'tx_ref' => time(),
-            'amount' => $data['amount'],
-            'currency' => 'USD',
-            'payment_options' => 'card',
-            'redirect_url' => 'https://afriproedu.com/wallet', //replace with yours
-            'customer' => [
-                'email' => Auth()->user()->email,
-                'name' => Auth()->user()->name . ' ' . Auth()->user()->last_name
-            ],
-            'meta' => [
-                'price' => $data['amount']
-            ],
-            'customizations' => [
-                'title' => 'Paying for a service', //Set your title
-                'description' => 'Level'
-            ]
-        ];
-
-        //* Call fluterwave endpoint
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($request),
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer FLWPUBK_TEST-2841b8bd89c458c57f1cf773ef6eda0b-X',
-                'Content-Type: application/json'
-            ),
-        )
-        );
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $res = json_decode($response);
-        if ($res->status == 'success') {
-            return ($res);
-        } else {
-            // FLWPUBK_TEST-a3f1debc86ff81e490884965b8985bf9-X
-            // FLWSECK_TEST-73b190630a6477e0f7440874acdc862f-X
-            // FLWSECK_TEST9d6319106094
-            // echo 'We can not process your payment';
-            return ($res);
-        }
-    }
-
-
     public function makePaymentForSubscription($data)
     {
 
@@ -86,12 +33,13 @@ class PaymentService extends BaseController
             $request = [
                 'tx_ref' => time(),
                 'amount' => $data['amount'],
-                'currency' => 'USD',
+                'currency' => 'NGN',
                 'payment_options' => 'card',
-                'redirect_url' => 'https://www.mygupta.co/subscription', //replace with yours
+                'redirect_url' => 'http://localhost:3000/subscription', //replace with yours
                 'customer' => [
                     'email' => Auth()->user()->email,
                     'name' => Auth()->user()->name,
+                    'phone_number' => Auth()->user()->phone_number
                 ],
                 'meta' => [
                     'price' => $data['amount']
@@ -104,21 +52,23 @@ class PaymentService extends BaseController
 
             //* Call fluterwave endpoint
             $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => json_encode($request),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: Bearer FLWSECK_TEST-275ada82d4edb5f892f52e41dbc78a40-X',
-                    'Content-Type: application/json'
-                ),
-            )
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode($request),
+                    CURLOPT_HTTPHEADER => array(
+                        'Authorization: Bearer '.env('FLUTTERWAVE_SECRET_KEY'),
+                        'Content-Type: application/json'
+                    ),
+                )
             );
 
             $response = curl_exec($curl);
@@ -140,237 +90,102 @@ class PaymentService extends BaseController
 
 
 
-    public function makeOutsidePaymentWithFlutterwave($data)
-    {
-        $request = [
-            'tx_ref' => time(),
-            'amount' => $data['amount'],
-            'currency' => 'USD',
-            'payment_options' => 'card',
-            'redirect_url' => 'https://afriproedu.com/practical-nursing-application-form', //replace with yours
-            'customer' => [
-                'email' => $data['email'],
-                'name' => $data['first_name'] . ' ' . $data['last_name']
-            ],
-            'meta' => [
-                'price' => $data['amount']
-            ],
-            'customizations' => [
-                'title' => 'Paying for a service', //Set your title
-                'description' => 'Level'
-            ]
-        ];
-
-
-        // dd( $nurr);
-
-        //* Call fluterwave endpoint
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($request),
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer FLWSECK-e493f89a819aae8e3d16266e170948cd-18a93169e5fvt-X',
-                'Content-Type: application/json'
-            ),
-        )
-        );
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $res = json_decode($response);
-        if ($res->status == 'success') {
-            try {
-                NursingPayments::updateOrCreate(
-                    ['email' => $data['email']],
-                    [
-                        'email' => $data['email'],
-                        'amount' => $data['amount'],
-                        'first_name' => $data['first_name'],
-                        'last_name' => $data['last_name'],
-                        'status' => $data['status'],
-                        'age' => $data['age'],
-                        'nursing_program' => $data['nursing_program'],
-                        'passport' => $data['passport'],
-                        'location' => $data['location'],
-                        'comment' => $data['comment'],
-                        'tution_fee' => $data['tution_fee'],
-                        'academic_background' => $data['academic_background'],
-                        'phone_number' => $data['phone_number'],
-                        'unique_id' => mt_rand(1000000000, 7000000000),
-                    ]
-                );
-            } catch (\Throwable $th) {
-                return ($th->getMessage());
-            }
-
-            return ($res);
-        } else {
-            // FLWPUBK_TEST-a3f1debc86ff81e490884965b8985bf9-X
-            // FLWSECK_TEST-73b190630a6477e0f7440874acdc862f-X
-            // FLWSECK_TEST9d6319106094
-            // echo 'We can not process your payment';
-            return ($res);
-        }
-    }
-
-    public function makeOutsideWaiterPayment($data)
-    {
-        $request = [
-            'tx_ref' => time(),
-            'amount' => $data['amount'],
-            'currency' => 'USD',
-            'payment_options' => 'card',
-            'redirect_url' => 'https://afriproedu.com' . $data['url'], //replace with yours
-            'customer' => [
-                'email' => $data['email'],
-                'name' => $data['full_name']
-            ],
-            'meta' => [
-                'price' => $data['amount']
-            ],
-            'customizations' => [
-                'title' => 'Paying for a service', //Set your title
-                'description' => 'Level'
-            ]
-        ];
-
-
-        // dd( $nurr);
-
-        //* Call fluterwave endpoint
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($request),
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer FLWSECK-e493f89a819aae8e3d16266e170948cd-18a93169e5fvt-X',
-                'Content-Type: application/json'
-            ),
-        )
-        );
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $res = json_decode($response);
-        if ($res->status == 'success') {
-            try {
-                Waiter::updateOrCreate(
-                    ['email' => $data['email']],
-                    [
-                        'email' => $data['email'],
-                        'full_name' => $data['full_name'],
-                        'program' => $data['program'],
-                        'country' => $data['country'],
-                        'academic_background' => $data['academic_background'],
-                        'profession' => $data['profession'],
-                        'pay_tuition_fee' => $data['pay_tution_fee'],
-                        'phone_number' => $data['phone_number'],
-                        'amount' => $data['amount'],
-                        'where_do_you_hear_about_us' => $data['where_do_you_hear_about_us'],
-                        'who_will_pay_for_tuition' => $data['who_will_pay_for_tuition']
-                    ]
-                );
-
-                $reveiverEmailAddress = 'samuelfemi85@gmail.com';
-                $details = [
-                    'custname' => $data['full_name'],
-                    'email' => $data['email'],
-                    'program' => $data['program'],
-                    'phone_number' => $data['phone_number'],
-                ];
-
-                Mail::to($reveiverEmailAddress)->send(new Program($details));
-
-                return ($res);
-            } catch (\Throwable $th) {
-                return ($th->getMessage());
-            }
-
-
-        } else {
-            // FLWPUBK_TEST-a3f1debc86ff81e490884965b8985bf9-X
-            // FLWSECK_TEST-73b190630a6477e0f7440874acdc862f-X
-            // FLWSECK_TEST9d6319106094
-            // echo 'We can not process your payment';
-            return ($res);
-        }
-    }
-
-    public function outsidePaymentCallback($data)
+    public function makeOutsideProductPaymentWithFlutterwave($data)
     {
         try {
 
-            $query = array(
-                "SECKEY" => "FLWSECK-e493f89a819aae8e3d16266e170948cd-18a93169e5fvt-X",
-                "txref" => $data['reference']
+            DB::beginTransaction();
+            $userData = User::where('id', $data['user_id'])->first();
+
+            $transaction = Transaction::create([
+                'user_id' => $data['user_id'],
+                'amount_paid' => '0',
+                'user_email' => $userData->email,
+                'user_phone_number' => $userData->phone_number,
+                'customer_email' => $data['customer_email'],
+                'customer_name' => $data['customer_full_name'],
+                'customer_phone_number' => $data['customer_phone_number'],
+                'paying_for' => $data['pay_for'],
+                'transaction_status' => 'pending',
+                'tnx_ref' => CarbonImmutable::now(),
+                'currency' => 'ngn',
+            ]);
+
+
+
+            $request = [
+                'tx_ref' => time(),
+                'amount' => $data['amount'],
+                'currency' => 'NGN',
+                'payment_options' => 'card',
+                'redirect_url' => 'http://localhost:3000/subscription', //replace with yours
+                'customer' => [
+                    'email' => $data['customer_email'],
+                    'name' => $data['customer_full_name'],
+                    'phone_number' => $data['customer_full_name']
+                ],
+                'meta' => [
+                    'price' => $data['amount']
+                ],
+                'customizations' => [
+                    'title' => $transaction->id, //Set your title
+                    'description' => 'Level'
+                ]
+            ];
+
+
+            // dd( $nurr);
+
+            //* Call fluterwave endpoint
+            $curl = curl_init();
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL => 'https://api.flutterwave.com/v3/payments', //don't change this
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode($request),
+                    CURLOPT_HTTPHEADER => array(
+                        'Authorization:Bearer '.env('FLUTTERWAVE_SECRET_KEY'),
+                        'Content-Type: application/json'
+                    ),
+                )
             );
 
-            $data_string = json_encode($query);
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $res = json_decode($response);
+            DB::commit();
 
-            $ch = curl_init('https://api.ravepay.co/flwv3-pug/getpaidx/api/v2/verify');
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            // return  $res;
 
-            $response = curl_exec($ch);
+            return $this->success(
+                ('Data Fetched Successfully'),
+                $res
+            );
 
-            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-            $header = substr($response, 0, $header_size);
-            $body = substr($response, $header_size);
-            curl_close($ch);
-            $resp = json_decode($response, true);
-            $paymentStatus = $resp['data']['status'];
-            $chargeResponsecode = $resp['data']['chargecode'];
-            $chargeAmount = $resp['data']['amount'];
-            $chargeCurrency = $resp['data']['currency'];
+        } catch (Exception $th) {
+            DB::rollback();
+            // dd($th->getMessage());
+            return $this->exception($th);
 
-            if (($chargeResponsecode == "00" || $chargeResponsecode == "0")) {
-                // $userAccount = userAccountDetail::where('user_id', Auth::user()->user_id)->first();
-                // if ($userAccount->payment_reference !== $data['reference']) {
-                //     $userAccount->account_balance = (($userAccount->account_balance) + (($resp['data']['amount'])));
-                //     $userAccount->payment_reference = $data['reference'];
-                //     $userAccount->save();
-                // }
-
-
-
-
-
-                $data = $resp['data'];
-                return $response;
-            } else {
-                return $response;
-            }
-        } catch (\Throwable $th) {
-            return ($th->getMessage());
         }
+
 
 
     }
 
+   
 
-
-    public function verify_flutterwave_payment($data)
+    public function verify_flutterwave_payment_for_subscription($data)
     {
         $query = array(
-            "SECKEY" => "FLWSECK_TEST-275ada82d4edb5f892f52e41dbc78a40-X",
+            "SECKEY" => env('FLUTTERWAVE_SECRET_KEY'),
             "txref" => $data['reference']
         );
 
@@ -392,6 +207,7 @@ class PaymentService extends BaseController
         $resp = json_decode($response, true);
         $paymentStatus = $resp['data']['status'];
         $chargeResponsecode = $resp['data']['chargecode'];
+        $tnx_ref = $resp['data']['txref'];
         $chargeAmount = $resp['data']['amount'];
         $chargeCurrency = $resp['data']['currency'];
 
@@ -400,42 +216,123 @@ class PaymentService extends BaseController
 
             //Basic Month sub
             if ($chargeAmount == '2') {
+
+                try {
+                    $userAccount = User::where('id', Auth::user()->id)->first();
+                    $userAccount->no_of_wlink = '20';
+                    $userAccount->no_of_rlink = '20';
+                    $userAccount->no_of_mlink = '5';
+                    $userAccount->no_of_mstore = '2';
+                    $userAccount->sub_type = '';
+                    $userAccount->sub_start = Carbon::today()->toDateString();
+                    $userAccount->sub_end = $current->addMonth()->toDateString();
+                    $userAccount->sub_status = 'active';
+                    $userAccount->save();
+
+                    Subscription::updateOrCreate(
+                        ['tnx_ref' => $tnx_ref],
+                        [
+                            'user_id' => Auth::user()->id,
+                            'sub_type' => '',
+                            'tnx_ref' => $tnx_ref,
+                            'amount_paid' => $chargeAmount,
+                            'user_email' => Auth::user()->email,
+                            'subscription_status' => 'paid',
+                            'currency' => 'ngn',
+                        ]
+                    );
+                } catch (\Throwable $th) {
+                    return $th->getMessage();
+                }
+
+
+            }
+
+            //basic year sub
+            if ($chargeAmount == '20') {
+
+                try {
+                    $userAccount = User::where('id', Auth::user()->id)->first();
+                    $userAccount->no_of_wlink = '20';
+                    $userAccount->no_of_rlink = '20';
+                    $userAccount->no_of_mlink = '5';
+                    $userAccount->no_of_mstore = '2';
+                    $userAccount->sub_type = '';
+                    $userAccount->sub_start = Carbon::today()->toDateString();
+                    $userAccount->sub_end = $current->addMonths(11)->toDateString();
+                    $userAccount->sub_status = 'active';
+                    $userAccount->save();
+                    Subscription::updateOrCreate(
+                        ['tnx_ref' => $tnx_ref],
+                        [
+                            'user_id' => Auth::user()->id,
+                            'sub_type' => '',
+                            'tnx_ref' => $tnx_ref,
+                            'amount_paid' => $chargeAmount,
+                            'user_email' => Auth::user()->email,
+                            'subscription_status' => 'paid',
+                            'currency' => 'ngn',
+                        ]
+                    );
+
+                } catch (\Throwable $th) {
+                    return $th->getMessage();
+                }
+
+            }
+
+            //Basic Month sub
+            if ($chargeAmount == '2') {
                 $userAccount = User::where('id', Auth::user()->id)->first();
                 $userAccount->no_of_wlink = '20';
                 $userAccount->no_of_rlink = '20';
                 $userAccount->no_of_mlink = '5';
                 $userAccount->no_of_mstore = '2';
-                $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = $current->addMonth()->toDateString();
-                $userAccount->sub_status = 'active';
-                $userAccount->save();
-            }
-
-            //basic year sub
-            if ($chargeAmount == '20') {
-                $userAccount = User::where('id', Auth::user()->id)->first();
-                $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = $current->addMonths(11)->toDateString();
-                $userAccount->sub_status = 'active';
-                $userAccount->save();
-            }
-
-             //Basic Month sub
-             if ($chargeAmount == '2') {
-                $userAccount = User::where('id', Auth::user()->id)->first();
+                $userAccount->sub_type = '';
                 $userAccount->sub_start = Carbon::today()->toDateString();
                 $userAccount->sub_end = $current->addDays(30)->toDateString();
                 $userAccount->sub_status = 'active';
                 $userAccount->save();
+
+                Subscription::updateOrCreate(
+                    ['tnx_ref' => $tnx_ref],
+                    [
+                        'user_id' => Auth::user()->id,
+                        'sub_type' => '',
+                        'tnx_ref' => $tnx_ref,
+                        'amount_paid' => $chargeAmount,
+                        'user_email' => Auth::user()->email,
+                        'subscription_status' => 'paid',
+                        'currency' => 'ngn',
+                    ]
+                );
             }
 
             //Popular year sub
             if ($chargeAmount == '20') {
                 $userAccount = User::where('id', Auth::user()->id)->first();
+                $userAccount->no_of_wlink = '20';
+                $userAccount->no_of_rlink = '20';
+                $userAccount->no_of_mlink = '5';
+                $userAccount->no_of_mstore = '2';
+                $userAccount->sub_type = '';
                 $userAccount->sub_start = Carbon::today()->toDateString();
                 $userAccount->sub_end = $current->addMonths(11)->toDateString();
                 $userAccount->sub_status = 'active';
                 $userAccount->save();
+
+                Subscription::updateOrCreate(
+                    ['tnx_ref' => $tnx_ref],
+                    [
+                        'user_id' => Auth::user()->id,
+                        'sub_type' => '',
+                        'tnx_ref' => $tnx_ref,
+                        'amount_paid' => $chargeAmount,
+                        'user_email' => Auth::user()->email,
+                        'subscription_status' => 'paid',
+                        'currency' => 'ngn',
+                    ]
+                );
             }
 
             $data = $resp['data'];
@@ -444,6 +341,102 @@ class PaymentService extends BaseController
             return "Failed";
         }
     }
+
+    public function verify_flutterwave_payment_for_product($data)
+    {
+        $query = array(
+            "SECKEY" => env('FLUTTERWAVE_SECRET_KEY'),
+            "txref" => $data['reference']
+        );
+
+        $data_string = json_encode($query);
+
+        $ch = curl_init('https://api.ravepay.co/flwv3-pug/getpaidx/api/v2/verify');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+        $response = curl_exec($ch);
+
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $header_size);
+        $body = substr($response, $header_size);
+        curl_close($ch);
+        $resp = json_decode($response, true);
+        $paymentStatus = $resp['data']['status'];
+        $chargeResponsecode = $resp['data']['chargecode'];
+        $tnx_ref = $resp['data']['txref'];
+        $chargeAmount = $resp['data']['amount'];
+        $chargeCurrency = $resp['data']['currency'];
+
+        if (($chargeResponsecode == "00" || $chargeResponsecode == "0")) {
+            $current = CarbonImmutable::now();
+
+            try {
+                Transaction::updateOrCreate(
+                    ['tnx_ref' => $tnx_ref],
+                    [
+                        'user_id' => '',
+                        'amount_paid' => $chargeAmount,
+                        'user_email' => '',
+                        'user_phone_number' => '',
+                        'customer_email' => '',
+                        'customer_phone_number' => '',
+                        'paying_for' => '',
+                        'transaction_status' => '',
+                        'sub_type' => '',
+                        'tnx_ref' => $tnx_ref,
+                        'subscription_status' => 'paid',
+                        'currency' => 'ngn',
+                    ]
+                );
+
+                $userAccount = VendorWallet::where('email', Auth::user()->id)->first();
+                $userAccount->no_of_wlink = '20';
+                $userAccount->no_of_rlink = '20';
+                $userAccount->no_of_mlink = '5';
+                $userAccount->no_of_mstore = '2';
+                $userAccount->sub_type = '';
+                $userAccount->sub_start = Carbon::today()->toDateString();
+                $userAccount->sub_end = $current->addMonths(11)->toDateString();
+                $userAccount->sub_status = 'active';
+                $userAccount->save();
+
+
+
+            } catch (\Throwable $th) {
+                return $th->getMessage();
+            }
+
+            $data = $resp['data'];
+
+
+            return $this->success(
+                ('Data Fetched Successfully'),
+                $data
+            );
+            
+        } else {
+            return $this->error('failed');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -481,10 +474,13 @@ class PaymentService extends BaseController
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer " . env('PAYSTACK_SECRET_KEY'),
-            "Cache-Control: no-cache",
-        )
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                "Authorization: Bearer " . env('PAYSTACK_SECRET_KEY'),
+                "Cache-Control: no-cache",
+            )
         );
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -587,19 +583,21 @@ class PaymentService extends BaseController
     {
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.paystack.co/transaction/verify/$reference",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer " . env('PAYSTACK_SECRET_KEY'),
-                "Cache-Control: no-cache",
-            ),
-        )
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => "https://api.paystack.co/transaction/verify/$reference",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "Authorization: Bearer " . env('PAYSTACK_SECRET_KEY'),
+                    "Cache-Control: no-cache",
+                ),
+            )
         );
 
         $response = curl_exec($curl);

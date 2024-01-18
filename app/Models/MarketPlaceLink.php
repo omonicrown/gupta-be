@@ -23,6 +23,15 @@ class MarketPlaceLink extends Model
     protected $fillable = [
         'link_name',
         'user_id',
+        'brand_primary_color',
+        'brand_description',
+        'facebook_url',
+        'instagram_url',
+        'tiktok_url',
+        'brand_logo',
+        'brand_logo_id'
+
+
        
     ];
 

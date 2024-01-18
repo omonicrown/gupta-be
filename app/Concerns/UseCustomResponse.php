@@ -29,9 +29,9 @@ trait UseCustomResponse
      */
     public function exception(Exception $exception): JsonResponse
     {
-        if (config('app.debug') === false) {
-            return $this->error('Server Error');
-        }
+        // if (config('app.debug') === false) {
+        //     return $this->error('Server Error');
+        // }
 
         if (app()->isProduction()) {
             Log::error($exception);
@@ -69,6 +69,8 @@ trait UseCustomResponse
 
         return response()->json($data, $code);
     }
+
+
 
     /**
      * @param  array  $errors

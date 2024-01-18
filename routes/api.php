@@ -42,10 +42,16 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('auth/forgot', [AuthController::class, 'forgot']);
 Route::post('auth/reset', [AuthController::class, 'reset']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
-Route::post('/link/create-random-url', CreateRandomUrlController::class);
+Route::post('/link/create-random-url', CreateRandomUrlController::class);  
 Route::post('/auth/verify-mail', [AuthController::class, 'verifyEmail']);
 
+Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']);
+// Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']); 
+
+
 Route::put('update-user-role/{id}', [ManageUsersController::class, 'updateUserRole']);
+
+Route::get('/auth/test', [AuthController::class, 'testChunk']);
 
 Route::get('get-products-by-link-name/{name}', [ProductController::class, 'getProductsByLinkName']);
 Route::get('get-single-product-outside/{id}', [ProductController::class, 'getSingleProduct']);

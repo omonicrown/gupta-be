@@ -26,9 +26,9 @@ class CreateProductRequest extends FormRequest
             'product_image_id_3' =>'string',
             'id' =>'',
             // 'cover_photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-            'product_image_1' =>'image|mimes:jpeg,png,jpg,gif,svg',
-            'product_image_2' =>'image|mimes:jpeg,png,jpg,gif,svg',
-            'product_image_3' =>'image|mimes:jpeg,png,jpg,gif,svg',
+            'product_image_1' =>'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'product_image_2' =>'',
+            'product_image_3' =>'',
         ];
     }
 }

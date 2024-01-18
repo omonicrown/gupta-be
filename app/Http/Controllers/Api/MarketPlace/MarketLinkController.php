@@ -39,8 +39,16 @@ class MarketLinkController extends Controller
 
             //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
             // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
+            
             $link = MarketPlaceLink::create([
                 'link_name' => str_replace(' ', '-', $request->link_name),
+                'brand_primary_color' => $request->brand_primary_color,
+                'brand_description' => $request->brand_description,
+                'facebook_url' => $request->facebook_url,
+                'instagram_url' => $request->instagram_url,
+                'tiktok_url' => $request->tiktok_url,
+                'brand_logo' => ($request->brand_logo =='No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPath()),
+                'brand_logo_id' =>  ( $request->brand_logo =='No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('productImages', $request->brand_logo->hashName()))->getPublicId()),
                 'user_id' => auth()->user()->id
             ]);
 

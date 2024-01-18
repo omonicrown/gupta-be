@@ -4,7 +4,7 @@ namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MakeOutsidePayment extends FormRequest
+class MakeOutsideProductPaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,11 +20,12 @@ class MakeOutsidePayment extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => 'required',
             'amount' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'currency' => 'required',
-            'email' => 'required',
+            'customer_full_name' => 'required',
+            'customer_email' => 'required',
+            'pay_for' => 'required',
+            'customer_phone_number' => 'required',
         ];
     }
 }
