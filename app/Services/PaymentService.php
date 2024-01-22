@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Mail\CustomerReciept;
 use App\Mail\Program;
+use App\Mail\VendorReciept;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\User;
@@ -35,7 +37,7 @@ class PaymentService extends BaseController
                 'amount' => $data['amount'],
                 'currency' => 'NGN',
                 'payment_options' => 'card',
-                'redirect_url' => 'http://localhost:3000/subscription', //replace with yours
+                'redirect_url' => 'https://www.mygupta.co/subscription', //replace with yours
                 'customer' => [
                     'email' => Auth()->user()->email,
                     'name' => Auth()->user()->name,
@@ -65,7 +67,7 @@ class PaymentService extends BaseController
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => json_encode($request),
                     CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer '.env('FLUTTERWAVE_SECRET_KEY'),
+                        'Authorization: Bearer ' . env('FLUTTERWAVE_SECRET_KEY'),
                         'Content-Type: application/json'
                     ),
                 )
@@ -106,6 +108,7 @@ class PaymentService extends BaseController
                 'customer_name' => $data['customer_full_name'],
                 'customer_phone_number' => $data['customer_phone_number'],
                 'paying_for' => $data['pay_for'],
+                'product_qty'=> $data['product_qty'],
                 'transaction_status' => 'pending',
                 'tnx_ref' => CarbonImmutable::now(),
                 'currency' => 'ngn',
@@ -118,17 +121,17 @@ class PaymentService extends BaseController
                 'amount' => $data['amount'],
                 'currency' => 'NGN',
                 'payment_options' => 'card',
-                'redirect_url' => 'http://localhost:3000/subscription', //replace with yours
+                'redirect_url' => 'https://www.mygupta.co/store/' . $data['store_id'], //replace with yours
                 'customer' => [
                     'email' => $data['customer_email'],
                     'name' => $data['customer_full_name'],
-                    'phone_number' => $data['customer_full_name']
+                    'phone_number' => $transaction->id
                 ],
                 'meta' => [
                     'price' => $data['amount']
                 ],
                 'customizations' => [
-                    'title' => $transaction->id, //Set your title
+                    'title' => $data['pay_for'], //Set your title
                     'description' => 'Level'
                 ]
             ];
@@ -151,7 +154,7 @@ class PaymentService extends BaseController
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => json_encode($request),
                     CURLOPT_HTTPHEADER => array(
-                        'Authorization:Bearer '.env('FLUTTERWAVE_SECRET_KEY'),
+                        'Authorization:Bearer ' . env('FLUTTERWAVE_SECRET_KEY'),
                         'Content-Type: application/json'
                     ),
                 )
@@ -180,7 +183,10 @@ class PaymentService extends BaseController
 
     }
 
-   
+
+
+
+
 
     public function verify_flutterwave_payment_for_subscription($data)
     {
@@ -223,7 +229,7 @@ class PaymentService extends BaseController
                     $userAccount->no_of_rlink = '20';
                     $userAccount->no_of_mlink = '5';
                     $userAccount->no_of_mstore = '2';
-                    $userAccount->sub_type = '';
+                    $userAccount->sub_type = 'basic';
                     $userAccount->sub_start = Carbon::today()->toDateString();
                     $userAccount->sub_end = $current->addMonth()->toDateString();
                     $userAccount->sub_status = 'active';
@@ -282,13 +288,13 @@ class PaymentService extends BaseController
             }
 
             //Basic Month sub
-            if ($chargeAmount == '2') {
+            if ($chargeAmount == '2000') {
                 $userAccount = User::where('id', Auth::user()->id)->first();
                 $userAccount->no_of_wlink = '20';
                 $userAccount->no_of_rlink = '20';
                 $userAccount->no_of_mlink = '5';
                 $userAccount->no_of_mstore = '2';
-                $userAccount->sub_type = '';
+                $userAccount->sub_type = 'premium';
                 $userAccount->sub_start = Carbon::today()->toDateString();
                 $userAccount->sub_end = $current->addDays(30)->toDateString();
                 $userAccount->sub_status = 'active';
@@ -368,45 +374,62 @@ class PaymentService extends BaseController
         $paymentStatus = $resp['data']['status'];
         $chargeResponsecode = $resp['data']['chargecode'];
         $tnx_ref = $resp['data']['txref'];
+        $tnx_id = $resp['data']['custphone'];
         $chargeAmount = $resp['data']['amount'];
         $chargeCurrency = $resp['data']['currency'];
+        $transact = [];
 
         if (($chargeResponsecode == "00" || $chargeResponsecode == "0")) {
             $current = CarbonImmutable::now();
-
             try {
-                Transaction::updateOrCreate(
-                    ['tnx_ref' => $tnx_ref],
+                DB::beginTransaction();
+                $transact = Transaction::updateOrCreate(
+                    ['id' => $tnx_id],
                     [
-                        'user_id' => '',
                         'amount_paid' => $chargeAmount,
-                        'user_email' => '',
-                        'user_phone_number' => '',
-                        'customer_email' => '',
-                        'customer_phone_number' => '',
-                        'paying_for' => '',
-                        'transaction_status' => '',
-                        'sub_type' => '',
-                        'tnx_ref' => $tnx_ref,
-                        'subscription_status' => 'paid',
-                        'currency' => 'ngn',
+                        'transaction_status' => $paymentStatus,
+                        'tnx_ref' => $tnx_ref
                     ]
                 );
 
-                $userAccount = VendorWallet::where('email', Auth::user()->id)->first();
-                $userAccount->no_of_wlink = '20';
-                $userAccount->no_of_rlink = '20';
-                $userAccount->no_of_mlink = '5';
-                $userAccount->no_of_mstore = '2';
-                $userAccount->sub_type = '';
-                $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = $current->addMonths(11)->toDateString();
-                $userAccount->sub_status = 'active';
-                $userAccount->save();
+                $wallet = VendorWallet::where('user_id', $transact->user_id)->first();
+                if ($wallet->last_tnx_ref !== $tnx_ref) {
+                    $wallet->previous_amount = $wallet->total_amount;
+                    $wallet->total_amount = ($wallet->total_amount + $chargeAmount);
+                    $wallet->last_tnx_ref = $tnx_ref;
+                    $wallet->save();
+
+                    //Customer Email
+                    $reveiverEmailAddress = $transact->customer_email;
+                    $details = [
+                        'custname' => $transact->customer_name,
+                        'vendor_contact' => $transact->user_phone_number,
+                        'pay_for' => $transact->paying_for,
+                        'quantity' => $transact->product_qty,
+                        'amount' => $chargeAmount
+                    ];
+
+                    Mail::to($reveiverEmailAddress)->send(new CustomerReciept($details));
 
 
+                    //vendor Email
+                    $reveiverEmailAddress2 = $transact->user_email;
+                    $details2 = [
+                        'custname' => $transact->customer_name,
+                        'customer_contact' => $transact->customer_phone_number,
+                        'pay_for' => $transact->paying_for,
+                        'quantity' => $transact->product_qty,
+                        'amount' => $chargeAmount
+                    ];
 
+                    Mail::to($reveiverEmailAddress2)->send(new VendorReciept($details2));
+
+                }
+
+
+                DB::commit();
             } catch (\Throwable $th) {
+                DB::rollback();
                 return $th->getMessage();
             }
 
@@ -417,9 +440,13 @@ class PaymentService extends BaseController
                 ('Data Fetched Successfully'),
                 $data
             );
-            
+
         } else {
-            return $this->error('failed');
+            // return $this->error('failed');
+            return $this->success(
+                ('Data Fetched Successfully'),
+                'failed'
+            );
         }
     }
 
@@ -493,7 +520,10 @@ class PaymentService extends BaseController
 
     public function walletDetails()
     {
-        return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
+        return $this->success('Fetched successful', VendorWallet::where('user_id', Auth::user()->id)->first());
+
+
+        // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
     }
 
 

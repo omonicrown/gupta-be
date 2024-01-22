@@ -45,7 +45,8 @@ Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);  
 Route::post('/auth/verify-mail', [AuthController::class, 'verifyEmail']);
 
-Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']);
+Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']); 
+Route::get('product-payment-callback', [PaymentController::class, 'paymentCallbackForProduct']);
 // Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']); 
 
 
@@ -95,10 +96,12 @@ Route::middleware('auth:sanctum')->group(function () {
             $link->post('check-market-link', [MarketLinkController::class, 'checkMarketLink']);
             $link->post('create-product', [ProductController::class, 'CreateProduct']);
             $link->post('update-product', [ProductController::class, 'UpdateProduct']);
+            $link->post('update-market-link', [MarketLinkController::class, 'UpdateMarketLink']);
             $link->get('get-market-links', [MarketLinkController::class, 'getLinks']);
             $link->get('get-products', [ProductController::class, 'getAllProducts']);
             $link->get('get-single-product/{id}', [ProductController::class, 'getSingleProduct']);
             $link->delete('delete-product/{id}', [ProductController::class, 'deleteProduct']);
+            $link->delete('delete-market-link/{id}', [MarketLinkController::class, 'deleteMarketLink']);
             $link->post('update-image-1', [ProductController::class, 'updateProductImage1']);
             $link->post('update-product-data', [ProductController::class, 'updateProductData']);
         });

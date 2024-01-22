@@ -27,7 +27,8 @@ class Transaction extends Model
         'paying_for',
         'transaction_status',
         'currency',
-        'tnx_ref'
+        'tnx_ref',
+        'product_qty'
     ];
 
     protected $hidden = [

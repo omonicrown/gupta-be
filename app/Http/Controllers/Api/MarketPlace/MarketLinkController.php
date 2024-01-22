@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\MarketPlace;
 
+use App\Models\Product;
+use App\Models\User;
 use Exception;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -31,7 +33,7 @@ class MarketLinkController extends Controller
                 // return $links;
                 return response()->json([
                     'status' => false,
-                    'message' => 'Link exceeded '.Auth::user()->no_of_mlink,
+                    'message' => 'Link exceeded ' . Auth::user()->no_of_mlink,
                     'errors' => 'Unauthorized'
                 ], 500);
             }
@@ -39,7 +41,7 @@ class MarketLinkController extends Controller
 
             //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
             // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
-            
+
             $link = MarketPlaceLink::create([
                 'link_name' => str_replace(' ', '-', $request->link_name),
                 'brand_primary_color' => $request->brand_primary_color,
@@ -47,8 +49,8 @@ class MarketLinkController extends Controller
                 'facebook_url' => $request->facebook_url,
                 'instagram_url' => $request->instagram_url,
                 'tiktok_url' => $request->tiktok_url,
-                'brand_logo' => ($request->brand_logo =='No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPath()),
-                'brand_logo_id' =>  ( $request->brand_logo =='No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('productImages', $request->brand_logo->hashName()))->getPublicId()),
+                'brand_logo' => ($request->brand_logo == 'No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPath()),
+                'brand_logo_id' => ($request->brand_logo == 'No selected file' ? 'no image' : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPublicId()),
                 'user_id' => auth()->user()->id
             ]);
 
@@ -56,6 +58,49 @@ class MarketLinkController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Market Link Created Successfully',
+                'link' => $link,
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => false,
+                'message' => ($e->getMessage())
+            ], 500);
+        }
+    }
+
+    public function UpdateMarketLink(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $product = MarketPlaceLink::where('id', $request->id)->first();
+            if ($request->id) {
+                if ($request->brand_logo !== $product->brand_logo && $request->brand_logo !== 'No selected file') {
+                    if ($request->brand_logo_id) {
+                        (Cloudinary::destroy($product->brand_logo_id));
+                    }
+                }
+            }
+
+            $link = MarketPlaceLink::updateOrCreate(
+                ['link_name' => $product->link_name],
+                [
+                    'link_name' => $product->link_name,
+                    'brand_primary_color' => $request->brand_primary_color,
+                    'brand_description' => $request->brand_description,
+                    'facebook_url' => $request->facebook_url,
+                    'instagram_url' => $request->instagram_url,
+                    'tiktok_url' => $request->tiktok_url,
+                    'brand_logo' => (($request->brand_logo == 'No selected file') ? $product->brand_logo : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPath()),
+                    'brand_logo_id' => (($request->brand_logo == 'No selected file') ? $product->brand_logo_id : ($request->brand_logo->storeOnCloudinaryAs('brandLogos', $request->brand_logo->hashName()))->getPublicId()),
+                    'user_id' => auth()->user()->id
+                ]
+            );
+
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'message' => 'Product Updated Successfully',
                 'link' => $link,
             ], 200);
         } catch (Exception $e) {
@@ -93,11 +138,13 @@ class MarketLinkController extends Controller
         try {
             DB::beginTransaction();
             $link = MarketPlaceLink::where('user_id', Auth::user()->id)->get();
+            $userData = User::where('id', Auth::user()->id)->first();
             DB::commit();
             return response()->json([
                 'status' => true,
-                'message' =>'success',
+                'message' => 'success',
                 'link' => $link,
+                'user_data' => $userData
             ], 200);
         } catch (Exception $e) {
             DB::rollback();
@@ -107,4 +154,32 @@ class MarketLinkController extends Controller
             ], 500);
         }
     }
+
+    public function deleteMarketLink($id)
+    {
+        try {
+            $marketLink = MarketPlaceLink::where('id', $id)->first();
+
+            $images = Product::where('link_name', $marketLink->link_name)->get();
+            
+            foreach ($images as $image) {
+                (Cloudinary::destroy($image->product_image_id_1));
+                (Cloudinary::destroy($image->product_image_id_2));
+                (Cloudinary::destroy($image->product_image_id_3));
+
+            }
+
+            $product = Product::where('link_name', $marketLink->link_name)->forceDelete();
+            $delLink =  MarketPlaceLink::where('id', $id)->forceDelete();
+
+            return $this->success('Deleted Successfully', $product);
+        } catch (Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
 }

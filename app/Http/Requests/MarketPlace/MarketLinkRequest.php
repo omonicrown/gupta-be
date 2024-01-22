@@ -17,10 +17,10 @@ class MarketLinkRequest extends FormRequest
         return [
             'link_name' =>['required', 'string'],
             'brand_primary_color' =>['string'],
-            'brand_description' =>['string'],
-            'facebook_url' =>['string'],
-            'instagram_url' =>['string'],
-            'tiktok_url' =>['string'],
+            'brand_description' =>[''],
+            'facebook_url' =>[''],
+            'instagram_url' =>[''],
+            'tiktok_url' =>[''],
             'brand_logo' =>['']
 
 

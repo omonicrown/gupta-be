@@ -46,12 +46,12 @@ class ProductController extends Controller
                     'phone_number' => $request->phone_number,
                     'no_of_items' => $request->no_of_items,
                     'product_price' => $request->product_price,
-                    'product_image_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages', $request->product_image_1->hashName()))->getPath()),
-                    'product_image_2' => ($request->product_image_2 == 'No selected file' ? 'no image' : ($request->product_image_2->storeOnCloudinaryAs('productImages', $request->product_image_2->hashName()))->getPath()),
-                    'product_image_3' => ($request->product_image_3 == 'No selected file' ? 'no image' : ($request->product_image_3->storeOnCloudinaryAs('productImages', $request->product_image_3->hashName()))->getPath()),
+                    'product_image_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPath()),
+                    'product_image_2' => ($request->product_image_2 == 'No selected file' ? 'no image' : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPath()),
+                    'product_image_3' => ($request->product_image_3 == 'No selected file' ? 'no image' : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPath()),
                     'product_image_id_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages', $request->product_image_1->hashName()))->getPublicId()),
-                    'product_image_id_2' => ($request->product_image_2 == 'No selected file' ? 'no image path' : ($request->product_image_2->storeOnCloudinaryAs('productImages', $request->product_image_2->hashName()))->getPublicId()),
-                    'product_image_id_3' => ($request->product_image_3 == 'No selected file' ? 'no image path' : ($request->product_image_3->storeOnCloudinaryAs('productImages', $request->product_image_3->hashName()))->getPublicId()),
+                    'product_image_id_2' => ($request->product_image_2 == 'No selected file' ? 'no image path' : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPublicId()),
+                    'product_image_id_3' => ($request->product_image_3 == 'No selected file' ? 'no image path' : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPublicId()),
                     'user_id' => auth()->user()->id
                 ]
             );
@@ -106,12 +106,12 @@ class ProductController extends Controller
                     'phone_number' => $request->phone_number,
                     'no_of_items' => $request->no_of_items,
                     'product_price' => $request->product_price,
-                    'product_image_1' => (($request->product_image_1 == $product->product_image_1) ? $request->product_image_1 : ($request->product_image_1->storeOnCloudinaryAs('productImages', $request->product_image_1->hashName()))->getPath()),
-                    'product_image_2' => (($request->product_image_2 == $product->product_image_2) ? $request->product_image_2 : ($request->product_image_2->storeOnCloudinaryAs('productImages', $request->product_image_2->hashName()))->getPath()),
-                    'product_image_3' => (($request->product_image_3 == $product->product_image_3) ? $request->product_image_3 : ($request->product_image_3->storeOnCloudinaryAs('productImages', $request->product_image_3->hashName()))->getPath()),
-                    'product_image_id_1' => (($request->product_image_1 == $product->product_image_1) ? $request->product_image_id_1 : ($request->product_image_1->storeOnCloudinaryAs('productImages', $request->product_image_1->hashName()))->getPublicId()),
-                    'product_image_id_2' => (($request->product_image_2 == $product->product_image_2) ? $request->product_image_id_2 : ($request->product_image_2->storeOnCloudinaryAs('productImages', $request->product_image_2->hashName()))->getPublicId()),
-                    'product_image_id_3' => (($request->product_image_3 == $product->product_image_3) ? $request->product_image_id_3 : ($request->product_image_3->storeOnCloudinaryAs('productImages', $request->product_image_3->hashName()))->getPublicId()),
+                    'product_image_1' => (($request->product_image_1 == $product->product_image_1) ? $request->product_image_1 : ($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPath()),
+                    'product_image_2' => (($request->product_image_2 == $product->product_image_2) ? $request->product_image_2 : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPath()),
+                    'product_image_3' => (($request->product_image_3 == $product->product_image_3) ? $request->product_image_3 : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPath()),
+                    'product_image_id_1' => (($request->product_image_1 == $product->product_image_1) ? $request->product_image_id_1 : ($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPublicId()),
+                    'product_image_id_2' => (($request->product_image_2 == $product->product_image_2) ? $request->product_image_id_2 : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPublicId()),
+                    'product_image_id_3' => (($request->product_image_3 == $product->product_image_3) ? $request->product_image_id_3 : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPublicId()),
                     'user_id' => auth()->user()->id
                 ]
             );
@@ -167,7 +167,11 @@ class ProductController extends Controller
     {
         try {
             $product = Product::where('id', $id)->first();
-            return $this->success('Fetched Successfully', $product);
+            $market = MarketPlaceLink::where('link_name',  $product->link_name)->first();
+            return $this->success('Fetched Successfully',[
+               'product'=> $product,
+               'market_info' => $market
+               ] );
         } catch (Exception $th) {
             return response()->json([
                 'status' => false,
@@ -194,6 +198,9 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+
+  
 
 
     public function updateProductData(Request $request)

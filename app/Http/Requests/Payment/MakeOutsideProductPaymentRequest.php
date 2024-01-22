@@ -25,6 +25,8 @@ class MakeOutsideProductPaymentRequest extends FormRequest
             'customer_full_name' => 'required',
             'customer_email' => 'required',
             'pay_for' => 'required',
+            'store_id' => '',
+            'product_qty' => 'string',
             'customer_phone_number' => 'required',
         ];
     }

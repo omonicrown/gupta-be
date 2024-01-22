@@ -49,7 +49,7 @@
 
         .header {
 
-            background-image: linear-gradient(to right, #61C193, #018143);
+            background-image: linear-gradient(to right, #619fc1, #015081);
             display: flex;
             justify-content: space-between;
             border-top-right-radius: 10px;
@@ -181,61 +181,18 @@
     </div>
 
 
-    <div class="content">
-        <!-- <img src="www.afriproedu.com/images/logo.svg" alt="www.afriproedu.com/images/logo192.png"/> -->
-        <!-- <div class="card">Design</div> -->
-        <div class="img-container">
-
-            <!-- <img src="https://afriproedu.com/logo192.png" alt="https://afriproedu.com/logo192.png" class="img" /> -->
-            <!-- <div class="centered">Welcome to AfriProEdu:<br/> Your Gateway to a Bright Future in Finland!</div> -->
-        </div>
-
-        <h2>Dear Candidate,</h2>
-
-
-        <p> We extend our heartfelt thanks to you for registering for the Nursing exam with AfriProEdu. Your dedication to your career is commendable, and we are thrilled to have you on board.  </p>
-
-
-        <p>
-            <span style="font-weight: 500;">Here are the essential details for the upcoming exam:</span><br />
-            <span>* Venue: Vantage Hub</span><br />
-            <span>*  Address: 5th Floor, Mosesola House, 103 Allen Avenue, Ikeja, Lagos.</span><br />
-            <span>*  Hall name: Emerald Halls</span><br />
-            <span>*  Date: November 25th 2023, starting promptly at 11:00 AM.</span><br />
-            <span>*  Address: 5th Floor, Mosesola House, 103 Allen Avenue, Ikeja, Lagos.</span>
-        </p>
-
-        <p>To ensure a smooth process, The meeting time is set for 9:45 AM, and the gate will close at 10:45 AM sharp.</p>
-
-        <p>For identification purposes, it is imperative to bring a government-recognized ID with a passport photo or an international passport. Please note that any ID without a picture will not be acceptable.</p>
-
-        <p>Additionally, attached to this email, you will find a printable receipt. This receipt is crucial, as it will serve as your gate pass to the exam venue.</p>
-
-        <p>We wish you the best of luck on your upcoming exam. If you have any questions or need further assistance, do not hesitate to reach out to us.</p>
-
-
-        <!-- <p>_Note: your unique code is your means of identification and pass to the exam hall. Do not share this code with anyone. _</p> -->
-
-        <p>Sincerely,<br />
-         AfriProEdu Team.</p>
-
-
-        <!-- <div class="btn">
-                <button class="button button1">Call To Action</button>
-            </div> -->
-
-    </div>
+   
 
     <div class="wrapper" id="my-node">
         <div class="content" style="border: 1px solid #979797;">
             <div class="header">
                 <div>
-                    <h3>Customer Receipt</h3>
-                    <h5>Your payment has been confirmed</h5>
+                    <h3>Vendor Receipt</h3>
+                    <h5>A customer Just made a payment</h5>
                 </div>
                 <div class="img-logo">
                     <div>
-                        <img src="https://afriproedu.com/images/reciept/logo.png" alt="">
+                        <img src="https://www.mygupta.co/gupta.jpeg" alt="">
                     </div>
                     <!-- <div>
                         <img src="https://afriproedu.com/images/reciept/download-icon.png" alt="">
@@ -246,25 +203,31 @@
             </div>
             <div class="info-details">
                 <div class="mail-body">
-                    <h4>Name : {{$details['name']}}</h4>
+                    <h4>Customer Name : {{$details['custname']}}</h4>
                     <!-- <span style="padding-top: 12px;color: #979797;padding-left:4px">Omolade Samuel</span> -->
                 </div>
                 <div class="mail-body">
-                    <h4>Unique ID :{{$details['code']}}</h4>
+                    <h4>Paid For :{{$details['pay_for']}}</h4>
                     <!-- <span style="padding-top: 12px;color: #979797;padding-left:4px">#AFR3456789</span> -->
                 </div>
                 <div class="mail-body">
-                    <h4>Date & Time : 25th November 2023, 11 : 00am</h4>
-                    <!-- <span style="padding-top: 15px;color: #979797;padding-left:4px;font-size:12px">24th November 2023, 11 : 00am</span> -->
+                    <h4>Customer Contact : {{$details['customer_contact']}}</h4>
+                    <!-- <span style="padding-top: 12px;color: #979797;padding-left:4px">samuel@gmail.com</span> -->
                 </div>
+
                 <div class="mail-body">
-                    <h4>Email : {{$details['email']}}</h4>
+                    <h4>No. of Items : {{$details['quantity']}}</h4>
+                    <!-- <span style="padding-top: 12px;color: #979797;padding-left:4px">samuel@gmail.com</span> -->
+                </div>
+
+                <div class="mail-body">
+                    <h4>Amount Paid : {{$details['amount']}} NGN</h4>
                     <!-- <span style="padding-top: 12px;color: #979797;padding-left:4px">samuel@gmail.com</span> -->
                 </div>
             </div>
 
             <hr />
-            <div class="payment-section">
+            <!-- <div class="payment-section">
                 <h3>Payment Details
                 </h3>
                 <div class="payment">
@@ -274,9 +237,9 @@
                 </div>
 
 
-            </div>
-            <hr />
-            <div class="other-details">
+            </div> -->
+            <!-- <hr /> -->
+            <!-- <div class="other-details">
                 <h3>Other Details</h3>
                 <h5>Exam Date : 25th November 2023 </h5>
 
@@ -287,26 +250,14 @@
                     Allen Avenue, Ikeja, Lagos</h5>
                 <p>Note : Come along with your government approved ID Card or NIN slip</p>
             </div>
-            <hr />
-            <div class="total">
-                <h3>Total</h3>
-                <h3 class="amount">$100.00</h3>
-            </div>
-            <div>
-                <img src="https://afriproedu.com/images/reciept/payment-mark.png" alt="">
-
-            </div>
-            <div>
-                <img src="https://afriproedu.com/images/reciept/receipt.png" alt="">
-
-            </div>
+            <hr /> -->
         </div>
     </div>
 
 
  <!-- START FOOTER -->
  <div class="footer">
-        <p>Sent by AfriProEdu © 2023. All Rights Reserved.</p>
+        <p>Sent by Gupta © 2024. All Rights Reserved.</p>
     </div>
     <!-- END FOOTER -->
 </body>

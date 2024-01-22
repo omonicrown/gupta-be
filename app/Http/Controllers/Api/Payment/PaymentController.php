@@ -54,11 +54,18 @@ class PaymentController extends Controller
     public function paymentCallbackForProduct(Request $request, PaymentService $userService): JsonResponse
     {
         try {
-            return $this->success(
-                ('Data Fetched Successfully'),
-                $userService->verify_flutterwave_payment_for_product($request->all())
+            return 
+                $userService->verify_flutterwave_payment_for_product($request->all());
 
-            );
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
+    public function walletDetails(Request $request, PaymentService $userService): JsonResponse
+    {
+        try {
+            return $userService->walletDetails();
         } catch (Exception $exception) {
             return $this->exception($exception);
         }

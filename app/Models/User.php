@@ -40,6 +40,7 @@ class User extends Authenticatable
         'no_of_mstore',
         'created_at',
         'updated_at',
+        'no_of_malink'
     ];
 
     /**

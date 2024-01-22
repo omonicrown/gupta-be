@@ -43,14 +43,14 @@ class AuthController extends Controller
 
         try {
             $rows = collect();
-       $userAll = User::chunk(5, function ($users) use($rows) {
+        User::chunk(100, function ($users) use($rows) {
             foreach ($users as $user) {
-               return($user);	
+                $rows->push($user);	
                 // sleep(2);
                 // break;
             }
         });
-        return $userAll;
+        return $rows;
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
@@ -96,6 +96,7 @@ class AuthController extends Controller
                 'no_of_rlink' => '3',
                 'no_of_mlink' => '2',
                 'no_of_mstore' => '1',
+                'no_of_malink' => '3',
                 'password' => Hash::make($request->password)
             ]);
 
