@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\MakeOutsideProductPaymentRequest;
 use App\Http\Requests\Payment\MakePayment;
+use App\Http\Requests\Payment\WitdrawFundRequest;
 use App\Services\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +33,18 @@ class PaymentController extends Controller
         // return ($request);
         try {
            return $userService->makeOutsideProductPaymentWithFlutterwave($request->all());
+
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+    
+    public function payOutCustomers(WitdrawFundRequest $request, PaymentService $userService)
+    {
+        // return ($request);
+        try {
+           return $userService->payOutCustomers($request->all());
+        //    return $request;
 
         } catch (Exception $exception) {
             return $this->exception($exception);
@@ -66,6 +79,15 @@ class PaymentController extends Controller
     {
         try {
             return $userService->walletDetails();
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
+    public function transactionDetails(Request $request, PaymentService $userService): JsonResponse
+    {
+        try {
+            return $userService->transactionDetails();
         } catch (Exception $exception) {
             return $this->exception($exception);
         }

@@ -184,6 +184,77 @@ class PaymentService extends BaseController
     }
 
 
+    public function payOutCustomers($data)
+    {
+        try {
+
+            DB::beginTransaction();
+            $userData = User::where('id', Auth::user()->id)->first();
+            
+            $request = [
+                // 'tx_ref' => time(),
+                'account_bank' => $data['account_bank'],
+                'account_number' => $data['account_number'],
+                'amount' => $data['amount'],
+                'narration' => 'witdraw',
+                'reference' => time(),
+                'currency' => 'NGN',
+                'meta' => [
+                    'sender' => 'GUPTA LINKS',
+                    'first_name' => $userData->name,
+                    'last_name' => $userData->name,
+                    'email' => $userData->email,
+                    'beneficiary_country' => "NG",
+                    'mobile_number' => $userData->phone_number,
+                    'merchant_name' => "PAY WITH GUPTA"
+                ]
+            ];
+
+
+            // dd( $nurr);
+
+            //* Call fluterwave endpoint
+            $curl = curl_init();
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL => 'https://api.flutterwave.com/v3/transfers', //don't change this
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode($request),
+                    CURLOPT_HTTPHEADER => array(
+                        'Authorization:Bearer ' . env('FLUTTERWAVE_SECRET_KEY'),
+                        'Content-Type: application/json'
+                    ),
+                )
+            );
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $res = json_decode($response);
+            DB::commit();
+
+            // return  $res;
+
+            return $this->success(('Data Fetched Successfully'),$res);
+
+        } catch (Exception $th) {
+            DB::rollback();
+            // dd($th->getMessage());
+            return $this->exception($th);
+
+        }
+
+
+
+    }
+
+
 
 
 
@@ -518,9 +589,24 @@ class PaymentService extends BaseController
         return $result;
     }
 
+    
+
     public function walletDetails()
     {
         return $this->success('Fetched successful', VendorWallet::where('user_id', Auth::user()->id)->first());
+
+
+        // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
+    }
+
+    public function transactionDetails()
+    {
+        $walletDatails =  VendorWallet::where('user_id', Auth::user()->id)->first();
+        $transactions = Transaction::where('user_id', Auth::user()->id)->where('transaction_status','successful')->paginate(10);
+        return $this->success('Fetched successful',[
+            'walletDetails'=> $walletDatails,
+            'transactions'=> $transactions,
+        ]);
 
 
         // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();

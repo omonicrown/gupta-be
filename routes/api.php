@@ -120,9 +120,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('payment')->group(function () { 
         Route::post('make-payment', [PaymentController::class, 'makePayment']);
+        Route::post('pay-to-customers', [PaymentController::class, 'payOutCustomers']);
         Route::get('callback', [PaymentController::class, 'paymentCallback']);
         Route::post('pay-for-course', [PaymentController::class, 'payForCourse']);
         Route::get('get-wallet-details', [PaymentController::class, 'walletDetails']);
+        Route::get('get-transations', [PaymentController::class, 'transactionDetails']);
     });
 
 
