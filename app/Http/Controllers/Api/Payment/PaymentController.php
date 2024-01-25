@@ -180,6 +180,13 @@ class PaymentController extends Controller
                         ]
                     );
 
+                    $reveiverEmailAddress = 'samuelfemi85@gmail.com';
+                    $details = [
+                        'custname' => 'failed',
+                        'amount' =>'2000'
+                    ];
+                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+
                     // VendorWallet::updateOrCreate(
                     //     ['email' => $transfer['data']['meta']['email']],
                     //     [
@@ -190,6 +197,13 @@ class PaymentController extends Controller
 
                 } else if ($transfer['data']['status'] === 'PENDING') {
                     // update transfer status to pending in your db
+
+                    $reveiverEmailAddress = 'samuelfemi85@gmail.com';
+                    $details = [
+                        'custname' => 'pending',
+                        'amount' =>'2000'
+                    ];
+                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
                 }
 
             }
