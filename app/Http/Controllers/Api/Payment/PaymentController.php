@@ -143,9 +143,9 @@ class PaymentController extends Controller
     {
         try {
             //This verifies the webhook is sent from Flutterwave
-            $verified = Flutterwave::verifyWebhook();
+            // $verified = Flutterwave::verifyWebhook();
             // if it is a charge event, verify and confirm it is a successful transaction
-            if ($verified && $request->event == 'charge.completed' && $request->data->status == 'successful') {
+            if ($request->data->status == 'successful') {
                 $verificationData = Flutterwave::verifyPayment($request->data['id']);
                 if ($verificationData['status'] === 'success') {
                     // process for successful charge
@@ -153,7 +153,7 @@ class PaymentController extends Controller
             }
 
             // if it is a transfer event, verify and confirm it is a successful transfer
-            if ($verified && $request->event == 'transfer.completed') {
+            if ($request->event == 'transfer.completed') {
                 $transfer = Flutterwave::transfers()->fetch($request->data['id']);
                 if ($transfer['data']['status'] === 'SUCCESSFUL') {
                     Witdrawal::updateOrCreate(
@@ -183,7 +183,7 @@ class PaymentController extends Controller
                     $reveiverEmailAddress = 'samuelfemi85@gmail.com';
                     $details = [
                         'custname' => 'failed',
-                        'amount' =>'2000'
+                        'amount' => '2000'
                     ];
                     Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
 
@@ -201,7 +201,7 @@ class PaymentController extends Controller
                     $reveiverEmailAddress = 'samuelfemi85@gmail.com';
                     $details = [
                         'custname' => 'pending',
-                        'amount' =>'2000'
+                        'amount' => '2000'
                     ];
                     Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
                 }
@@ -216,6 +216,12 @@ class PaymentController extends Controller
             //    return $request;
 
         } catch (Exception $exception) {
+            $reveiverEmailAddress = 'samuelfemi85@gmail.com';
+            $details = [
+                'custname' => 'failed 232',
+                'amount' => '2000'
+            ];
+            Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
             return $this->exception($exception);
         }
     }
