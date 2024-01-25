@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\MakeOutsideProductPaymentRequest;
 use App\Http\Requests\Payment\MakePayment;
 use App\Http\Requests\Payment\WitdrawFundRequest;
-use App\Mail\CompleteTransaction;
+use App\Mail\completeTransaction;
 use App\Models\VendorWallet;
 use App\Models\Witdrawal;
 use App\Services\PaymentService;
@@ -153,42 +153,43 @@ class PaymentController extends Controller
             // }
 
 
-            $userData = Witdrawal::where('reference', $request->data->reference)->first();
+            $userData = Witdrawal::where('reference', $request['data']['reference'])->first();
 
             // if it is a transfer event, verify and confirm it is a successful transfer
             if ($request->event == 'transfer.completed') {
                 // $transfer = Flutterwave::transfers()->fetch($request->data['id']);
-                if ($request->data->status === 'SUCCESSFUL') {
+                if ($request['data']['status'] === 'SUCCESSFUL') {
                     Witdrawal::updateOrCreate(
-                        ['reference' =>$request->data->reference],
+                        ['reference' =>$request['data']['reference']],
                         [
-                            'status' => $request->data->status
+                            'status' => $request['data']['status']
                         ]
                     );
 
                     $reveiverEmailAddress = $userData->email;
                     $details = [
                         'custname' => $userData->first_name,
-                        'amount' => $request->data->amount
+                        'amount' => $request['data']['amount']
                     ];
 
-                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+                    Mail::to($reveiverEmailAddress)->send(new completeTransaction($details));
 
                     // update transfer status to successful in your db
-                } else if ($request->data->status === 'FAILED') {
+                } else if ($request['data']['status']=== 'FAILED') {
                     Witdrawal::updateOrCreate(
-                        ['reference' =>$request->data->reference],
+                        ['reference' =>$request['data']['reference']],
                         [
-                            'status' => $request->data->status
+                            'status' => $request['data']['status']
                         ]
                     );
 
                     $reveiverEmailAddress = $userData->email;
                     $details = [
-                        'custname' => 'failed',
-                        'amount' => '2000'
+                        'custname' => $userData->first_name,
+                        'amount' => $request['data']['amount']
                     ];
-                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+
+                    Mail::to($reveiverEmailAddress)->send(new completeTransaction($details));
 
                     // VendorWallet::updateOrCreate(
                     //     ['email' => $transfer['data']['meta']['email']],
@@ -198,7 +199,7 @@ class PaymentController extends Controller
                     // );
 
 
-                } else if ($request->data->status=== 'PENDING') {
+                } else if ($$request['data']['status'] === 'PENDING') {
                     // update transfer status to pending in your db
 
                     $reveiverEmailAddress = 'samuelfemi85@gmail.com';
@@ -206,12 +207,10 @@ class PaymentController extends Controller
                         'custname' => 'pending',
                         'amount' => '2000'
                     ];
-                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+                    Mail::to($reveiverEmailAddress)->send(new completeTransaction($details));
                 }
 
             }
-
-
 
             return $this->success(
                 ('Data Fetched Successfully'),
@@ -222,12 +221,7 @@ class PaymentController extends Controller
             //    return $request;
 
         } catch (Exception $exception) {
-            $reveiverEmailAddress = 'samuelfemi85@gmail.com';
-            $details = [
-                'custname' => 'failed 232',
-                'amount' => '2000'
-            ];
-            Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+           
             return $this->exception($exception);
         }
     }
