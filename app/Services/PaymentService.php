@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\CustomerReciept;
+use App\Mail\InitiatedTransaction;
 use App\Mail\Program;
 use App\Mail\VendorReciept;
 use App\Models\Subscription;
@@ -10,21 +11,16 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\userAccountDetail;
 use App\Http\Controllers\Api\BaseController as BaseController;
-use App\Models\NursingPayments;
-use App\Models\NursingProgram;
 use App\Models\userCoursePayment;
 use App\Models\VendorWallet;
-use App\Models\Waiter;
+use App\Models\Witdrawal;
+use KingFlamez\Rave\Facades\Rave as Flutterwave;
 use Carbon\CarbonImmutable;
-use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Mail;
-use PhpParser\Node\Stmt\TryCatch;
 use Carbon\Carbon;
-use GuzzleHttp\Psr7\Message;
 
 class PaymentService extends BaseController
 {
@@ -108,7 +104,7 @@ class PaymentService extends BaseController
                 'customer_name' => $data['customer_full_name'],
                 'customer_phone_number' => $data['customer_phone_number'],
                 'paying_for' => $data['pay_for'],
-                'product_qty'=> $data['product_qty'],
+                'product_qty' => $data['product_qty'],
                 'transaction_status' => 'pending',
                 'tnx_ref' => CarbonImmutable::now(),
                 'currency' => 'ngn',
@@ -184,28 +180,104 @@ class PaymentService extends BaseController
     }
 
 
-    public function payOutCustomers($data)
+
+
+    public function requestWitdrawal($data)
     {
         try {
 
             DB::beginTransaction();
             $userData = User::where('id', Auth::user()->id)->first();
+            $walletDatails = VendorWallet::where('user_id', Auth::user()->id)->first();
+
+            if ($walletDatails->total_amount >= $data['amount']){
+
+             VendorWallet::updateOrCreate(
+                    ['user_id' => Auth::user()->id],
+                    [
+                        'total_amount' => ($walletDatails->total_amount - $data['amount'])
+                    ]
+                );
+
+
+                
+                // $walletDatails->total_amount = ($walletDatails->total_amount - $data['amount']);
+                // $walletDatails->save();
+
+
+                 Witdrawal::create([
+                    'account_bank' => $data['account_bank'],
+                    'account_number' => $data['account_number'],
+                    'amount' => $data['amount'],
+                    'narration' => 'vendor witdrawal',
+                    'reference' => time(),
+                    'first_name' => $userData->name,
+                    'last_name' => $userData->name,
+                    'email' => $userData->email,
+                    'beneficiary_country' => "NG",
+                    'status' => 'PENDING',
+                    'mobile_number' => $userData->phone_number,
+                    'merchant_name' => "PAY WITH GUPTA"
+                ]);
+
+
+                $reveiverEmailAddress = $userData->email;
+                $details = [
+                    'custname' => $userData->name,
+                    'amount' => $data['amount']
+                ];
+    
+                Mail::to($reveiverEmailAddress)->send(new InitiatedTransaction($details));
+
+                DB::commit();
+                return $this->success(('Witdrawal Initated Successfully'), []);
+                
+
+
+            }else{
+                DB::commit();
+                return $this->sendError(('Insufficient Funds'), []);
+            }
+               
+           
+           
+            // return  $res;
+
             
+
+        } catch (Exception $th) {
+            DB::rollback();
+            // dd($th->getMessage());
+            return $this->exception($th);
+
+        }
+
+
+
+    }
+
+
+
+    public function payOutCustomers($data)
+    {
+        try {
+
+            DB::beginTransaction();
             $request = [
                 // 'tx_ref' => time(),
                 'account_bank' => $data['account_bank'],
                 'account_number' => $data['account_number'],
                 'amount' => $data['amount'],
-                'narration' => 'witdraw',
-                'reference' => time(),
+                'narration' => $data['narration'],
+                'reference' => $data['reference'],
                 'currency' => 'NGN',
                 'meta' => [
                     'sender' => 'GUPTA LINKS',
-                    'first_name' => $userData->name,
-                    'last_name' => $userData->name,
-                    'email' => $userData->email,
+                    'first_name' =>$data['first_name'],
+                    'last_name' => $data['last_name'],
+                    'email' => $data['email'],
                     'beneficiary_country' => "NG",
-                    'mobile_number' => $userData->phone_number,
+                    'mobile_number' =>$data['mobile_number'],
                     'merchant_name' => "PAY WITH GUPTA"
                 ]
             ];
@@ -241,7 +313,7 @@ class PaymentService extends BaseController
 
             // return  $res;
 
-            return $this->success(('Data Fetched Successfully'),$res);
+            return $this->success(('Transaction Initiated'), $res);
 
         } catch (Exception $th) {
             DB::rollback();
@@ -589,7 +661,7 @@ class PaymentService extends BaseController
         return $result;
     }
 
-    
+
 
     public function walletDetails()
     {
@@ -601,12 +673,22 @@ class PaymentService extends BaseController
 
     public function transactionDetails()
     {
-        $walletDatails =  VendorWallet::where('user_id', Auth::user()->id)->first();
-        $transactions = Transaction::where('user_id', Auth::user()->id)->where('transaction_status','successful')->paginate(10);
-        return $this->success('Fetched successful',[
-            'walletDetails'=> $walletDatails,
-            'transactions'=> $transactions,
+        $walletDatails = VendorWallet::where('user_id', Auth::user()->id)->first();
+        $transactions = Transaction::where('user_id', Auth::user()->id)->where('transaction_status', 'successful')->paginate(10);
+        return $this->success('Fetched successful', [
+            'walletDetails' => $walletDatails,
+            'transactions' => $transactions,
         ]);
+
+
+        // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
+    }
+
+    
+
+    public function getAllWitdrawals()
+    {
+        return $this->success('Fetched successful', Witdrawal::paginate(10));
 
 
         // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();

@@ -45,6 +45,9 @@ Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);  
 Route::post('/auth/verify-mail', [AuthController::class, 'verifyEmail']);
 
+//flutterwave webhook
+Route::post('/webhook/flutterwave', [PaymentController::class, 'webhook'])->name('webhook');
+
 Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']); 
 Route::get('product-payment-callback', [PaymentController::class, 'paymentCallbackForProduct']);
 // Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']); 
@@ -119,8 +122,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('payment')->group(function () { 
-        Route::post('make-payment', [PaymentController::class, 'makePayment']);
-        Route::post('pay-to-customers', [PaymentController::class, 'payOutCustomers']);
+        Route::post('make-payment', [PaymentController::class, 'makePayment']); 
+        Route::post('request-witdrawal', [PaymentController::class, 'requestWitdrawal']);
+        Route::post('pay-to-customer', [PaymentController::class, 'payOutCustomers']);
         Route::get('callback', [PaymentController::class, 'paymentCallback']);
         Route::post('pay-for-course', [PaymentController::class, 'payForCourse']);
         Route::get('get-wallet-details', [PaymentController::class, 'walletDetails']);
@@ -142,6 +146,11 @@ Route::middleware('auth:sanctum')->group(function () {
             $link->get('get-user-multi-link/{id}', [ManageUsersController::class, 'getUserMultiLinks']);
             $link->get('get-user-market-link/{id}', [ManageUsersController::class, 'getUserMarketLinks']);
             $link->post('tiered', CreateTieredController::class);
+
+
+            //Manage witdrawal
+            $link->get('get-all-witdrawals', [PaymentController::class, 'getAllWitdrawals']);
+            Route::post('pay-out-customers', [PaymentController::class, 'payOutCustomers']);
         });
     });
 

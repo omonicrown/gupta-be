@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\MakeOutsideProductPaymentRequest;
 use App\Http\Requests\Payment\MakePayment;
 use App\Http\Requests\Payment\WitdrawFundRequest;
+use App\Mail\CompleteTransaction;
+use App\Models\VendorWallet;
+use App\Models\Witdrawal;
 use App\Services\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use KingFlamez\Rave\Facades\Rave as Flutterwave;
 
 class PaymentController extends Controller
 {
@@ -32,24 +36,39 @@ class PaymentController extends Controller
     {
         // return ($request);
         try {
-           return $userService->makeOutsideProductPaymentWithFlutterwave($request->all());
+            return $userService->makeOutsideProductPaymentWithFlutterwave($request->all());
 
         } catch (Exception $exception) {
             return $this->exception($exception);
         }
     }
-    
-    public function payOutCustomers(WitdrawFundRequest $request, PaymentService $userService)
+
+
+    public function requestWitdrawal(WitdrawFundRequest $request, PaymentService $userService)
     {
         // return ($request);
         try {
-           return $userService->payOutCustomers($request->all());
-        //    return $request;
+            return $userService->requestWitdrawal($request->all());
+            //    return $request;
 
         } catch (Exception $exception) {
             return $this->exception($exception);
         }
     }
+
+    public function payOutCustomers(Request $request, PaymentService $userService)
+    {
+        // return ($request);
+        try {
+            return $userService->payOutCustomers($request->all());
+            //    return $request;
+
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
+
 
     public function paymentCallback(Request $request, PaymentService $userService): JsonResponse
     {
@@ -67,7 +86,7 @@ class PaymentController extends Controller
     public function paymentCallbackForProduct(Request $request, PaymentService $userService): JsonResponse
     {
         try {
-            return 
+            return
                 $userService->verify_flutterwave_payment_for_product($request->all());
 
         } catch (Exception $exception) {
@@ -84,10 +103,20 @@ class PaymentController extends Controller
         }
     }
 
+
     public function transactionDetails(Request $request, PaymentService $userService): JsonResponse
     {
         try {
             return $userService->transactionDetails();
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
+    public function getAllWitdrawals(Request $request, PaymentService $userService): JsonResponse
+    {
+        try {
+            return $userService->getAllWitdrawals();
         } catch (Exception $exception) {
             return $this->exception($exception);
         }
@@ -102,6 +131,76 @@ class PaymentController extends Controller
                 $userService->verify_flutterwave_payment_for_subscription($request->all())
 
             );
+        } catch (Exception $exception) {
+            return $this->exception($exception);
+        }
+    }
+
+
+
+
+    public function webhook(Request $request, PaymentService $userService)
+    {
+        try {
+            //This verifies the webhook is sent from Flutterwave
+            $verified = Flutterwave::verifyWebhook();
+            // if it is a charge event, verify and confirm it is a successful transaction
+            if ($verified && $request->event == 'charge.completed' && $request->data->status == 'successful') {
+                $verificationData = Flutterwave::verifyPayment($request->data['id']);
+                if ($verificationData['status'] === 'success') {
+                    // process for successful charge
+                }
+            }
+
+            // if it is a transfer event, verify and confirm it is a successful transfer
+            if ($verified && $request->event == 'transfer.completed') {
+                $transfer = Flutterwave::transfers()->fetch($request->data['id']);
+                if ($transfer['data']['status'] === 'SUCCESSFUL') {
+                    Witdrawal::updateOrCreate(
+                        ['reference' => $transfer['data']['reference']],
+                        [
+                            'status' => $transfer['data']['status']
+                        ]
+                    );
+
+                    $reveiverEmailAddress = $transfer['data']['meta']['email'];
+                    $details = [
+                        'custname' => $transfer['data']['fullname'],
+                        'amount' => $transfer['data']['amount']
+                    ];
+
+                    Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
+
+                    // update transfer status to successful in your db
+                } else if ($transfer['data']['status'] === 'FAILED') {
+                    Witdrawal::updateOrCreate(
+                        ['reference' => $transfer['data']['reference']],
+                        [
+                            'status' => $transfer['data']['status']
+                        ]
+                    );
+
+                    // VendorWallet::updateOrCreate(
+                    //     ['email' => $transfer['data']['meta']['email']],
+                    //     [
+                    //         'total_amount' => ($walletDatails->total_amount - $data['amount'])
+                    //     ]
+                    // );
+
+
+                } else if ($transfer['data']['status'] === 'PENDING') {
+                    // update transfer status to pending in your db
+                }
+
+            }
+
+
+
+
+
+            return $userService->verifyWebhook($request->all());
+            //    return $request;
+
         } catch (Exception $exception) {
             return $this->exception($exception);
         }

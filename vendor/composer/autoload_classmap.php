@@ -55,6 +55,7 @@ return array(
     'App\\Http\\Requests\\MarketPlace\\MarketLinkRequest' => $baseDir . '/app/Http/Requests/MarketPlace/MarketLinkRequest.php',
     'App\\Http\\Requests\\Payment\\MakeOutsideProductPaymentRequest' => $baseDir . '/app/Http/Requests/Payment/MakeOutsideProductPaymentRequest.php',
     'App\\Http\\Requests\\Payment\\MakePayment' => $baseDir . '/app/Http/Requests/Payment/MakePayment.php',
+    'App\\Http\\Requests\\Payment\\WitdrawFundRequest' => $baseDir . '/app/Http/Requests/Payment/WitdrawFundRequest.php',
     'App\\Http\\Requests\\Profile\\UpdatePasswordRequest' => $baseDir . '/app/Http/Requests/Profile/UpdatePasswordRequest.php',
     'App\\Http\\Requests\\Profile\\UpdateProfileRequest' => $baseDir . '/app/Http/Requests/Profile/UpdateProfileRequest.php',
     'App\\Http\\Requests\\ResetPasswordRequest' => $baseDir . '/app/Http/Requests/ResetPasswordRequest.php',

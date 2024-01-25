@@ -677,6 +677,7 @@ class ComposerStaticInit59bfadf365662cfd32d50ec6373fa8e1
         'App\\Http\\Requests\\MarketPlace\\MarketLinkRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MarketPlace/MarketLinkRequest.php',
         'App\\Http\\Requests\\Payment\\MakeOutsideProductPaymentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Payment/MakeOutsideProductPaymentRequest.php',
         'App\\Http\\Requests\\Payment\\MakePayment' => __DIR__ . '/../..' . '/app/Http/Requests/Payment/MakePayment.php',
+        'App\\Http\\Requests\\Payment\\WitdrawFundRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Payment/WitdrawFundRequest.php',
         'App\\Http\\Requests\\Profile\\UpdatePasswordRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Profile/UpdatePasswordRequest.php',
         'App\\Http\\Requests\\Profile\\UpdateProfileRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Profile/UpdateProfileRequest.php',
         'App\\Http\\Requests\\ResetPasswordRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ResetPasswordRequest.php',

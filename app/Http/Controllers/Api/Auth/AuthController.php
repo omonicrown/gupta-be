@@ -112,7 +112,7 @@ class AuthController extends Controller
 
             $reveiverEmailAddress = $request->email;
             $details = [
-                'custname' => $request->name . ' ' . $request->last_name,
+                'custname' => $request->name,
                 'email' => $request->email,
             ];
 

@@ -94,7 +94,7 @@
     .logo img {
         text-align: center;
         position: relative;
-       
+
     }
 </style>
 
@@ -106,30 +106,22 @@
         <div class="content">
 
             <div class="header">
-                <h3>Welcome to Gupta! 🎉</h3>
-                <h3> Dear {{$details['custname']}},</h3>
-                <h3>Welcome to Gupta! We're thrilled to have you on board. 🚀
+                <h3> Hello {{$details['custname']}},</h3>
+                <h3>Your witdrawal of {{$details['amount']}} Naira has been initated. 🚀
                 </h3>
             </div>
             <div class="text-content">
-                <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
-                    feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
-                    the Gupta community.</p>
-                <p>Kindly click on the link below to proceed.</p>
+                <p>Kindly excercise patience as we process your payment within the next 1 hour.</p>
+             
                 <p>Best regards,</p>
-            </div>
-            <div class="btn">
-                <a href="https://www.mygupta.co/email-verify/{{$details['email']}}">
-                    <button class="button">Confirm Email</button>
-                </a>
             </div>
         </div>
 
 
 
         <div class="footer">
-        <p>Sent by Gupta © 2024. All Rights Reserved.</p>
-    </div>
+            <p>Sent by Gupta © 2024. All Rights Reserved.</p>
+        </div>
         <div class="footer-end">
             <div>
                 <h3>Gupta</h3>
