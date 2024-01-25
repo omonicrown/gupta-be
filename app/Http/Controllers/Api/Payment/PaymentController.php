@@ -145,42 +145,45 @@ class PaymentController extends Controller
             //This verifies the webhook is sent from Flutterwave
             // $verified = Flutterwave::verifyWebhook();
             // if it is a charge event, verify and confirm it is a successful transaction
-            if ($request->data->status == 'successful') {
-                $verificationData = Flutterwave::verifyPayment($request->data['id']);
-                if ($verificationData['status'] === 'success') {
-                    // process for successful charge
-                }
-            }
+            // if ($request->data->status == 'successful') {
+            //     $verificationData = Flutterwave::verifyPayment($request->data['id']);
+            //     if ($verificationData['status'] === 'success') {
+            //         // process for successful charge
+            //     }
+            // }
+
+
+            $userData = Witdrawal::where('reference', $request->data->reference)->first();
 
             // if it is a transfer event, verify and confirm it is a successful transfer
             if ($request->event == 'transfer.completed') {
-                $transfer = Flutterwave::transfers()->fetch($request->data['id']);
-                if ($transfer['data']['status'] === 'SUCCESSFUL') {
+                // $transfer = Flutterwave::transfers()->fetch($request->data['id']);
+                if ($request->data->status === 'SUCCESSFUL') {
                     Witdrawal::updateOrCreate(
-                        ['reference' => $transfer['data']['reference']],
+                        ['reference' =>$request->data->reference],
                         [
-                            'status' => $transfer['data']['status']
+                            'status' => $request->data->status
                         ]
                     );
 
-                    $reveiverEmailAddress = $transfer['data']['meta']['email'];
+                    $reveiverEmailAddress = $userData->email;
                     $details = [
-                        'custname' => $transfer['data']['fullname'],
-                        'amount' => $transfer['data']['amount']
+                        'custname' => $userData->first_name,
+                        'amount' => $request->data->amount
                     ];
 
                     Mail::to($reveiverEmailAddress)->send(new CompleteTransaction($details));
 
                     // update transfer status to successful in your db
-                } else if ($transfer['data']['status'] === 'FAILED') {
+                } else if ($request->data->status === 'FAILED') {
                     Witdrawal::updateOrCreate(
-                        ['reference' => $transfer['data']['reference']],
+                        ['reference' =>$request->data->reference],
                         [
-                            'status' => $transfer['data']['status']
+                            'status' => $request->data->status
                         ]
                     );
 
-                    $reveiverEmailAddress = 'samuelfemi85@gmail.com';
+                    $reveiverEmailAddress = $userData->email;
                     $details = [
                         'custname' => 'failed',
                         'amount' => '2000'
@@ -195,7 +198,7 @@ class PaymentController extends Controller
                     // );
 
 
-                } else if ($transfer['data']['status'] === 'PENDING') {
+                } else if ($request->data->status=== 'PENDING') {
                     // update transfer status to pending in your db
 
                     $reveiverEmailAddress = 'samuelfemi85@gmail.com';
@@ -210,9 +213,12 @@ class PaymentController extends Controller
 
 
 
+            return $this->success(
+                ('Data Fetched Successfully'),
+                []
+            );
 
-
-            return $userService->verifyWebhook($request->all());
+            
             //    return $request;
 
         } catch (Exception $exception) {
