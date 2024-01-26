@@ -63,7 +63,7 @@ Route::get('get-single-product-outside/{id}', [ProductController::class, 'getSin
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::group(['middleware' => ['SubStatus']], function (Router $link) {
+    Route::group(['middleware' => ['SubStatus','throttle:120,1']], function (Router $link) {
         Route::get('session', [AuthController::class, 'session']);
         Route::get('getRedirectLinks', [AuthController::class, 'redirectLinks']);
         Route::get('getlinksShort', [AuthController::class, 'getLinksShort']);
