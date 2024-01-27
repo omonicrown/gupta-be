@@ -37,53 +37,53 @@ class GetSingleLinksController extends Controller
 
             //For SQL 
 
-            $visitors = ShortURLVisit::where('short_url_id', $link->short_url_id)
-                ->select(
-                    "id",
-                    DB::raw("(count(short_url_id)) as total_click"),
-                    DB::raw("(DATE_FORMAT(created_at, '%Y-%M')) as month_year")
-                )
-                ->orderBy('created_at')
-                ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
-                ->get();
-
-
-            $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
-                ->select(
-                    DB::raw("COUNT(IF(browser = 'Chrome',browser,null)) as chrome"),
-                    DB::raw("COUNT(IF(browser = 'Safari',browser,null)) as safari"),
-                    DB::raw("COUNT(IF(operating_system = 'OS X',operating_system,null)) as android"),
-                    DB::raw("COUNT(IF(operating_system = 'iOS',operating_system,null)) as ios"),
-                    DB::raw("COUNT(id) as visit")
-                )
-                ->get();
-
-
-
-
             // $visitors = ShortURLVisit::where('short_url_id', $link->short_url_id)
-            //     // ->whereYear('created_at', '2023')
             //     ->select(
-            //         DB::raw("(count(case when operating_system <> '0' then short_url_id end)) as total_click"),
-            //         DB::raw("(to_char(created_at, 'MM-DD')) as month_day")
+            //         "id",
+            //         DB::raw("(count(short_url_id)) as total_click"),
+            //         DB::raw("(DATE_FORMAT(created_at, '%Y-%M')) as month_year")
             //     )
-            //     // ->groupBy('created_at')
-            //     ->groupBy(DB::raw("to_char(created_at, 'MM-DD')"))
+            //     ->orderBy('created_at')
+            //     ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
             //     ->get();
+
 
             // $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
             //     ->select(
-
-            //         DB::raw("COUNT(case when browser = 'Chrome' then browser end) as chrome"),
-            //         DB::raw("COUNT(case when browser = 'Safari' then browser end) as safari"),
-            //         DB::raw("COUNT(case when operating_system = 'OS X' then operating_system end) as macbook"),
-            //         DB::raw("COUNT(case when operating_system = 'AndroidOS' then operating_system end) as android"),
-            //         DB::raw("COUNT(case when operating_system = 'iOS' then operating_system end) as iphone"),
-            //         DB::raw("COUNT(case when operating_system <> '0' then id end) as visit"),
+            //         DB::raw("COUNT(IF(browser = 'Chrome',browser,null)) as chrome"),
+            //         DB::raw("COUNT(IF(browser = 'Safari',browser,null)) as safari"),
+            //         DB::raw("COUNT(IF(operating_system = 'OS X',operating_system,null)) as android"),
+            //         DB::raw("COUNT(IF(operating_system = 'iOS',operating_system,null)) as ios"),
+            //         DB::raw("COUNT(id) as visit")
             //     )
-            //     // ->groupBy('id')
-            //     // ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
             //     ->get();
+
+
+
+
+            $visitors = ShortURLVisit::where('short_url_id', $link->short_url_id)
+                // ->whereYear('created_at', '2023')
+                ->select(
+                    DB::raw("(count(case when operating_system <> '0' then short_url_id end)) as total_click"),
+                    DB::raw("(to_char(created_at, 'MM-DD')) as month_day")
+                )
+                // ->groupBy('created_at')
+                ->groupBy(DB::raw("to_char(created_at, 'MM-DD')"))
+                ->get();
+
+            $social_traffic = ShortURLVisit::where('short_url_id', $link->short_url_id)
+                ->select(
+
+                    DB::raw("COUNT(case when browser = 'Chrome' then browser end) as chrome"),
+                    DB::raw("COUNT(case when browser = 'Safari' then browser end) as safari"),
+                    DB::raw("COUNT(case when operating_system = 'OS X' then operating_system end) as macbook"),
+                    DB::raw("COUNT(case when operating_system = 'AndroidOS' then operating_system end) as android"),
+                    DB::raw("COUNT(case when operating_system = 'iOS' then operating_system end) as iphone"),
+                    DB::raw("COUNT(case when operating_system <> '0' then id end) as visit"),
+                )
+                // ->groupBy('id')
+                // ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%M')"))
+                ->get();
 
 
             DB::commit();
