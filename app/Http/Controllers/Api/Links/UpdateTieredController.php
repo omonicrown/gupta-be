@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Links;
 
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Exception;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -136,12 +137,18 @@ class UpdateTieredController extends Controller
         try {
             $link = Link::where('id', $id)->first();
             // dd($link->logo);
-            $userImage = 'TieredImages/' . $link->logo;
-            if ($link->logo !== null) {
-                if (file_exists(public_path($userImage))) {
-                    unlink(public_path($userImage));
-                }
+
+            if($link->logo_id !=='no image path' && $link->logo_id !==null){
+                (Cloudinary::destroy($link->logo_id));
             }
+
+
+            // $userImage = 'TieredImages/' . $link->logo;
+            // if ($link->logo !== null) {
+            //     if (file_exists(public_path($userImage))) {
+            //         unlink(public_path($userImage));
+            //     }
+            // }
 
             MultiLink::where('link_id', $id)->forceDelete();
             Link::where('id', $id)->forceDelete();
