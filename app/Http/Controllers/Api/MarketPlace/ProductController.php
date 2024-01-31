@@ -28,7 +28,7 @@ class ProductController extends Controller
             DB::beginTransaction();
 
             $links = Product::where('user_id', Auth::user()->id)->count();
-            if ($links >= ((Auth::user()->no_of_mstore) - 1)) {
+            if ($links >= ((Auth::user()->no_of_mstore)+1)) {
                 // return $links;
                 return response()->json([
                     'status' => false,
@@ -149,7 +149,7 @@ class ProductController extends Controller
     {
         try {
             // dd(auth()->user()->id);
-            $products = Product::where('link_name', $name)->get();
+            $products = Product::where('link_name', $name)->paginate(10);
             $market = MarketPlaceLink::where('link_name', $name)->first();
             return $this->success('Fetched Successfully', [
                 'market_info' => $market,

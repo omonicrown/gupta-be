@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Mail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
 {
@@ -40,6 +41,7 @@ class AuthController extends Controller
 
     public function testChunk(Request $request)
     {
+        dd(Crypt::decrypt('eyJpdiI6IjZ5dTNpWWdISVBUVUhVVjJXc1drRkE9PSIsInZhbHVlIjoicnY4YzdsakZyRTMyUzM1TUFkQW8xMFVPOW9iR2NnaW4xSUkrNGRLNHpjYz0iLCJtYWMiOiIxYjlhMTkzYTUyY2Q1NzNlMWZiZDBhYTEwNjA3MjExOGQwMzIwMTMyNDYyMzkwZTJhN2U1YTY1YTZkYmNkMzdiIiwidGFnIjoiIn0='));
 
         try {
             $rows = collect();
@@ -113,7 +115,7 @@ class AuthController extends Controller
             $reveiverEmailAddress = $request->email;
             $details = [
                 'custname' => $request->name,
-                'email' => $request->email,
+                'email' => Crypt::encrypt($request->email),
             ];
 
             Mail::to($reveiverEmailAddress)->send(new EmailVerify($details));
@@ -142,7 +144,7 @@ class AuthController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -155,8 +157,9 @@ class AuthController extends Controller
 
         try {
             DB::beginTransaction();
+            $email = Crypt::decrypt($request->email);
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $email)->first();
             $user->isVerified = 'true';
             $user->save();
 

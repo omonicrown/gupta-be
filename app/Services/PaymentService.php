@@ -33,7 +33,7 @@ class PaymentService extends BaseController
                 'amount' => $data['amount'],
                 'currency' => 'NGN',
                 'payment_options' => 'card',
-                'redirect_url' => 'https://www.mygupta.co/subscription', //replace with yours
+                'redirect_url' => 'https://www.mygupta.co/subscription', //replace with yours  http://localhost:3000/   https://www.mygupta.co
                 'customer' => [
                     'email' => Auth()->user()->email,
                     'name' => Auth()->user()->name,
@@ -190,22 +190,24 @@ class PaymentService extends BaseController
             $userData = User::where('id', Auth::user()->id)->first();
             $walletDatails = VendorWallet::where('user_id', Auth::user()->id)->first();
 
-            if ($walletDatails->total_amount >= $data['amount']){
+            if ($walletDatails->total_amount >= $data['amount']) {
 
-             VendorWallet::updateOrCreate(
+                VendorWallet::updateOrCreate(
                     ['user_id' => Auth::user()->id],
                     [
+                        'previous_amount' => ($walletDatails->total_amount),
                         'total_amount' => ($walletDatails->total_amount - $data['amount'])
+
                     ]
                 );
 
 
-                
+
                 // $walletDatails->total_amount = ($walletDatails->total_amount - $data['amount']);
                 // $walletDatails->save();
 
 
-                 Witdrawal::create([
+                Witdrawal::create([
                     'account_bank' => $data['account_bank'],
                     'account_number' => $data['account_number'],
                     'amount' => $data['amount'],
@@ -226,24 +228,24 @@ class PaymentService extends BaseController
                     'custname' => $userData->name,
                     'amount' => $data['amount']
                 ];
-    
+
                 Mail::to($reveiverEmailAddress)->send(new InitiatedTransaction($details));
 
                 DB::commit();
                 return $this->success(('Witdrawal Initated Successfully'), []);
-                
 
 
-            }else{
+
+            } else {
                 DB::commit();
                 return $this->sendError(('Insufficient Funds'), []);
             }
-               
-           
-           
+
+
+
             // return  $res;
 
-            
+
 
         } catch (Exception $th) {
             DB::rollback();
@@ -273,11 +275,11 @@ class PaymentService extends BaseController
                 'currency' => 'NGN',
                 'meta' => [
                     'sender' => 'GUPTA LINKS',
-                    'first_name' =>$data['first_name'],
+                    'first_name' => $data['first_name'],
                     'last_name' => $data['last_name'],
                     'email' => $data['email'],
                     'beneficiary_country' => "NG",
-                    'mobile_number' =>$data['mobile_number'],
+                    'mobile_number' => $data['mobile_number'],
                     'merchant_name' => "PAY WITH GUPTA"
                 ]
             ];
@@ -364,17 +366,17 @@ class PaymentService extends BaseController
             $current = CarbonImmutable::now();
 
             //Basic Month sub
-            if ($chargeAmount == '2') {
-
+            if ($chargeAmount == '3500' || $chargeAmount == '9975' || $chargeAmount == '19950' || $chargeAmount == '39900') {
                 try {
                     $userAccount = User::where('id', Auth::user()->id)->first();
-                    $userAccount->no_of_wlink = '20';
-                    $userAccount->no_of_rlink = '20';
-                    $userAccount->no_of_mlink = '5';
-                    $userAccount->no_of_mstore = '2';
+                    $userAccount->no_of_wlink = '10';
+                    $userAccount->no_of_rlink = '10';
+                    $userAccount->no_of_mlink = '10';
+                    $userAccount->no_of_mstore = '100';
+                    $userAccount->no_of_malink = '5';
                     $userAccount->sub_type = 'basic';
                     $userAccount->sub_start = Carbon::today()->toDateString();
-                    $userAccount->sub_end = $current->addMonth()->toDateString();
+                    $userAccount->sub_end = ($chargeAmount == '3500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '9975' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '19950' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '39900' ? $current->addMonths(11)->toDateString() : '')));
                     $userAccount->sub_status = 'active';
                     $userAccount->save();
 
@@ -382,7 +384,7 @@ class PaymentService extends BaseController
                         ['tnx_ref' => $tnx_ref],
                         [
                             'user_id' => Auth::user()->id,
-                            'sub_type' => '',
+                            'sub_type' => 'basic',
                             'tnx_ref' => $tnx_ref,
                             'amount_paid' => $chargeAmount,
                             'user_email' => Auth::user()->email,
@@ -397,25 +399,26 @@ class PaymentService extends BaseController
 
             }
 
-            //basic year sub
-            if ($chargeAmount == '20') {
+            //popular month sub
+            if ($chargeAmount == '7500' || $chargeAmount == '21375' || $chargeAmount == '42750' || $chargeAmount == '85500') {
 
                 try {
                     $userAccount = User::where('id', Auth::user()->id)->first();
-                    $userAccount->no_of_wlink = '20';
-                    $userAccount->no_of_rlink = '20';
-                    $userAccount->no_of_mlink = '5';
-                    $userAccount->no_of_mstore = '2';
-                    $userAccount->sub_type = '';
+                    $userAccount->no_of_wlink = '25';
+                    $userAccount->no_of_rlink = '25';
+                    $userAccount->no_of_mlink = '25';
+                    $userAccount->no_of_malink = '10';
+                    $userAccount->no_of_mstore = '500';
+                    $userAccount->sub_type = 'popular';
                     $userAccount->sub_start = Carbon::today()->toDateString();
-                    $userAccount->sub_end = $current->addMonths(11)->toDateString();
+                    $userAccount->sub_end = ($chargeAmount == '7500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '21375' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '42750' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '85500' ? $current->addMonths(11)->toDateString() : '')));
                     $userAccount->sub_status = 'active';
                     $userAccount->save();
                     Subscription::updateOrCreate(
                         ['tnx_ref' => $tnx_ref],
                         [
                             'user_id' => Auth::user()->id,
-                            'sub_type' => '',
+                            'sub_type' => 'popular',
                             'tnx_ref' => $tnx_ref,
                             'amount_paid' => $chargeAmount,
                             'user_email' => Auth::user()->email,
@@ -430,16 +433,17 @@ class PaymentService extends BaseController
 
             }
 
-            //Basic Month sub
-            if ($chargeAmount == '2000') {
+            //premium Month sub
+            if ($chargeAmount == '16500' || $chargeAmount == '47025' || $chargeAmount == '94050' || $chargeAmount == '188100') {
                 $userAccount = User::where('id', Auth::user()->id)->first();
-                $userAccount->no_of_wlink = '20';
-                $userAccount->no_of_rlink = '20';
-                $userAccount->no_of_mlink = '5';
-                $userAccount->no_of_mstore = '2';
+                $userAccount->no_of_wlink = '2000';
+                $userAccount->no_of_rlink = '2000';
+                $userAccount->no_of_mlink = '2000';
+                $userAccount->no_of_malink = '200';
+                $userAccount->no_of_mstore = '5000';
                 $userAccount->sub_type = 'premium';
                 $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = $current->addDays(30)->toDateString();
+                $userAccount->sub_end = ($chargeAmount == '16500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '47025' ? $current->addMonths(3)->toDateString() : ($chargeAmount == '94050' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '188100' ? $current->addMonths(11)->toDateString() : '')));
                 $userAccount->sub_status = 'active';
                 $userAccount->save();
 
@@ -447,7 +451,7 @@ class PaymentService extends BaseController
                     ['tnx_ref' => $tnx_ref],
                     [
                         'user_id' => Auth::user()->id,
-                        'sub_type' => '',
+                        'sub_type' => 'premium',
                         'tnx_ref' => $tnx_ref,
                         'amount_paid' => $chargeAmount,
                         'user_email' => Auth::user()->email,
@@ -458,31 +462,31 @@ class PaymentService extends BaseController
             }
 
             //Popular year sub
-            if ($chargeAmount == '20') {
-                $userAccount = User::where('id', Auth::user()->id)->first();
-                $userAccount->no_of_wlink = '20';
-                $userAccount->no_of_rlink = '20';
-                $userAccount->no_of_mlink = '5';
-                $userAccount->no_of_mstore = '2';
-                $userAccount->sub_type = '';
-                $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = $current->addMonths(11)->toDateString();
-                $userAccount->sub_status = 'active';
-                $userAccount->save();
+            // if ($chargeAmount == '20') {
+            //     $userAccount = User::where('id', Auth::user()->id)->first();
+            //     $userAccount->no_of_wlink = '20';
+            //     $userAccount->no_of_rlink = '20';
+            //     $userAccount->no_of_mlink = '5';
+            //     $userAccount->no_of_mstore = '2';
+            //     $userAccount->sub_type = '';
+            //     $userAccount->sub_start = Carbon::today()->toDateString();
+            //     $userAccount->sub_end = $current->addMonths(11)->toDateString();
+            //     $userAccount->sub_status = 'active';
+            //     $userAccount->save();
 
-                Subscription::updateOrCreate(
-                    ['tnx_ref' => $tnx_ref],
-                    [
-                        'user_id' => Auth::user()->id,
-                        'sub_type' => '',
-                        'tnx_ref' => $tnx_ref,
-                        'amount_paid' => $chargeAmount,
-                        'user_email' => Auth::user()->email,
-                        'subscription_status' => 'paid',
-                        'currency' => 'ngn',
-                    ]
-                );
-            }
+            //     Subscription::updateOrCreate(
+            //         ['tnx_ref' => $tnx_ref],
+            //         [
+            //             'user_id' => Auth::user()->id,
+            //             'sub_type' => '',
+            //             'tnx_ref' => $tnx_ref,
+            //             'amount_paid' => $chargeAmount,
+            //             'user_email' => Auth::user()->email,
+            //             'subscription_status' => 'paid',
+            //             'currency' => 'ngn',
+            //         ]
+            //     );
+            // }
 
             $data = $resp['data'];
             return $data;
@@ -673,18 +677,23 @@ class PaymentService extends BaseController
 
     public function transactionDetails()
     {
+
         $walletDatails = VendorWallet::where('user_id', Auth::user()->id)->first();
+        $witdrawal = Witdrawal::where('email', Auth::user()->email)->where('status', 'SUCCESSFUL')->latest()->first();
+        $deposit = Transaction::where('user_id', Auth::user()->id)->where('transaction_status', 'successful')->latest()->first();
         $transactions = Transaction::where('user_id', Auth::user()->id)->where('transaction_status', 'successful')->paginate(10);
         return $this->success('Fetched successful', [
             'walletDetails' => $walletDatails,
             'transactions' => $transactions,
+            'witdrawal' => $witdrawal,
+            'deposit' => $deposit,
         ]);
 
 
         // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
     }
 
-    
+
 
     public function getAllWitdrawals()
     {
