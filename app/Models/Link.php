@@ -29,6 +29,7 @@ class Link extends Model
         'business_policy',
         'redirect_link',
         'type',
+        'logo_id',
         'user_id',
         'short_url_id',
         'created_at',
