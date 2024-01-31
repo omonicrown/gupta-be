@@ -26,9 +26,9 @@ class DeleteLinksController extends Controller
             DB::beginTransaction();
             $link = Link::whereId($id)->first();
 
-            if($link->logo_id !=='no image path' || $link->logo_id !==null){
-                (Cloudinary::destroy($link->logo_id));
-            }
+            // if($link->logo_id !=='no image path' || $link->logo_id !==null){
+            //     (Cloudinary::destroy($link->logo_id));
+            // }
 
             $short = ShortURL::where('url_key',$link->name)->first();
             ShortURLVisit::where('short_url_id',$short->id)->forceDelete();
