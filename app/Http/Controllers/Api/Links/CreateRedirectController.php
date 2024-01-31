@@ -80,7 +80,7 @@ class CreateRedirectController extends Controller
                     'link_id' => $link->id
                 ],
                 [
-                    'phone_number' => '',
+                    'phone_number' => time(),
                     'message' => $request->url,
                 ]
             );
