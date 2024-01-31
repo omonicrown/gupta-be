@@ -49,7 +49,7 @@ class ProductController extends Controller
                     'product_image_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPath()),
                     'product_image_2' => ($request->product_image_2 == 'No selected file' ? 'no image' : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPath()),
                     'product_image_3' => ($request->product_image_3 == 'No selected file' ? 'no image' : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPath()),
-                    'product_image_id_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages', $request->product_image_1->hashName()))->getPublicId()),
+                    'product_image_id_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPublicId()),
                     'product_image_id_2' => ($request->product_image_2 == 'No selected file' ? 'no image path' : ($request->product_image_2->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_2->hashName()))->getPublicId()),
                     'product_image_id_3' => ($request->product_image_3 == 'No selected file' ? 'no image path' : ($request->product_image_3->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_3->hashName()))->getPublicId()),
                     'user_id' => auth()->user()->id
