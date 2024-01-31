@@ -33,13 +33,13 @@ class CreateTieredController extends Controller
                 ], 500);
             }
 
-            $pics_2='';
-            if($request->logo !== '1'){
-                $uploadedFile2 = $request->logo;
-                $pin = mt_rand(10, 99);
-                $pics_2 = $uploadedFile2->hashName();
-                $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
-            }
+            // $pics_2='';
+            // if($request->logo !== '1'){
+            //     $uploadedFile2 = $request->logo;
+            //     $pin = mt_rand(10, 99);
+            //     $pics_2 = $uploadedFile2->hashName();
+            //     $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
+            // }
             $students = preg_split("/[,]/", $request->attach_links);
            
 
@@ -47,7 +47,8 @@ class CreateTieredController extends Controller
                 'name' => str_replace(' ', '', $request->name),
                 'title' =>  $request->title,
                 'type' =>  'tiered',
-                'logo' =>  $pics_2,
+                'logo' =>  ($request->logo == 'No selected file' ? 'no image' : ($request->logo->storeOnCloudinaryAs('logo/'.Auth::user()->id, $request->logo->hashName()))->getPath()),
+                'logo_id' =>  ($request->logo == 'No selected file' ? 'no image path' : ($request->logo->storeOnCloudinaryAs('logo/'.Auth::user()->id, $request->logo->hashName()))->getPublicId()),
                 'bio' => $request->bio,
                 'business_website' => $request->business_website,
                 'business_policy' => $request->business_policy,
@@ -71,7 +72,7 @@ class CreateTieredController extends Controller
             DB::commit();
             return response()->json([
                 'status' => true,
-                'message' => 'Tiered Link Created Successfully',
+                'message' => 'Multi Link Created Successfully',
                 'link' => $link,
             ], 200);
         } catch (Exception $e) {

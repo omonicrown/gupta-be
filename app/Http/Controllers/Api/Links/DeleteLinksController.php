@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Links;
 
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Exception;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -24,6 +25,11 @@ class DeleteLinksController extends Controller
             // return ($id);
             DB::beginTransaction();
             $link = Link::whereId($id)->first();
+
+            if($link->logo_id !=='no image path' || $link->logo_id !==null){
+                (Cloudinary::destroy($link->logo_id));
+            }
+
             $short = ShortURL::where('url_key',$link->name)->first();
             ShortURLVisit::where('short_url_id',$short->id)->forceDelete();
             ShortURL::where('url_key',$link->name)->forceDelete();
