@@ -138,7 +138,7 @@ class UpdateTieredController extends Controller
             $link = Link::where('id', $id)->first();
             // dd($link->logo);
 
-            if($link->logo_id !=='no image path' || $link->logo_id !==null){
+            if($link->logo_id !=='no image path' || !$link->logo_id){
                 (Cloudinary::destroy($link->logo_id));
             }
 
