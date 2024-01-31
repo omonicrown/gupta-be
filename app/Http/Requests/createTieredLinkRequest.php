@@ -21,8 +21,8 @@ class createTieredLinkRequest extends FormRequest
             'bio' => ['required', 'string'],
             'attach_links' => ['required','string'],
             'business_website' => ['required', 'string'],
-            'business_policy' => ['required', 'string'],
-            'redirect_link' => ['required', 'string'],
+            'business_policy' => ['string'],
+            'redirect_link' => ['string'],
         ];
     }
 }
