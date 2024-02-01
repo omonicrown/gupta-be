@@ -164,8 +164,8 @@
                     user experience.</span><br /><br />
                 <span>- <b>Redirect Links: </b> Seamlessly guide users to any destination URL, enhancing your online
                     presence.</span><br /><br />
-                <span>- <b>Automated Messages:</b> Engage efficiently with automated messages, ensuring timely and
-                    consistent communication.</span><br /><br />
+                <span>- <b>Mini Store:</b> A pivotal component, enabling vendors to create market links with custom URLs representing their shops. Subscription plans dictate customization options. Vendors populate these market links with products, fostering a seamless shopping experience.</span><br /><br />
+                <span>- <b>Pay with Gupta:</b> Vendors seamlessly collect payments through Gupta payment links on product pages. The platform includes a wallet section for vendors to monitor customer payments and facilitate withdrawals.</span><br /><br />
 
                 <!-- <span>- You get guaranteed job placement for work practise, then possible permanent contract</span><br /><br />
                 <span><a href="https://afriproedu.com/course-details/2"> Click here for more information </a></span><br /><br /> -->
