@@ -37,27 +37,25 @@ class AuthController extends Controller
      */
 
 
-   
+
 
     public function testChunk(Request $request)
     {
-        dd(Crypt::decrypt('eyJpdiI6IjZ5dTNpWWdISVBUVUhVVjJXc1drRkE9PSIsInZhbHVlIjoicnY4YzdsakZyRTMyUzM1TUFkQW8xMFVPOW9iR2NnaW4xSUkrNGRLNHpjYz0iLCJtYWMiOiIxYjlhMTkzYTUyY2Q1NzNlMWZiZDBhYTEwNjA3MjExOGQwMzIwMTMyNDYyMzkwZTJhN2U1YTY1YTZkYmNkMzdiIiwidGFnIjoiIn0='));
-
         try {
-            $rows = collect();
-        User::chunk(100, function ($users) use($rows) {
-            foreach ($users as $user) {
-                $rows->push($user);	
-                // sleep(2);
-                // break;
-            }
-        });
-        return $rows;
+            $rows = $request->ip();
+            // User::chunk(100, function ($users) use ($rows) {
+            //     foreach ($users as $user) {
+            //         $rows->push($user);
+            //         // sleep(2);
+            //         // break;
+            //     }
+            // });
+            return $rows;
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
 
-      
+
     }
 
 
@@ -103,7 +101,7 @@ class AuthController extends Controller
             ]);
 
 
-             VendorWallet::create([
+            VendorWallet::create([
                 'user_id' => $user->id,
                 'total_amount' => '0',
                 'previous_amount' => '0',
@@ -304,36 +302,36 @@ class AuthController extends Controller
             $user = User::where('email', $attribute['email'])->first();
             // $user = ($query = User::query());
             // $user = $user->where($query->qualifyColumn('email'),$request->input('email'))->first();
-    
+
             if (!$user) {
                 return $this->sendError('No Record', 'Incorrect email address provided');
             }
-    
+
             $resetRequest = passwordReset::where('email', $user->email)->first();
             // dd($resetRequest->token);
-    
+
             if (!$resetRequest || $request->token != $resetRequest->token) {
                 return $this->error('An Error Occured', 'Token Mis-match,try again');
             }
-    
+
             $user->fill([
                 'password' => Hash::make($attribute['password']),
             ]);
-    
+
             $user->save();
-    
+
             $user->tokens()->delete();
             $resetRequest->delete();
             // $success['token'] = $user->createToken('MyAuth')->plainTextToken;
             $success['name'] = $user->name;
             // $success['role'] =  $user->role;
             $success['account_id'] = $user->id;
-    
-            return $this->success('Pasword Reset Successfully!',$success);
+
+            return $this->success('Pasword Reset Successfully!', $success);
         } catch (\Throwable $th) {
-           dd($th->getMessage());
+            dd($th->getMessage());
         }
-        
+
     }
 
     /**
