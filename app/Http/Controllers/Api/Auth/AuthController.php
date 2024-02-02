@@ -42,7 +42,7 @@ class AuthController extends Controller
     public function testChunk(Request $request)
     {
         try {
-            $rows = $request->ip();
+            $rows = $request->getClientIp();
             // User::chunk(100, function ($users) use ($rows) {
             //     foreach ($users as $user) {
             //         $rows->push($user);
