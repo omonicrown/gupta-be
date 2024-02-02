@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Validator;
 use Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -88,8 +89,10 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'user_ip' => $request->getClientIp(),
                 'phone_number' => $request->phone_number,
                 'sub_status' => 'trial',
+                'sub_type' => 'free',
                 'sub_start' => Carbon::today()->toDateString(),
                 'sub_end' => $current->addDays(14)->toDateString(),
                 'no_of_wlink' => '3',
@@ -216,18 +219,41 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Email & Password does not match with our record.',
-                ], 401);
+                ], 200);
             }
 
             $user = User::where('email', $request->email)->first();
+            PersonalAccessToken::where('tokenable_id',$user->id)->delete();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'User Logged In Successfully',
-                'name' => $user->name,
-                'data' => $user,
-                'token' => $user->createToken("API TOKEN")->plainTextToken
-            ], 200);
+            if ($user->sub_type !== 'premium') {
+                if ($user->user_ip !== $request->getClientIp()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Account restricted to one user',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'User Logged In Successfully',
+                        'name' => $user->name,
+                        'data' => $user,
+                        'token' => $user->createToken("API TOKEN")->plainTextToken
+                    ], 200);
+                }
+            } else {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'User Logged In Successfully',
+                    'name' => $user->name,
+                    'data' => $user,
+                    'token' => $user->createToken("API TOKEN")->plainTextToken
+                ], 200);
+            }
+
+            // 'user_ip' => $request->getClientIp(),
+
+
+
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
