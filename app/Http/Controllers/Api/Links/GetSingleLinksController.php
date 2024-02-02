@@ -65,8 +65,8 @@ class GetSingleLinksController extends Controller
                 // ->whereYear('created_at', '2023')
                 ->select(
                     DB::raw("(count(case when operating_system <> '0' then short_url_id end)) as total_click"),
-                    DB::raw("(to_char(created_at, 'MM-DD')) as month_day")
-                )
+                    DB::raw("(to_char(created_at, 'YYYY-MM')) as month_day")
+                )->orderBy('created_at')
                 // ->groupBy('created_at')
                 ->groupBy(DB::raw("to_char(created_at, 'MM-DD')"))
                 ->get();
