@@ -232,6 +232,7 @@ class AuthController extends Controller
                         'message' => 'Account restricted to one user',
                     ], 200);
                 } else {
+                    
                     return response()->json([
                         'status' => true,
                         'message' => 'User Logged In Successfully',
