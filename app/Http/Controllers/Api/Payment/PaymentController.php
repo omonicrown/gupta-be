@@ -179,7 +179,7 @@ class PaymentController extends Controller
                 } else if ($request['data']['status']=== 'FAILED') {
 
                     $vendorWallet = VendorWallet::where('user_email', $userData->email)->first();
-                    $vendorWallet->amount =  $vendorWallet->amount + $request['data']['amount'];
+                    $vendorWallet->amount = (intval($vendorWallet->amount) + intval($request['data']['amount']));
                     $vendorWallet->save();
 
                     Witdrawal::updateOrCreate(
