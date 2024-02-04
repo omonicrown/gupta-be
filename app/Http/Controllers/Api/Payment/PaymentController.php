@@ -7,6 +7,7 @@ use App\Http\Requests\Payment\MakeOutsideProductPaymentRequest;
 use App\Http\Requests\Payment\MakePayment;
 use App\Http\Requests\Payment\WitdrawFundRequest;
 use App\Mail\completeTransaction;
+use App\Mail\failedTransaction;
 use App\Models\VendorWallet;
 use App\Models\Witdrawal;
 use App\Services\PaymentService;
@@ -176,6 +177,11 @@ class PaymentController extends Controller
 
                     // update transfer status to successful in your db
                 } else if ($request['data']['status']=== 'FAILED') {
+
+                    $vendorWallet = VendorWallet::where('user_email', $userData->email)->first();
+                    $vendorWallet->amount =  $vendorWallet->amount + $request['data']['amount'];
+                    $vendorWallet->save();
+
                     Witdrawal::updateOrCreate(
                         ['reference' =>$request['data']['reference']],
                         [
@@ -183,13 +189,15 @@ class PaymentController extends Controller
                         ]
                     );
 
+
+
                     $reveiverEmailAddress = $userData->email;
                     $details = [
                         'custname' => $userData->first_name,
                         'amount' => $request['data']['amount']
                     ];
 
-                    Mail::to($reveiverEmailAddress)->send(new completeTransaction($details));
+                    Mail::to($reveiverEmailAddress)->send(new failedTransaction($details));
 
                     // VendorWallet::updateOrCreate(
                     //     ['email' => $transfer['data']['meta']['email']],
