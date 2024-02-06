@@ -225,23 +225,8 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
             PersonalAccessToken::where('tokenable_id',$user->id)->delete();
 
-            if ($user->sub_type !== 'premium') {
-                if ($user->user_ip !== $request->getClientIp()) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Account restricted to one user',
-                    ], 200);
-                } else {
-                    
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'User Logged In Successfully',
-                        'name' => $user->name,
-                        'data' => $user,
-                        'token' => $user->createToken("API TOKEN")->plainTextToken
-                    ], 200);
-                }
-            } else {
+          
+            
                 return response()->json([
                     'status' => true,
                     'message' => 'User Logged In Successfully',
@@ -249,7 +234,7 @@ class AuthController extends Controller
                     'data' => $user,
                     'token' => $user->createToken("API TOKEN")->plainTextToken
                 ], 200);
-            }
+           
 
             // 'user_ip' => $request->getClientIp(),
 
