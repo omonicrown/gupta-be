@@ -29,11 +29,11 @@ class MarketLinkController extends Controller
             DB::beginTransaction();
 
             $links = MarketPlaceLink::where('user_id', Auth::user()->id)->count();
-            if ($links >= Auth::user()->no_of_mlink) {
+            if ($links >= Auth::user()->no_of_malink) {
                 // return $links;
                 return response()->json([
                     'status' => false,
-                    'message' => 'Link exceeded ' . Auth::user()->no_of_mlink,
+                    'message' => 'Link exceeded ' . Auth::user()->no_of_malink,
                     'errors' => 'Unauthorized'
                 ], 500);
             }

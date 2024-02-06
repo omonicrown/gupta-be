@@ -95,11 +95,11 @@ class AuthController extends Controller
                 'sub_type' => 'free',
                 'sub_start' => Carbon::today()->toDateString(),
                 'sub_end' => $current->addDays(14)->toDateString(),
-                'no_of_wlink' => '3',
-                'no_of_rlink' => '3',
-                'no_of_mlink' => '2',
-                'no_of_mstore' => '1',
-                'no_of_malink' => '3',
+                'no_of_wlink' => '5',
+                'no_of_rlink' => '5',
+                'no_of_mlink' => '3',
+                'no_of_mstore' => '10',
+                'no_of_malink' => '1',
                 'password' => Hash::make($request->password)
             ]);
 

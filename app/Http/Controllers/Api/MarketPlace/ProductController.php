@@ -28,7 +28,7 @@ class ProductController extends Controller
             DB::beginTransaction();
 
             $links = Product::where('user_id', Auth::user()->id)->count();
-            if ($links >= ((Auth::user()->no_of_mstore)+1)) {
+            if ($links >= ((Auth::user()->no_of_mstore))) {
                 // return $links;
                 return response()->json([
                     'status' => false,
