@@ -257,7 +257,13 @@ class AuthController extends Controller
             $user = $user->where($query->qualifyColumn('email'), $request->input('email'))->first();
 
             if (!$user || !$user->email) {
-                return $this->sendError('No Record', 'No Record Found');
+                return
+                response()->json([
+                    'status' => false,
+                    'message' => 'No Record',
+                    'data' => "Email does not match our records"
+                ], 200);
+                // $this->sendError('No Record', 'No Record Found');
             }
 
             $resetPasswordToken = str_pad(random_int(1, 999), 4, '0', STR_PAD_LEFT);
@@ -316,14 +322,27 @@ class AuthController extends Controller
             // $user = $user->where($query->qualifyColumn('email'),$request->input('email'))->first();
 
             if (!$user) {
-                return $this->sendError('No Record', 'Incorrect email address provided');
+                return
+
+                response()->json([
+                    'status' => false,
+                    'message' => 'No Record',
+                    'data' => "Incorrect email address provided"
+                ], 200);
             }
 
             $resetRequest = passwordReset::where('email', $user->email)->first();
             // dd($resetRequest->token);
 
             if (!$resetRequest || $request->token != $resetRequest->token) {
-                return $this->error('An Error Occured', 'Token Mis-match,try again');
+                return
+
+                response()->json([
+                    'status' => false,
+                    'message' => 'An Error Occured',
+                    'data' => "Incorrect 4 digit code,try again"
+                ], 200);
+                
             }
 
             $user->fill([
@@ -340,6 +359,7 @@ class AuthController extends Controller
             $success['account_id'] = $user->id;
 
             return $this->success('Pasword Reset Successfully!', $success);
+
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }

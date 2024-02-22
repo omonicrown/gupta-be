@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\newCustomerFollowup;
 use App\Mail\Reciept;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -39,17 +41,18 @@ Artisan::command('logs:clear', function() {
 
 Artisan::command('nurse', function () {
 
-    $reveiverEmailAddress = "samuelfemi85@gmail.com";
+    
+
+    
+        $reveiverEmailAddress = "boluawosika@gmail.com";
         $details = [
-            'name' => 'Omolade Samuel Femi',
-            'email' => 'samuelfemi85@gmail.com',
-            'code' => '#33419649'
+            'custname' => 'Jolami stores',
+
         ];
 
-       
-        Mail::to($reveiverEmailAddress)->send(new Reciept($details));
+        Mail::to($reveiverEmailAddress)->send(new newCustomerFollowup($details));
         dd('success');
-
+   
        
         if (Mail::failures() != 0) {
             return "Email has been sent successfully.";
