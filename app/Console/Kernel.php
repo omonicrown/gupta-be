@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('hello:world')->everyMinute();
         $schedule->command('subscription:check')->dailyAt('02:16');
+        $schedule->command('notification:push');
     }
 
     /**
