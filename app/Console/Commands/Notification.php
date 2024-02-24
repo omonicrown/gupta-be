@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class Notification extends Command
@@ -38,13 +39,21 @@ class Notification extends Command
         $user = User::orderBy('id')->chunk(100, function ($users) {
             foreach ($users as $user) {
                 $reveiverEmailAddress = $user->email;
-                $details = [
-                    'custname' => $user->name,
-        
-                ];
-        
-                Mail::to($reveiverEmailAddress)->send(new WeekendFollowup($details));
+                // $details = [
+                //     'custname' => $user->name,
 
+                // ];
+
+                // Mail::to($reveiverEmailAddress)->send(new WeekendFollowup($details));
+                Http::post('https://api.ng.termii.com/api/sms/send', [
+                    'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
+                    'type' => 'plain',
+                    'to' => $user->phone_number,
+                    'from' => 'Gupta',
+                    'channel' => 'generic',
+                    'sms' => "Hello ".$user->name." ! Elevate your weekend with Gupta's magic customize links, collect payments effortlessly. Need assistance? Reach us on whatsapp  +234 913 729 4656.",
+
+                ]);
 
                 // if ($user->sub_end == Carbon::now()->isoFormat('YYYY-MM-DD')) {
                 //     $updateUser = User::find($user->id);
