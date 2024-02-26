@@ -117,25 +117,23 @@
 
             <div class="header">
                 <h3> Hello {{$details['custname']}} , </h3>
-                <p>Wishing you a fantastic weekend ahead! 🎉 As you unwind, don't forget the incredible possibilities Gupta brings to your fingertips.</p>
+                <p>Entrepreneurship is a journey, not a destination. Fuel your ambition with Gupta – personalize your sales approach, delve into detailed analytics, and create a stunning mini website. Make this week count!</p>
                 
-                <p>
+                <!-- <p>
                 <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
                 <span>🛍️ Customizing WhatsApp and catalog links effortlessly.</span><br /><br />
                 <span>📊 Exploring detailed analytics for insightful business decisions.</span><br /><br />
                 <span>🌐 Creating personalized market links for seamless shopping.</span><br /><br />
                 <span>💸 Collecting payments seamlessly with Gupta payment links.</span><br /><br />
 
-                <!-- <span>- You get guaranteed job placement for work practise, then possible permanent contract</span><br /><br />
-                <span><a href="https://afriproedu.com/course-details/2"> Click here for more information </a></span><br /><br /> -->
-
-            </p>
+               
+            </p> -->
                 
                 
-                <p> Have questions or need assistance? We're just a message away! Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
+                <p> Have questions or need assistance? Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
                 </p>
               
-                <p> Make the most of your weekend, and remember, we're here to support your success!</p>
+                <p> Remember, we're here to support your success!</p>
 
             </div>
             <div class="text-content">
