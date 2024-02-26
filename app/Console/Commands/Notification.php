@@ -45,15 +45,15 @@ class Notification extends Command
                 ];
 
                 Mail::to($reveiverEmailAddress)->send(new WeekendFollowup($details));
-                // Http::post('https://api.ng.termii.com/api/sms/send', [
-                //     'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
-                //     'type' => 'plain',
-                //     'to' => $user->phone_number,
-                //     'from' => 'Gupta',
-                //     'channel' => 'generic',
-                //     'sms' => "New week, new opportunities! Gupta is your partner in progress – tailor your path, maximize sales, and create a mini website that speaks volumes about your brand. Let's crush those goals!",
+                Http::post('https://api.ng.termii.com/api/sms/send', [
+                    'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
+                    'type' => 'plain',
+                    'to' => $user->phone_number,
+                    'from' => 'Gupta',
+                    'channel' => 'generic',
+                    'sms' => "New week, new opportunities! Gupta is your partner in progress – tailor your path, maximize sales, and create a mini website that speaks volumes about your brand. Let's crush those goals!",
 
-                // ]);
+                ]);
 
                 // if ($user->sub_end == Carbon::now()->isoFormat('YYYY-MM-DD')) {
                 //     $updateUser = User::find($user->id);
