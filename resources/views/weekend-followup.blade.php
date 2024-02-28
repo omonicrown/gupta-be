@@ -117,7 +117,7 @@
 
             <div class="header">
                 <h3> Hello {{$details['custname']}} , </h3>
-                <p>Entrepreneurship is a journey, not a destination. Fuel your ambition with Gupta – personalize your sales approach, delve into detailed analytics, and create a stunning mini website. Make this week count!</p>
+                <p>Happy Wednesday, entrepreneurs! 🌟 Just a friendly reminder that your hard work is building something extraordinary. Gupta is your partner in success – customize your strategy, track your wins, and did you know you can create a customized website for your business? Keep pushing, you're doing amazing! 💼💪</p>
                 
                 <!-- <p>
                 <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
