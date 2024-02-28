@@ -51,7 +51,7 @@ class Notification extends Command
                     'to' => $user->phone_number,
                     'from' => 'Gupta',
                     'channel' => 'generic',
-                    'sms' => "Wednesday vibes! 🌟 Your hard work is creating something extraordinary. Gupta is your success partner – customize strategies, track wins, and explore creating a personalized website for your business. Keep pushing, you're amazing! 💼💪",
+                    'sms' => "Wednesday vibes! 🌟 Your hard work is creating something extraordinary. Gupta is your success partner – customize strategies, track wins, and explore creating a personalized website for your business. Keep pushing, you're amazing! 💼💪 ",
 
                 ]);
 
