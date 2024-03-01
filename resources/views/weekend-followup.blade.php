@@ -116,9 +116,11 @@
         <div class="content">
 
             <div class="header">
-                <h3> Hello {{$details['custname']}} , </h3>
-                <p>Happy Wednesday, entrepreneurs! 🌟 Just a friendly reminder that your hard work is building something extraordinary. Gupta is your partner in success – customize your strategy, track your wins, and did you know you can create a customized website for your business? Keep pushing, you're doing amazing! 💼💪</p>
+                <h3> Dear {{$details['custname']}} , </h3>
+                <p>Happy New Month! 🎉 As we step into March, we're excited about the endless possibilities it holds for your business. We want to remind you that Gupta is not just a tool; it's your ally in success.</p>
+                <p>Did you know? Gupta can help you create a customized website for your business, providing a unique online identity to showcase your products/services. As we navigate this month together, consider leveraging this feature to enhance your brand presence.</p>
                 
+                <p>Remember, our support team is always here for you. Whether you need assistance in setting up your personalized website or have any questions about maximizing Gupta's potential, we're just a message away.</p>
                 <!-- <p>
                 <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
                 <span>🛍️ Customizing WhatsApp and catalog links effortlessly.</span><br /><br />
@@ -133,7 +135,7 @@
                 <p> Have questions or need assistance? Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
                 </p>
               
-                <p> Remember, we're here to support your success!</p>
+                <p> Let's make this month extraordinary! Wishing you success, prosperity, and countless achievements.</p>
 
             </div>
             <div class="text-content">
