@@ -117,8 +117,8 @@
 
             <div class="header">
                 <h3> Dear {{$details['custname']}} , </h3>
-                <p>Happy New Month! 🎉 As we step into March, we're excited about the endless possibilities it holds for your business. We want to remind you that Gupta is not just a tool; it's your ally in success.</p>
-                <p>Did you know? Gupta can help you create a customized website for your business, providing a unique online identity to showcase your products/services. As we navigate this month together, consider leveraging this feature to enhance your brand presence.</p>
+                <p>Happy New Week!</p>
+                <p>Just a friendly reminder: you're rocking a FREE trial with Gupta! 🚀 Dive in, create your customized website, and set up that personalized WhatsApp link – it's all about YOUR brand shining through! 🌐✨ Let Gupta elevate your sales game with top-notch branding. Ready to conquer this week together? 💼💪</p>
                 
                 <p>Remember, our support team is always here for you. Whether you need assistance in setting up your personalized website or have any questions about maximizing Gupta's potential, we're just a message away.</p>
                 <!-- <p>

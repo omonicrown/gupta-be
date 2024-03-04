@@ -51,7 +51,7 @@ class Notification extends Command
                     'to' => $user->phone_number,
                     'from' => 'Gupta',
                     'channel' => 'generic',
-                    'sms' => "Happy New Month! 🌟 Elevate your business with Gupta – create a personalized website effortlessly. We're here for support and success! 💼🚀",
+                    'sms' => "Happy New Week, Vendors! 🌟 Unlock success with Gupta's free trial – create a custom website, personalized WhatsApp link, and boost sales with branding. Let's elevate together! 💼🚀",
 
                 ]);
 
