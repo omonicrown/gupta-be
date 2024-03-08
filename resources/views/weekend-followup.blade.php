@@ -116,7 +116,7 @@
         <div class="content">
 
             <div class="header">
-                <h3> Dear Amazing Vendors, , </h3>
+                <h3> Dear Amazing Vendors, </h3>
                 <p>Happy International Women's Day! 🎉 Today, we celebrate the strength, resilience, and incredible achievements of each of you. Your dedication inspires us every day.</p>
                 <p>Did you know that with Gupta, you can give your business the top-notch branding it deserves? Elevate your online presence by creating a stunning customized website effortlessly. Let your business shine! ✨💻</p>
                 

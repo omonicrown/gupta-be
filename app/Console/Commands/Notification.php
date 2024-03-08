@@ -45,15 +45,15 @@ class Notification extends Command
                 ];
 
                 Mail::to($reveiverEmailAddress)->send(new WeekendFollowup($details));
-                // Http::post('https://api.ng.termii.com/api/sms/send', [
-                //     'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
-                //     'type' => 'plain',
-                //     'to' => $user->phone_number,
-                //     'from' => 'Gupta',
-                //     'channel' => 'generic',
-                //     'sms' => "Happy International Women's Day, incredible vendors! 🌸✨ Celebrate your strength and success. Embrace the power of Gupta to give your business top-notch branding with a personalized website. 💼💖 #IWD2022",
+                Http::post('https://api.ng.termii.com/api/sms/send', [
+                    'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
+                    'type' => 'plain',
+                    'to' => $user->phone_number,
+                    'from' => 'Gupta',
+                    'channel' => 'generic',
+                    'sms' => "Happy International Women's Day, incredible vendors! 🌸✨ Celebrate your strength and success. Embrace the power of Gupta to give your business top-notch branding with a personalized website. 💼💖 #IWD2024",
 
-                // ]);
+                ]);
 
                 // if ($user->sub_end == Carbon::now()->isoFormat('YYYY-MM-DD')) {
                 //     $updateUser = User::find($user->id);
