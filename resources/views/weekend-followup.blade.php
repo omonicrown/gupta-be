@@ -116,11 +116,11 @@
         <div class="content">
 
             <div class="header">
-                <h3> Dear {{$details['custname']}} , </h3>
-                <p>Happy New Week!</p>
-                <p>Just a friendly reminder: you're rocking a FREE trial with Gupta! 🚀 Dive in, create your customized website, and set up that personalized WhatsApp link – it's all about YOUR brand shining through! 🌐✨ Let Gupta elevate your sales game with top-notch branding. Ready to conquer this week together? 💼💪</p>
+                <h3> Dear Amazing Vendors, , </h3>
+                <p>Happy International Women's Day! 🎉 Today, we celebrate the strength, resilience, and incredible achievements of each of you. Your dedication inspires us every day.</p>
+                <p>Did you know that with Gupta, you can give your business the top-notch branding it deserves? Elevate your online presence by creating a stunning customized website effortlessly. Let your business shine! ✨💻</p>
                 
-                <p>Remember, our support team is always here for you. Whether you need assistance in setting up your personalized website or have any questions about maximizing Gupta's potential, we're just a message away.</p>
+                <p>Here's to you, trailblazers! Wishing you continued success and empowerment today and always.</p>
                 <!-- <p>
                 <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
                 <span>🛍️ Customizing WhatsApp and catalog links effortlessly.</span><br /><br />
@@ -135,8 +135,7 @@
                 <p> Have questions or need assistance? Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
                 </p>
               
-                <p> Let's make this month extraordinary! Wishing you success, prosperity, and countless achievements.</p>
-
+                
             </div>
             <div class="text-content">
 
