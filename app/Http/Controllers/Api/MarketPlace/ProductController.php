@@ -135,9 +135,46 @@ class ProductController extends Controller
     {
         try {
             // dd(auth()->user()->id);
-            $products = Product::where('user_id', auth()->user()->id)->paginate('10');
+            $products = Product::where('user_id', auth()->user()->id)->paginate(10);
             return $this->success('Fetched Successfully', $products);
         } catch (Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getMarketProducts(Request $request)
+    {
+        try {
+            $search = $request->query('search');
+            $name = $request->query('name');
+            $category = $request->query('categories');
+
+            if($search !=''){
+                $getData = Product::query()
+                    ->orWhere('product_name', 'LIKE', "%{$search}%")
+                    // ->orWhere('item_name', 'LIKE', "%{$search}%")
+                    ->paginate(20);
+            }else if($category !==''){
+                $getData = Product::query()
+                ->where('product_name', 'LIKE', "%{$category}%")
+                // ->where('item_name', 'LIKE', "%{$name}%")
+                ->paginate(20);
+            }else{
+                $getData = Product::paginate(20);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => "Fetched Successfully",
+                'data' => $getData
+            ], 200);
+
+            // return $this->success('Fetched Successfully', $getData);
+            // return $this->sendResponse($getData, 'Fetched Successfully');
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()

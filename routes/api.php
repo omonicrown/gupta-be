@@ -55,6 +55,8 @@ Route::get('product-payment-callback', [PaymentController::class, 'paymentCallba
 
 Route::put('update-user-role/{id}', [ManageUsersController::class, 'updateUserRole']);
 
+Route::get('market-links/get-market-products', [ProductController::class, 'getMarketProducts']);
+
 Route::get('/auth/test', [AuthController::class, 'testChunk']);
 
 Route::get('get-products-by-link-name/{name}', [ProductController::class, 'getProductsByLinkName']);
@@ -100,8 +102,9 @@ Route::middleware('auth:sanctum')->group(function () {
             $link->post('create-product', [ProductController::class, 'CreateProduct']);
             $link->post('update-product', [ProductController::class, 'UpdateProduct']);
             $link->post('update-market-link', [MarketLinkController::class, 'UpdateMarketLink']);
-            $link->get('get-market-links', [MarketLinkController::class, 'getLinks']);
+            $link->get('get-market-links', [MarketLinkController::class, 'getLinks']); 
             $link->get('get-products', [ProductController::class, 'getAllProducts']);
+           
             $link->get('get-single-product/{id}', [ProductController::class, 'getSingleProduct']);
             $link->delete('delete-product/{id}', [ProductController::class, 'deleteProduct']);
             $link->delete('delete-market-link/{id}', [MarketLinkController::class, 'deleteMarketLink']);
