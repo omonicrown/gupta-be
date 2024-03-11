@@ -51,7 +51,7 @@ class Notification extends Command
                     'to' => $user->phone_number,
                     'from' => 'Gupta',
                     'channel' => 'generic',
-                    'sms' => "Happy International Women's Day, incredible vendors! 🌸✨ Celebrate your strength and success. Embrace the power of Gupta to give your business top-notch branding with a personalized website. 💼💖 #IWD2024",
+                    'sms' => "Hello Vendors! Monday Motivation: Gupta, your key to more sales and branding. Exciting news: Gupta Marketplace launching soon! 🚀💼 #GuptaSuccess #MondayMotivation",
 
                 ]);
 

@@ -117,10 +117,12 @@
 
             <div class="header">
                 <h3> Dear Amazing Vendors, </h3>
-                <p>Happy International Women's Day! 🎉 Today, we celebrate the strength, resilience, and incredible achievements of each of you. Your dedication inspires us every day.</p>
-                <p>Did you know that with Gupta, you can give your business the top-notch branding it deserves? Elevate your online presence by creating a stunning customized website effortlessly. Let your business shine! ✨💻</p>
+                <p>Happy Monday! 🌟 As you kickstart a new week of opportunities, we wanted to remind you that Gupta is your ultimate partner in achieving more sales and giving your business the brand it deserves.</p>
+                <p>With Gupta, you have the tools to customize, captivate, and conquer the market. Personalize your sales approach, create a stunning brand image, and watch your business thrive!</p>
                 
-                <p>Here's to you, trailblazers! Wishing you continued success and empowerment today and always.</p>
+                <p>Exciting news on the horizon: Gupta will soon be launching a marketplace where your products will shine. Get ready to showcase your offerings to a wider audience and amplify your success.</p>
+
+                <p>This Monday, embrace the power of Gupta – where sales, branding, and endless possibilities converge. Let's make this week extraordinary together!</p>
                 <!-- <p>
                 <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
                 <span>🛍️ Customizing WhatsApp and catalog links effortlessly.</span><br /><br />

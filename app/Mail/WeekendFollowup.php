@@ -34,7 +34,7 @@ class WeekendFollowup extends Mailable
      */
     public function build()
     {
-        return $this->subject('Celebrating You on International Women\'s Day! 🌸')
+        return $this->subject('Elevate Your Week with Gupta: Your Sales and Branding Companion! 🚀')
             ->view('weekend-followup');
     }
     // /**
