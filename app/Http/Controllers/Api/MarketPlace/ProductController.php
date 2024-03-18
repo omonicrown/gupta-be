@@ -37,6 +37,7 @@ class ProductController extends Controller
                 ], 500);
             }
 
+
             $link = Product::create(
                 [
                     'link_name' => str_replace(' ', '-', $request->link_name),
@@ -44,6 +45,8 @@ class ProductController extends Controller
                     'product_name' => $request->product_name,
                     'product_description' => $request->product_description,
                     'phone_number' => $request->phone_number,
+                    'category' => $request->category,
+                    'location' => $request->location,
                     'no_of_items' => $request->no_of_items,
                     'product_price' => $request->product_price,
                     'product_image_1' => (($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPath()),
@@ -104,6 +107,8 @@ class ProductController extends Controller
                     'product_name' => $request->product_name,
                     'product_description' => $request->product_description,
                     'phone_number' => $request->phone_number,
+                    'category' => $request->category,
+                    'location' => $request->location,
                     'no_of_items' => $request->no_of_items,
                     'product_price' => $request->product_price,
                     'product_image_1' => (($request->product_image_1 == $product->product_image_1) ? $request->product_image_1 : ($request->product_image_1->storeOnCloudinaryAs('productImages/'.Auth::user()->id, $request->product_image_1->hashName()))->getPath()),
@@ -149,21 +154,22 @@ class ProductController extends Controller
     {
         try {
             $search = $request->query('search');
-            $name = $request->query('name');
+            $location = $request->query('location');
             $category = $request->query('categories');
 
-            if($search !=''){
+            if($category == ''){
                 $getData = Product::query()
-                    ->orWhere('product_name', 'LIKE', "%{$search}%")
+                    ->where('product_name', 'LIKE', "%{$search}%")
                     // ->orWhere('item_name', 'LIKE', "%{$search}%")
-                    ->paginate(20);
+                    ->paginate(5);
             }else if($category !==''){
                 $getData = Product::query()
-                ->where('product_name', 'LIKE', "%{$category}%")
-                // ->where('item_name', 'LIKE', "%{$name}%")
-                ->paginate(20);
+                ->where('category', 'LIKE', "%{$category}%")
+                ->where('product_name', 'LIKE', "%{$search}%")
+                ->where('location', 'LIKE', "%{$location}%")
+                ->paginate(5);
             }else{
-                $getData = Product::paginate(20);
+                $getData = Product::paginate(5);
             }
 
             return response()->json([

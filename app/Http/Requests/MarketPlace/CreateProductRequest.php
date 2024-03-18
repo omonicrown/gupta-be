@@ -21,6 +21,8 @@ class CreateProductRequest extends FormRequest
             'phone_number' =>['required', 'string'],
             'no_of_items' =>['required', 'string'],
             'product_price' =>['required', 'string'],
+            'category' =>['required','string'],
+            'location' =>['required', 'string'],
             'product_image_id_1' =>'string',
             'product_image_id_2' =>'string',
             'product_image_id_3' =>'string',

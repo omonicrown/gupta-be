@@ -18,7 +18,6 @@ class Product extends Model
      *
      * @var array<int, string>
      */
-
    
     protected $fillable = [
         'link_name',
@@ -28,6 +27,9 @@ class Product extends Model
         'phone_number',
         'no_of_items',
         'user_id',
+        'category',
+        'location',
+        'count',
         'product_price',
         'product_image_1',
         'product_image_2',

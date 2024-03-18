@@ -116,23 +116,13 @@
         <div class="content">
 
             <div class="header">
-                <h3> Dear Amazing Vendors, </h3>
-                <p>Happy Monday! 🌟 As you kickstart a new week of opportunities, we wanted to remind you that Gupta is your ultimate partner in achieving more sales and giving your business the brand it deserves.</p>
-                <p>With Gupta, you have the tools to customize, captivate, and conquer the market. Personalize your sales approach, create a stunning brand image, and watch your business thrive!</p>
+                <h3> Hello {{$details['custname']}}, </h3>
+                <p>Hope you're doing great! We've got some thrilling updates to kickstart your week.</p>
+                <p>Firstly, we're excited to announce that the Gupta Marketplace is launching in the first week of next month! This means that your products will be showcased on our platform, reaching a wider audience of potential customers. Get ready to showcase your offerings to the world!</p>
                 
-                <p>Exciting news on the horizon: Gupta will soon be launching a marketplace where your products will shine. Get ready to showcase your offerings to a wider audience and amplify your success.</p>
+                <p>In addition, we wanted to express our gratitude for your continued support. As a token of appreciation, we're extending your subscription by an additional 2 months, giving you more time to explore all the features Gupta has to offer, including the upcoming Marketplace.</p>
 
-                <p>This Monday, embrace the power of Gupta – where sales, branding, and endless possibilities converge. Let's make this week extraordinary together!</p>
-                <!-- <p>
-                <span style="font-weight: 500;">Enhance your vendor experience by:</span><br /><br />
-                <span>🛍️ Customizing WhatsApp and catalog links effortlessly.</span><br /><br />
-                <span>📊 Exploring detailed analytics for insightful business decisions.</span><br /><br />
-                <span>🌐 Creating personalized market links for seamless shopping.</span><br /><br />
-                <span>💸 Collecting payments seamlessly with Gupta payment links.</span><br /><br />
-
-               
-            </p> -->
-                
+                <p>This is an incredible opportunity to expand your business and reach new heights. Let's make this journey together and drive success together!</p>
                 
                 <p> Have questions or need assistance? Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
                 </p>
