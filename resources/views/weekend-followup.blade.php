@@ -105,7 +105,7 @@
 </style>
 
 <body>
-    <div>
+    <div class="logo">
         <span style="display:flex;justify:center;text-align:center;">
             <img src="https://www.mygupta.co/gt3.png" />
         </span>
@@ -116,18 +116,37 @@
         <div class="content">
 
             <div class="header">
-                <h3> Hello {{$details['custname']}}, </h3>
-                <p>Hope you're doing great! We've got some thrilling updates to kickstart your week.</p>
-                <p>Firstly, we're excited to announce that the Gupta Marketplace is launching in the first week of next month! This means that your products will be showcased on our platform, reaching a wider audience of potential customers. Get ready to showcase your offerings to the world!</p>
-                
-                <p>In addition, we wanted to express our gratitude for your continued support. As a token of appreciation, we're extending your subscription by an additional 2 months, giving you more time to explore all the features Gupta has to offer, including the upcoming Marketplace.</p>
-
-                <p>This is an incredible opportunity to expand your business and reach new heights. Let's make this journey together and drive success together!</p>
-                
-                <p> Have questions or need assistance? Reach out to us on WhatsApp at +234 913 729 4656 or drop us an email at hello@mygupta.co. Join our vibrant community on Telegram for real-time updates, discussions, and more:  <a href="https://t.me/+l40Q-6IHxA1mMzJk">https://t.me/+l40Q-6IHxA1mMzJk</a>.
-                </p>
+                <h3> Dear {{$details['custname']}} 🤗, </h3>
+                <p> We hope this email finds you well.</p>
+                <p> Thank you for being a valued user of our platform! Your support and trust in our services have enabled us to continually improve and serve your needs effectively.</p>
               
+              <p></p>
+              
+
+              <p>
+                <span style="font-weight: 500;">To ensure that we are meeting your expectations and enhancing your experience, we would greatly appreciate your feedback. We kindly ask if you could spare a moment to answer a few questions:</span><br /><br />
+                <span>-1. Have you encountered any challenges while using our platform? If so, could you please provide details?</span><br /><br />
+                <span>-2. Are there any specific features or changes you would like to see implemented to improve your experience?</span><br /><br />
+                <span>-3. If you have not subscribed to our paid services, could you please share the main reasons for this decision?</span><br /><br />
                 
+                <!-- <span>- You get guaranteed job placement for work practise, then possible permanent contract</span><br /><br />
+                <span><a href="https://afriproedu.com/course-details/2"> Click here for more information </a></span><br /><br /> -->
+
+            </p>
+
+            <p>Please rest assured that your feedback is anonymous and will be used solely to enhance our platform and better serve your needs.</p>
+
+            <p>Thank you once again for your continued support and for helping us improve. We look forward to hearing from you soon!</p>
+
+
+
+                <!-- <p> Additionally, we've created a vibrant community on our Telegram channel where you can connect with
+                    us and fellow users. Feel free to join the conversation, ask questions, and share your thoughts. You
+                    can find us on Telegram at <a href="https://t.me/gupta_community">https://t.me/gupta_community</a>.
+                </p>
+                <p> Thank you for being a part of our journey. We look forward to serving you and making your experience
+                    with us exceptional.</p> -->
+
             </div>
             <div class="text-content">
 

@@ -161,15 +161,15 @@ class ProductController extends Controller
                 $getData = Product::query()
                     ->where('product_name', 'LIKE', "%{$search}%")
                     // ->orWhere('item_name', 'LIKE', "%{$search}%")
-                    ->paginate(5);
+                    ->paginate(10);
             }else if($category !==''){
                 $getData = Product::query()
-                ->where('category', 'LIKE', "%{$category}%")
+                ->where('category', '=', $category)
                 ->where('product_name', 'LIKE', "%{$search}%")
                 ->where('location', 'LIKE', "%{$location}%")
-                ->paginate(5);
+                ->paginate(10);
             }else{
-                $getData = Product::paginate(5);
+                $getData = Product::paginate(10);
             }
 
             return response()->json([
