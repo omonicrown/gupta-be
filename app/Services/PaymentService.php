@@ -29,7 +29,7 @@ class PaymentService extends BaseController
 
         try {
             $request = [
-                'tx_ref' => time(),
+                'tx_ref' => time().'',
                 'amount' => $data['amount'],
                 'currency' => 'NGN',
                 'payment_options' => 'card',
