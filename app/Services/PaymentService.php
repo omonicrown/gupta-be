@@ -113,7 +113,7 @@ class PaymentService extends BaseController
 
 
             $request = [
-                'tx_ref' => time(),
+                'tx_ref' => time().'',
                 'amount' => $data['amount'],
                 'currency' => 'NGN',
                 'payment_options' => 'card',
@@ -327,10 +327,6 @@ class PaymentService extends BaseController
 
 
     }
-
-
-
-
 
 
     public function verify_flutterwave_payment_for_subscription($data)
