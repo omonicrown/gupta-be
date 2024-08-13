@@ -362,17 +362,17 @@ class PaymentService extends BaseController
             $current = CarbonImmutable::now();
 
             //Basic Month sub
-            if ($chargeAmount == '3500' || $chargeAmount == '9975' || $chargeAmount == '19950' || $chargeAmount == '39900') {
+            if ($chargeAmount == '1500' || $chargeAmount == '4275' || $chargeAmount == '8550' || $chargeAmount == '17100') {
                 try {
                     $userAccount = User::where('id', Auth::user()->id)->first();
-                    $userAccount->no_of_wlink = '10';
-                    $userAccount->no_of_rlink = '10';
-                    $userAccount->no_of_mlink = '10';
-                    $userAccount->no_of_mstore = '100';
+                    $userAccount->no_of_wlink = '25';
+                    $userAccount->no_of_rlink = '25';
+                    $userAccount->no_of_mlink = '25';
+                    $userAccount->no_of_mstore = '250';
                     $userAccount->no_of_malink = '5';
                     $userAccount->sub_type = 'basic';
                     $userAccount->sub_start = Carbon::today()->toDateString();
-                    $userAccount->sub_end = ($chargeAmount == '3500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '9975' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '19950' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '39900' ? $current->addMonths(11)->toDateString() : '')));
+                    $userAccount->sub_end = ($chargeAmount == '1500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '4275' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '8550' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '17100' ? $current->addMonths(11)->toDateString() : '')));
                     $userAccount->sub_status = 'active';
                     $userAccount->save();
 
@@ -396,18 +396,18 @@ class PaymentService extends BaseController
             }
 
             //popular month sub
-            if ($chargeAmount == '7500' || $chargeAmount == '21375' || $chargeAmount == '42750' || $chargeAmount == '85500') {
+            if ($chargeAmount == '2500' || $chargeAmount == '7125' || $chargeAmount == '14250' || $chargeAmount == '28500') {
 
                 try {
                     $userAccount = User::where('id', Auth::user()->id)->first();
-                    $userAccount->no_of_wlink = '25';
-                    $userAccount->no_of_rlink = '25';
-                    $userAccount->no_of_mlink = '25';
-                    $userAccount->no_of_malink = '10';
+                    $userAccount->no_of_wlink = '100';
+                    $userAccount->no_of_rlink = '100';
+                    $userAccount->no_of_mlink = '100';
+                    $userAccount->no_of_malink = '100';
                     $userAccount->no_of_mstore = '500';
                     $userAccount->sub_type = 'popular';
                     $userAccount->sub_start = Carbon::today()->toDateString();
-                    $userAccount->sub_end = ($chargeAmount == '7500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '21375' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '42750' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '85500' ? $current->addMonths(11)->toDateString() : '')));
+                    $userAccount->sub_end = ($chargeAmount == '2500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '7125' ? $current->addMonths(2)->toDateString() : ($chargeAmount == '14250' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '28500' ? $current->addMonths(11)->toDateString() : '')));
                     $userAccount->sub_status = 'active';
                     $userAccount->save();
                     Subscription::updateOrCreate(
@@ -430,7 +430,7 @@ class PaymentService extends BaseController
             }
 
             //premium Month sub
-            if ($chargeAmount == '16500' || $chargeAmount == '47025' || $chargeAmount == '94050' || $chargeAmount == '188100') {
+            if ($chargeAmount == '7000' || $chargeAmount == '19950' || $chargeAmount == '39900' || $chargeAmount == '79800') {
                 $userAccount = User::where('id', Auth::user()->id)->first();
                 $userAccount->no_of_wlink = '2000';
                 $userAccount->no_of_rlink = '2000';
@@ -439,7 +439,7 @@ class PaymentService extends BaseController
                 $userAccount->no_of_mstore = '5000';
                 $userAccount->sub_type = 'premium';
                 $userAccount->sub_start = Carbon::today()->toDateString();
-                $userAccount->sub_end = ($chargeAmount == '16500') ? $current->addDays(30)->toDateString() : ($chargeAmount == '47025' ? $current->addMonths(3)->toDateString() : ($chargeAmount == '94050' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '188100' ? $current->addMonths(11)->toDateString() : '')));
+                $userAccount->sub_end = ($chargeAmount == '7000') ? $current->addDays(30)->toDateString() : ($chargeAmount == '19950' ? $current->addMonths(3)->toDateString() : ($chargeAmount == '39900' ? $current->addMonths(5)->toDateString() : ($chargeAmount == '79800' ? $current->addMonths(11)->toDateString() : '')));
                 $userAccount->sub_status = 'active';
                 $userAccount->save();
 
