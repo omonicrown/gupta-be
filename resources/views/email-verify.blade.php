@@ -106,16 +106,16 @@
         <div class="content">
 
             <div class="header">
-                <h3>Welcome to Gupta! 🎉</h3>
+                <h3>Welcome to Gupta!</h3>
                 <h3> Dear {{$details['custname']}},</h3>
-                <h3>Welcome to Gupta! We're thrilled to have you on board. 🚀
+                <h3>Welcome to Gupta! We're thrilled to have you on board.
                 </h3>
             </div>
             <div class="text-content">
                 <!-- <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
                     feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
                     the Gupta community.</p> -->
-                <p>Kindly click on the link below to proceed.</p>
+                <p>Kindly confirm yur email to proceed.</p>
                 <p>Best regards,</p>
             </div>
             <div class="btn">
