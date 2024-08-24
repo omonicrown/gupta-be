@@ -38,6 +38,17 @@ class MarketLinkController extends Controller
                 ], 500);
             }
 
+            $linksExist = MarketPlaceLink::where('link_name', $request->link_name)->count();
+
+            if ($linksExist > 0) {
+                // return $links;
+                return response()->json([
+                    'status' => false,
+                    'message' => 'link name already in use.Try another',
+                    'errors' => 'Unauthorized'
+                ], 500);
+            }
+
 
             //    dd(Cloudinary::destroy('partnerCourse/k10D3S1dhI3BQ7gOjjg9chizhZeK4dPpTP3mrFEs.png'));
             // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
