@@ -54,7 +54,7 @@ class MarketLinkController extends Controller
             // dd(($request->image->storeOnCloudinaryAs('partnerCourse', $request->image->hashName()))->getPublicId());
 
             $link = MarketPlaceLink::create([
-                'link_name' => str_replace(' ', '-', $request->link_name),
+                'link_name' => str_replace(' ', '-', strtolower($request->link_name)),
                 'brand_primary_color' => $request->brand_primary_color,
                 'brand_description' => $request->brand_description,
                 'facebook_url' => $request->facebook_url,
@@ -96,7 +96,7 @@ class MarketLinkController extends Controller
             $link = MarketPlaceLink::updateOrCreate(
                 ['link_name' => $product->link_name],
                 [
-                    'link_name' => $product->link_name,
+                    'link_name' => strtolower($product->link_name),
                     'brand_primary_color' => $request->brand_primary_color,
                     'brand_description' => $request->brand_description,
                     'facebook_url' => $request->facebook_url,
