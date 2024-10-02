@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Your Links Information</title>
 </head>
 <style>
     body {
@@ -94,44 +94,80 @@
     .logo img {
         text-align: center;
         position: relative;
-       
+        display: flex;
+        justify: center;
+        background-color: #3F83F8;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 </style>
 
 <body>
+    <div class="logo">
+        <span style="display:flex;justify:center;text-align:center;">
+            <img src="https://www.mygupta.co/gt3.png" />
+        </span>
+
+    </div>
     <div class="wrapper">
-        <div class="logo">
-            <img src="https://www.mygupta.co/gupta.jpeg" />
-        </div>
+
         <div class="content">
 
             <div class="header">
-                <h3>Welcome to Gupta!</h3>
-                <h3> Dear {{$details['custname']}},</h3>
-                <h3>Welcome to Gupta! We're thrilled to have you on board.
-                </h3>
+                <h3> Dear Vendor, </h3>
+                <p> We’ve gathered all your created links for easy access. Below, you’ll find the details of your links,
+                    including direct access to each one. Feel free to review them at your convenience.</p>
 
                 <p></p>
+
+                <h2>Your Links Information</h2>
+
+                <b>Whatsapp Links</b>
+                <ul>
+                    @foreach($data['session_links']->link as $link)
+                        <li><a href="https://link.mygupta.co/{{ $link->name }}">link.mygupta.co/{{ $link->name }}</a> -
+                            {{ $link->type }}</li>
+                    @endforeach
+                </ul>
+
+                <b>Redirect Links</b>
+                <ul>
+                    @foreach($data['redirect_links']->redirectLinks as $link)
+                        <li><a href="https://link.mygupta.co/{{ $link->name }}">link.mygupta.co/{{ $link->name }}</a> </li>
+                    @endforeach
+                </ul>
+
+                <b>Multi Links</b>
+                <ul>
+                    @foreach($data['multi_links']->multiLink as $link)
+                        <li><a href="https://mygupta.co/{{ $link->name }}">mygupta.co/{{ $link->name }}</a> </li>
+                    @endforeach
+                </ul>
+
+                <b>Mini Store URLs</b>
+                <ul>
+                    @foreach($data['mini_store'] as $link)
+                        <li><a href="https://mygupta.co/{{ $link->name }}">mygupta.co/store/{{ $link->link_name }}</a> </li>
+                    @endforeach
+                </ul>
+
+                <p>If you need assistance or have any questions, feel free to contact our support team at hello@mygupta.co .</p>
+
             </div>
             <div class="text-content">
-                <!-- <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
-                    feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
-                    the Gupta community.</p> -->
-                <p>Kindly confirm yur email to proceed.</p>
+
+
                 <p>Best regards,</p>
-            </div>
-            <div class="btn">
-                <a href="https://www.mygupta.co/email-verify/{{$details['email']}}">
-                    <button class="button">Confirm Email</button>
-                </a>
             </div>
         </div>
 
 
 
         <div class="footer">
-        <p>Sent by Gupta © 2024. All Rights Reserved.</p>
-    </div>
+            <p>Sent by Gupta © 2024. All Rights Reserved.</p>
+        </div>
         <div class="footer-end">
             <div>
                 <h3>Gupta</h3>
@@ -146,3 +182,11 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+

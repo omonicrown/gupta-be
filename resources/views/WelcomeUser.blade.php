@@ -149,53 +149,25 @@
 
 
             <p> Welcome to Gupta, </p>
-            <p> Your ultimate SaaS platform for optimizing WhatsApp communication! We're thrilled to have you on board,
-                and we can't wait for you to experience the power of Gupta in enhancing your business interactions on
-                WhatsApp.</p>
+            <p> Gupta boosts your business by letting you create multiple shops with direct WhatsApp links for each product, making it super easy for customers to connect and buy.</p>
 
             <!-- <p>My name is Treasure and I'll be your personal study support counsellor to help guide you on questions that you may have during your study abroad journey or if you need any help while using the platform. I am excited that you have taken the first step in your study dream, and I can't wait to commence this journey with you.</p> -->
             <!-- <p>Kindly follow the steps below to submit an application.</p> -->
 
             <p>
                 <span style="font-weight: 500;">Here's a brief overview of what Gupta has to offer: </span><br /><br />
-                <span>- <b>Customized WhatsApp Links:</b> Generate personalized links for direct customer
-                    engagement.</span><br /><br />
-                <span>- <b>Multilinks Management:</b>Simplify link sharing with consolidated multilinks for an improved
-                    user experience.</span><br /><br />
-                <span>- <b>Redirect Links: </b> Seamlessly guide users to any destination URL, enhancing your online
-                    presence.</span><br /><br />
-                <span>- <b>Mini Store:</b> A pivotal component, enabling vendors to create market links with custom URLs representing their shops. Subscription plans dictate customization options. Vendors populate these market links with products, fostering a seamless shopping experience.</span><br /><br />
-                <span>- <b>Pay with Gupta:</b> Vendors seamlessly collect payments through Gupta payment links on product pages. The platform includes a wallet section for vendors to monitor customer payments and facilitate withdrawals.</span><br /><br />
-
-                <!-- <span>- You get guaranteed job placement for work practise, then possible permanent contract</span><br /><br />
-                <span><a href="https://afriproedu.com/course-details/2"> Click here for more information </a></span><br /><br /> -->
-
+                <span>- <b>Custom WhatsApp Links:</b> Easily create customized links to connect directly with customers on whatsapp.engagement.</span><br /><br />
+                <span>- <b>Redirect Links: </b> Create short, custom URLs that redirect to any website, track link clicks, and generate QR codes for easy access.</span><br /><br />
+                <span>- <b>Multilinks Management:</b>Create a mini webpage with your customized WhatsApp links, brand logos, and social media links to make it easier for your customers to connect with you.</span><br /><br />
+                <span>- <b>Mini Store:</b> Create custom website URLs for your shop, add your products, and make it easy for customers to browse and shop.</span><br /><br />
+                <span>- <b>Pay with Gupta:</b> Easily collect payments with Gupta payment links on your product pages and track customer payments through a mini wallet, where you can also make withdrawals.</span><br /><br />
             </p>
 
-
-
-            <p>
-                <span style="font-weight: 500;">Getting started is easy: </span><br /><br />
-                <span>- Sign up for a Gupta account and provide essential business information.</span><br /><br />
-                <span>- Explore the intuitive dashboard to manage customized links, multilinks, redirects, and automated messages.</span><br /><br />
-
-                
-            </p>
-
-
-
-            <!-- <p>_Note: your unique code is your means of identification and pass to the exam hall. Do not share this code with anyone. _</p> -->
-
-            <p>Thank you for choosing Gupta! We're excited to be your partner in revolutionizing WhatsApp business communication.
+            <p>Thank you for choosing Gupta! We're excited to be your partner in revolutionizing your business.
                 <br />
                 Sincerely,<br />
                 The Gupta Team
             </p>
-
-
-            <!-- <div class="btn">
-                <button class="button button1">Call To Action</button>
-            </div> -->
 
         </div>
     </div>

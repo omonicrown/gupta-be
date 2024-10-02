@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Monthly Sales Summary</title>
 </head>
 <style>
     body {
@@ -94,44 +94,83 @@
     .logo img {
         text-align: center;
         position: relative;
-       
+        display: flex;
+        justify: center;
+        background-color: #3F83F8;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 </style>
 
 <body>
+    <div class="logo">
+        <span style="display:flex;justify:center;text-align:center;">
+            <img src="https://www.mygupta.co/gt3.png" />
+        </span>
+
+    </div>
     <div class="wrapper">
-        <div class="logo">
-            <img src="https://www.mygupta.co/gupta.jpeg" />
-        </div>
+
         <div class="content">
 
             <div class="header">
-                <h3>Welcome to Gupta!</h3>
-                <h3> Dear {{$details['custname']}},</h3>
-                <h3>Welcome to Gupta! We're thrilled to have you on board.
-                </h3>
+                <h3> Hello {{ $user->name }}, </h3>
+
+                <p>This sales summary has been generated specifically for vendors whose customers purchased products with Gupta.</p>
+
+                <p>Here is your sales summary for {{ $month }}:</p>
 
                 <p></p>
+
+                <h3>Summary:</h3>
+
+                <ul>
+                    <li>Total Sales: {{ $totalSales }} NGN</li>
+                    <li>Total Products Sold: {{ $totalProducts }}</li>
+                </ul>
+
+                <h3>Detailed Transactions:</h3>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Paid For</th>
+                            <th>Amount Paid</th>
+                            <th>Product Quantity</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($transactions as $transaction)
+                            <tr>
+                                <td>{{ $transaction->customer_email }}</td>
+                                <td>{{ $transaction->paying_for }}</td>
+                                <td>{{ $transaction->amount_paid }} NGN</td>
+                                <td>{{ $transaction->product_qty }}</td>
+                                <td>{{ $transaction->created_at->format('d M, Y') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <p>If you need assistance or have any questions, feel free to contact our support team at
+                    hello@mygupta.co.</p>
+
             </div>
             <div class="text-content">
-                <!-- <p>To enhance your experience and streamline communication, we've integrated a convenient WhatsApp link
-                    feature. Simply click the link below to join our dedicated WhatsApp group and stay connected with
-                    the Gupta community.</p> -->
-                <p>Kindly confirm yur email to proceed.</p>
+
+
                 <p>Best regards,</p>
-            </div>
-            <div class="btn">
-                <a href="https://www.mygupta.co/email-verify/{{$details['email']}}">
-                    <button class="button">Confirm Email</button>
-                </a>
             </div>
         </div>
 
 
 
         <div class="footer">
-        <p>Sent by Gupta © 2024. All Rights Reserved.</p>
-    </div>
+            <p>Sent by Gupta © 2024. All Rights Reserved.</p>
+        </div>
         <div class="footer-end">
             <div>
                 <h3>Gupta</h3>
