@@ -683,6 +683,9 @@ class PaymentService extends BaseController
             'transactions' => $transactions,
             'witdrawal' => $witdrawal,
             'deposit' => $deposit,
+            'sub_start' => Auth::user()->sub_start,
+            'sub_end' => Auth::user()->sub_end,
+            'sub_type' => Auth::user()->sub_type,
         ]);
 
 
