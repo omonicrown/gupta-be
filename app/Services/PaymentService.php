@@ -665,7 +665,12 @@ class PaymentService extends BaseController
 
     public function walletDetails()
     {
-        return $this->success('Fetched successful', VendorWallet::where('user_id', Auth::user()->id)->first());
+        return $this->success('Fetched successful', [
+            VendorWallet::where('user_id', Auth::user()->id)->first(),
+            'sub_start' => Auth::user()->sub_start,
+            'sub_end' => Auth::user()->sub_end,
+            'sub_type' => Auth::user()->sub_type,
+        ]);
 
 
         // return userAccountDetail::where('user_id', Auth::user()->user_id)->first();
@@ -682,10 +687,7 @@ class PaymentService extends BaseController
             'walletDetails' => $walletDatails,
             'transactions' => $transactions,
             'witdrawal' => $witdrawal,
-            'deposit' => $deposit,
-            'sub_start' => Auth::user()->sub_start,
-            'sub_end' => Auth::user()->sub_end,
-            'sub_type' => Auth::user()->sub_type,
+            'deposit' => $deposit
         ]);
 
 
