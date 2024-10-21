@@ -51,7 +51,7 @@ class Notification extends Command
                     'to' => $user->phone_number,
                     'from' => 'Gupta',
                     'channel' => 'generic',
-                    'sms' => "Happy Monday, Vendors! Exciting news: Gupta Marketplace launches next month! Showcase your products and expand your reach. Plus, you now have extra 2 months of free subscription to explore all Gupta features. Let's elevate together!",
+                    'sms' => "Happy Monday, amazing vendors! Let's kick off the week strong and keep those sales rolling in! Don't forget to use Gupta to create your customized branded links, mini websites, and WhatsApp connections to boost your business. Visit www.mygupta.co Now!",
 
                 ]);
 

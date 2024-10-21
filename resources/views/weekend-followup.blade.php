@@ -117,36 +117,15 @@
 
             <div class="header">
                 <h3> Dear {{$details['custname']}} 🤗, </h3>
-                <p> We hope this email finds you well.</p>
-                <p> Thank you for being a valued user of our platform! Your support and trust in our services have enabled us to continually improve and serve your needs effectively.</p>
+                <!-- <p> We hope this email finds you well.</p> -->
+                <p> Let’s kick off the week with fresh energy and renewed focus. Remember, every new day is a chance to grow your business, and Gupta is here to make that easier for you.</p>
+
+                <p> Whether it’s creating custom WhatsApp links, setting up your mini store, or managing customer interactions, Gupta has the tools to help you boost sales and keep things running smoothly.</p>
               
-              <p></p>
+            <p>Visit www.mygupta.co to get the week started!</p>
               
-
-              <p>
-                <span style="font-weight: 500;">To ensure that we are meeting your expectations and enhancing your experience, we would greatly appreciate your feedback. We kindly ask if you could spare a moment to answer a few questions:</span><br /><br />
-                <span>-1. Have you encountered any challenges while using our platform? If so, could you please provide details?</span><br /><br />
-                <span>-2. Are there any specific features or changes you would like to see implemented to improve your experience?</span><br /><br />
-                <span>-3. If you have not subscribed to our paid services, could you please share the main reasons for this decision?</span><br /><br />
-                
-                <!-- <span>- You get guaranteed job placement for work practise, then possible permanent contract</span><br /><br />
-                <span><a href="https://afriproedu.com/course-details/2"> Click here for more information </a></span><br /><br /> -->
-
-            </p>
-
-            <p>Please rest assured that your feedback is anonymous and will be used solely to enhance our platform and better serve your needs.</p>
-
-            <p>Thank you once again for your continued support and for helping us improve. We look forward to hearing from you soon!</p>
-
-
-
-                <!-- <p> Additionally, we've created a vibrant community on our Telegram channel where you can connect with
-                    us and fellow users. Feel free to join the conversation, ask questions, and share your thoughts. You
-                    can find us on Telegram at <a href="https://t.me/gupta_community">https://t.me/gupta_community</a>.
-                </p>
-                <p> Thank you for being a part of our journey. We look forward to serving you and making your experience
-                    with us exceptional.</p> -->
-
+              <p>If you need assistance or have any questions, feel free to contact our support team at
+                    hello@mygupta.co.</p>
             </div>
             <div class="text-content">
 
