@@ -118,20 +118,16 @@
             <div class="header">
                 <h3> Dear {{$details['custname']}} 🤗, </h3>
                 <!-- <p> We hope this email finds you well.</p> -->
-                <p> Let’s kick off the week with fresh energy and renewed focus. Remember, every new day is a chance to
-                    grow your business, and Gupta is here to make that easier for you.</p>
+                <p> Let’s start the week strong and set those sales goals high. Remember, Gupta is here to help you reach more customers and make selling easier, so why not unlock the full power of our features?</p>
 
-                <p> Whether it’s creating custom WhatsApp links, setting up your mini store, or managing customer
-                    interactions, Gupta has the tools to help you boost sales and keep things running smoothly.</p>
+                <p> By subscribing to any of our plans, you’ll get access to everything you need to give your business that professional edge—from unlimited custom links to a fully branded mini store that stands out.</p>
 
-                <p>With Gupta's paid subscriptions, you can unlock even more powerful features to boost your sales and
-                    reach more customers. From unlimited custom links to detailed analytics and personalized mini
-                    websites, our paid plans give you everything you need to stand out and grow faster.</p>
+                <p>Give it a try this week and see the difference for yourself! Let’s make this a winning week! 💼🚀</p>
                 
                     <p>Visit www.mygupta.co to get the week started!</p>
 
                 <p>If you need assistance or have any questions, feel free to contact our support team at
-                    hello@mygupta.co.</p>
+                    hello@mygupta.co. or via whatsapp on +2347025547335</p>
             </div>
             <div class="text-content">
 
