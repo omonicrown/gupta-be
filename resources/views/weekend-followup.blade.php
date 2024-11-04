@@ -118,11 +118,11 @@
             <div class="header">
                 <h3> Dear {{$details['custname']}} 🤗, </h3>
                 <!-- <p> We hope this email finds you well.</p> -->
-                <p> Let’s start the week strong and set those sales goals high. Remember, Gupta is here to help you reach more customers and make selling easier, so why not unlock the full power of our features?</p>
+                <p> A fresh week brings new opportunities to grow and succeed! 💪✨</p>
 
-                <p> By subscribing to any of our plans, you’ll get access to everything you need to give your business that professional edge—from unlimited custom links to a fully branded mini store that stands out.</p>
+                <p> At Gupta, we're here to support your journey and help you reach new heights. Remember: every small step brings you closer to your big goals.</p>
 
-                <p>Give it a try this week and see the difference for yourself! Let’s make this a winning week! 💼🚀</p>
+                <p>Keep pushing forward, and let’s make this week one for the books!</p>
                 
                     <p>Visit www.mygupta.co to get the week started!</p>
 

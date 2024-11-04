@@ -51,9 +51,11 @@ class Notification extends Command
                     'to' => $user->phone_number,
                     'from' => 'Gupta',
                     'channel' => 'generic',
-                    'sms' => "Hello ".$user->name."!\n\n Kickstart your week with new sales opportunities!\n Explore Gupta’s subscription plans to simplify selling and check your email for updates.\n\n We’re here to support you, let’s make this a winning week together!",
+                    'sms' => "Good Morning ".$user->name."!\n\n  Start your week strong with Gupta!\n Let's help you reach more customers, streamline sales, and grow effortlessly.\n\n Log in today and see how Gupta can simplify your business journey. Make this week your best yet!",
 
                 ]);
+
+                $this->info('motivation sent to: ' . $user->email);
 
                 // if ($user->sub_end == Carbon::now()->isoFormat('YYYY-MM-DD')) {
                 //     $updateUser = User::find($user->id);
