@@ -84,6 +84,11 @@ class ContactController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        if ($request->has('custom_fields') && is_string($request->custom_fields)) {
+            $customFields = json_decode($request->custom_fields, true);
+            $request->merge(['custom_fields' => $customFields]);
+        }
         
         try {
             $user = $request->user();
