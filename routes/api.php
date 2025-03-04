@@ -1,5 +1,12 @@
 <?php
+use App\Http\Controllers\Api\AnalyticsController;
+use App\Http\Controllers\Api\ApiMessagingController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\Payment\PaymentController;
+use App\Http\Controllers\Api\SenderIdController;
+use App\Http\Controllers\Api\WalletController;
+use App\Http\Controllers\ApiKeyController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -59,10 +66,19 @@ Route::get('market-links/get-market-products', [ProductController::class, 'getMa
 
 Route::get('/auth/test', [AuthController::class, 'testChunk']);
 
+// Flutterwave webhook (public)
+Route::post('/webhook/flutterwave', [WalletController::class, 'webhook']);
+
+
 Route::get('get-products-by-link-name/{name}', [ProductController::class, 'getProductsByLinkName']);
 Route::get('get-single-product-outside/{id}', [ProductController::class, 'getSingleProduct']);
 
 Route::get('/links/get-tiered-link/{linkName}', [UpdateTieredController::class, 'getLinkDetailByName']);
+
+Route::middleware('api.key')->group(function() {
+    Route::post('/sms/send', [ApiMessagingController::class, 'sendMessage']);
+    Route::get('/sms/status', [ApiMessagingController::class, 'checkStatus']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => ['SubStatus','throttle:180,1']], function (Router $link) {
@@ -124,6 +140,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 
+    Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('api-keys.index');
+    Route::post('/api-keys', [ApiKeyController::class, 'store'])->name('api-keys.store');
+    Route::delete('/api-keys/{apiKey}', [ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
+    Route::patch('/api-keys/{apiKey}/toggle', [ApiKeyController::class, 'toggle'])->name('api-keys.toggle');
+
     Route::prefix('payment')->group(function () { 
         Route::post('make-payment', [PaymentController::class, 'makePayment']); 
         Route::post('request-witdrawal', [PaymentController::class, 'requestWitdrawal']);
@@ -155,6 +176,92 @@ Route::middleware('auth:sanctum')->group(function () {
             $link->get('get-all-witdrawals', [PaymentController::class, 'getAllWitdrawals']);
             Route::post('pay-out-customers', [PaymentController::class, 'payOutCustomers']);
         });
+    });
+
+
+    // Route::post('/sms/send', [ApiMessagingController::class, 'sendMessage']);
+    // Route::get('/sms/status', [ApiMessagingController::class, 'checkStatus']);
+
+
+    // Contacts
+    Route::prefix('contacts')->group(function () {
+        Route::get('/', [ContactController::class, 'index']);
+        Route::post('/', [ContactController::class, 'store']);
+        Route::get('/{id}', [ContactController::class, 'show']);
+        Route::put('/{id}', [ContactController::class, 'update']);
+        Route::delete('/{id}', [ContactController::class, 'destroy']);
+        Route::post('/import', [ContactController::class, 'import']);
+    });
+    
+    // Contact Groups
+    Route::prefix('groups')->group(function () {
+        Route::get('/', [ContactController::class, 'groups']);
+        Route::post('/', [ContactController::class, 'storeGroup']);
+        Route::get('/{id}', [ContactController::class, 'showGroup']);
+        Route::put('/{id}', [ContactController::class, 'updateGroup']);
+        Route::delete('/{id}', [ContactController::class, 'destroyGroup']);
+        Route::post('/{id}/contacts', [ContactController::class, 'addContactsToGroup']);
+        Route::delete('/{id}/contacts', [ContactController::class, 'removeContactsFromGroup']);
+    });
+    
+    // Messages
+    Route::prefix('messages')->group(function () {
+        Route::get('/', [MessageController::class, 'index']);
+        Route::post('/', [MessageController::class, 'store']);
+        Route::get('/{id}', [MessageController::class, 'show']);
+        Route::post('/{id}/send', [MessageController::class, 'send']);
+        Route::post('/{id}/schedule', [MessageController::class, 'schedule']);
+        Route::post('/{id}/cancel', [MessageController::class, 'cancel']);
+        Route::delete('/{id}', [MessageController::class, 'destroy']);
+    });
+    
+    // Templates
+    Route::prefix('templates')->group(function () {
+        Route::get('/', [MessageController::class, 'templates']);
+        Route::post('/', [MessageController::class, 'storeTemplate']);
+        Route::get('/{id}', [MessageController::class, 'showTemplate']);
+        Route::put('/{id}', [MessageController::class, 'updateTemplate']);
+        Route::delete('/{id}', [MessageController::class, 'destroyTemplate']);
+    });
+    
+    // Campaigns
+    Route::prefix('campaigns')->group(function () {
+        Route::get('/', [MessageController::class, 'campaigns']);
+        Route::post('/', [MessageController::class, 'storeCampaign']);
+        Route::get('/{id}', [MessageController::class, 'showCampaign']);
+        Route::put('/{id}', [MessageController::class, 'updateCampaign']);
+        Route::delete('/{id}', [MessageController::class, 'destroyCampaign']);
+    });
+    
+    // Sender IDs
+    Route::prefix('sender-ids')->group(function () {
+        Route::get('/', [SenderIdController::class, 'index']);
+        Route::post('/', [SenderIdController::class, 'store']);
+        Route::get('/{id}', [SenderIdController::class, 'show']);
+        Route::post('/{id}/document', [SenderIdController::class, 'uploadDocument']);
+        Route::get('/{id}/status', [SenderIdController::class, 'checkStatus']);
+        Route::delete('/{id}', [SenderIdController::class, 'destroy']);
+    });
+
+
+    
+    // Wallet
+    Route::prefix('wallet')->group(function () {
+        Route::get('/', [WalletController::class, 'index']);
+        Route::get('/transactions', [WalletController::class, 'transactions']);
+        Route::post('/payment/initiate', [WalletController::class, 'initiatePayment']);
+        Route::post('/payment/verify', [WalletController::class, 'verifyPayment']);
+        Route::get('/transactions/{id}', [WalletController::class, 'showTransaction']);
+        Route::get('/transactions/{id}/invoice', [WalletController::class, 'generateInvoice']);
+    });
+    
+    // Analytics
+    Route::prefix('analytics')->group(function () {
+        Route::get('/dashboard', [AnalyticsController::class, 'dashboard']);
+        Route::get('/messages', [AnalyticsController::class, 'messages']);
+        Route::get('/financial', [AnalyticsController::class, 'financial']);
+        Route::get('/campaigns/{id}', [AnalyticsController::class, 'campaign']);
+        Route::get('/messages/export', [AnalyticsController::class, 'exportMessages']);
     });
 
 });

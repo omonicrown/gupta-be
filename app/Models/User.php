@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-     
+
     protected $fillable = [
         'name',
         'email',
@@ -42,7 +42,9 @@ class User extends Authenticatable
         'updated_at',
         'no_of_malink',
         'user_ip',
-        'sub_type'
+        'sub_type',
+        'status',
+        'address'
     ];
 
     /**
@@ -66,28 +68,81 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function multiLink(): HasMany  
+    public function multiLink(): HasMany
     {
-        return $this->hasMany(Link::class)->where('type','tiered');
+        return $this->hasMany(Link::class)->where('type', 'tiered');
     }
 
-    public function wallet() : HasOne
+    public function wallet(): HasOne
     {
         return $this->hasOne(VendorWallet::class);
     }
 
-    public function transactions() : HasMany
+    public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
     public function link(): HasMany
     {
-        return $this->hasMany(Link::class)->where('type','message')->orWhere('type','catalog');
+        return $this->hasMany(Link::class)->where('type', 'message')->orWhere('type', 'catalog');
     }
 
     public function redirectLinks(): HasMany
     {
-        return $this->hasMany(Link::class)->where('type','url');
+        return $this->hasMany(Link::class)->where('type', 'url');
+    }
+
+    /**
+     * Get the wallet associated with the user.
+     */
+    public function sms_wallet()
+    {
+        return $this->hasOne(SmsWallet::class);
+    }
+
+    /**
+     * Get the contacts for the user.
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+
+    /**
+     * Get the contact groups for the user.
+     */
+    public function contactGroups()
+    {
+        return $this->hasMany(ContactGroup::class);
+    }
+
+    /**
+     * Get the messages sent by the user.
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    /**
+     * Get the sender IDs for the user.
+     */
+    public function senderIds()
+    {
+        return $this->hasMany(SenderId::class);
+    }
+
+    /**
+     * Get the transactions for the user.
+     */
+    public function sms_transactions()
+    {
+        return $this->hasMany(SmsTransaction::class);
+    }
+
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
     }
 }

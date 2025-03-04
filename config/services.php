@@ -30,5 +30,40 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    /*
+    |--------------------------------------------------------------------------
+    | HollaTags SMS Configuration
+    |--------------------------------------------------------------------------
+    */
+    'hollatags' => [
+        'base_url' => env('HOLLATAGS_API_URL', 'https://sms.hollatags.com/api'),
+        'api_key' => env('HOLLATAGS_API_KEY'),
+        'default_sender_id' => env('HOLLATAGS_DEFAULT_SENDER_ID'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Flutterwave Configuration
+    |--------------------------------------------------------------------------
+    */
+    'flutterwave' => [
+        'base_url' => env('FLUTTERWAVE_API_URL', 'https://api.flutterwave.com/v3'),
+        'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
+        'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
+        'encryption_key' => env('FLUTTERWAVE_ENCRYPTION_KEY'),
+        'webhook_hash' => env('FLUTTERWAVE_WEBHOOK_HASH'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Messaging Configuration
+    |--------------------------------------------------------------------------
+    */
+    'messaging' => [
+        'cost_per_segment' => env('MESSAGING_COST_PER_SEGMENT', 4.0),
+        'max_segments_per_message' => env('MESSAGING_MAX_SEGMENTS', 10),
+        'retry_attempts' => env('MESSAGING_RETRY_ATTEMPTS', 3),
+        'retry_delay_seconds' => env('MESSAGING_RETRY_DELAY', 60),
+    ],
 
 ];

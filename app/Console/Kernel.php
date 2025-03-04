@@ -20,6 +20,19 @@ class Kernel extends ConsoleKernel
         $schedule->command('notification:push');
         $schedule->command('email:send-links')->daily();
         $schedule->command('send:monthly-sales-summary')->monthly();
+
+         // Process scheduled messages every minute
+         $schedule->command('messages:process-scheduled')->everyMinute();
+        
+         // Check for messages that need delivery status updates every 15 minutes
+         $schedule->command('messages:check-delivery-status')->everyFifteenMinutes();
+         
+         // Prune old records and database maintenance
+         $schedule->command('telescope:prune --hours=48')->daily();
+         $schedule->command('queue:prune-failed --hours=48')->daily();
+         
+         // Daily database backups
+         $schedule->command('backup:run')->dailyAt('02:00');
     }
 
     /**

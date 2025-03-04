@@ -10,6 +10,7 @@ use App\Mail\ResetPassword;
 use App\Mail\WelcomeUserMail;
 use App\Models\passwordReset;
 use App\Models\VendorWallet;
+use App\Services\WalletService;
 use Exception;
 use App\Models\User;
 use Http;
@@ -31,34 +32,21 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
+
+    protected $walletService;
+    
+    public function __construct(WalletService $walletService)
+    {
+        $this->walletService = $walletService;
+    }
+    
+
+
     /**
      * Create User
      * @param Request $request
      * @return User
      */
-
-
-
-
-    public function testChunk(Request $request)
-    {
-        try {
-            $rows = $request->getClientIp();
-            // User::chunk(100, function ($users) use ($rows) {
-            //     foreach ($users as $user) {
-            //         $rows->push($user);
-            //         // sleep(2);
-            //         // break;
-            //     }
-            // });
-            return $rows;
-        } catch (\Throwable $th) {
-            dd($th->getMessage());
-        }
-
-
-    }
-
 
 
 
@@ -96,6 +84,7 @@ class AuthController extends Controller
                 'sub_start' => Carbon::today()->toDateString(),
                 'sub_end' => $current->addDays(14)->toDateString(),
                 'no_of_wlink' => '5',
+                'status' => 'active',
                 'no_of_rlink' => '5',
                 'no_of_mlink' => '3',
                 'no_of_mstore' => '10',
@@ -112,6 +101,9 @@ class AuthController extends Controller
                 'user_phone_number' => $user->phone_number,
                 'last_tnx_ref' => '0'
             ]);
+
+            // Create wallet for user
+            $this->walletService->createWallet($user);
 
             $reveiverEmailAddress = $request->email;
             $details = [
