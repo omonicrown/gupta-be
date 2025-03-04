@@ -2,6 +2,7 @@
 use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\ApiMessagingController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\HollaTagsWebhookController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\Payment\PaymentController;
 use App\Http\Controllers\Api\SenderIdController;
@@ -79,6 +80,11 @@ Route::middleware('api.key')->group(function() {
     Route::post('/sms/send', [ApiMessagingController::class, 'sendMessage']);
     Route::get('/sms/status', [ApiMessagingController::class, 'checkStatus']);
 });
+
+
+// HollaTags webhook endpoint
+Route::post('/webhooks/hollatags/delivery', [HollaTagsWebhookController::class, 'handleDeliveryStatus']);
+Route::post('/webhooks/hollatags/delivery/{reference}', [HollaTagsWebhookController::class, 'handleDeliveryStatus']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => ['SubStatus','throttle:180,1']], function (Router $link) {
