@@ -45,8 +45,8 @@ class AnalyticsController extends Controller
             $monthlyStats = Message::where('user_id', $user->id)
                 ->where('created_at', '>=', now()->subMonths(6))
                 ->select(
-                    DB::raw('YEAR(created_at) as year'),
-                    DB::raw('MONTH(created_at) as month'),
+                    DB::raw('EXTRACT(YEAR FROM created_at) as year'),
+                    DB::raw('EXTRACT(MONTH FROM created_at) as month'),
                     DB::raw('count(*) as messages_count'),
                     DB::raw('sum(cost) as total_cost')
                 )
@@ -118,14 +118,14 @@ class AnalyticsController extends Controller
                 ->toArray();
             
             // Get top 10 most used sender IDs
-            $topSenderIds = Message::where('messages.user_id', $user->id)  // Specify the table name
-            ->whereBetween('messages.created_at', [$startDate, $endDate])  // Also specify table here
-            ->join('sender_ids', 'messages.sender_id', '=', 'sender_ids.id')
-            ->select('sender_ids.sender_id as name', DB::raw('count(*) as count'))
-            ->groupBy('sender_ids.sender_id')
-            ->orderBy('count', 'desc')
-            ->limit(10)
-            ->get();
+            $topSenderIds = Message::where('messages.user_id', $user->id)
+                ->whereBetween('messages.created_at', [$startDate, $endDate])
+                ->join('sender_ids', 'messages.sender_id', '=', 'sender_ids.id')
+                ->select('sender_ids.sender_id as name', DB::raw('count(*) as count'))
+                ->groupBy('sender_ids.sender_id')
+                ->orderBy('count', 'desc')
+                ->limit(10)
+                ->get();
             
             return response()->json([
                 'daily_stats' => $dailyStats,
@@ -162,8 +162,8 @@ class AnalyticsController extends Controller
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->select(
                     DB::raw('DATE(created_at) as date'),
-                    DB::raw('sum(CASE WHEN type = "deposit" THEN amount ELSE 0 END) as deposits'),
-                    DB::raw('sum(CASE WHEN type = "message_payment" THEN amount ELSE 0 END) as spending')
+                    DB::raw('sum(CASE WHEN type = \'deposit\' THEN amount ELSE 0 END) as deposits'),
+                    DB::raw('sum(CASE WHEN type = \'message_payment\' THEN amount ELSE 0 END) as spending')
                 )
                 ->groupBy('date')
                 ->orderBy('date')
