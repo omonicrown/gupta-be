@@ -21,13 +21,13 @@ class ContactService
     public function createContact(User $user, array $data)
     {
         try {
-            // Validate phone number format
-            if (!$this->validatePhoneNumber($data['phone_number'])) {
-                return [
-                    'success' => false,
-                    'error' => 'Invalid phone number format',
-                ];
-            }
+            // // Validate phone number format
+            // if (!$this->validatePhoneNumber($data['phone_number'])) {
+            //     return [
+            //         'success' => false,
+            //         'error' => 'Invalid phone number format',
+            //     ];
+            // }
 
             // Check if contact already exists for this user
             $existingContact = Contact::where('user_id', $user->id)
@@ -47,7 +47,7 @@ class ContactService
                 'user_id' => $user->id,
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'] ?? null,
-                'phone_number' => $data['phone_number'],
+                'phone_number' => $this->normalizePhoneNumber($data['phone_number']),
                 'email' => $data['email'] ?? null,
                 'custom_fields' => is_string($data['custom_fields'] ?? null)
                     ? json_decode($data['custom_fields'], true)
@@ -83,28 +83,15 @@ class ContactService
     }
 
     /**
-     * Normalize phone number format for HollaTags API
-     * Format required: 2348012345678 (no + sign)
+     * Validate phone number format
      *
      * @param string $phone
-     * @return string
+     * @return bool
      */
     protected function validatePhoneNumber(string $phone)
     {
-        // Remove the + sign if present
-        if (substr($phone, 0, 1) === '+') {
-            $phone = substr($phone, 1);
-        }
-
-        // Remove any non-digit characters
-        $phone = preg_replace('/[^0-9]/', '', $phone);
-
-        // Format for Nigerian numbers: if starts with 0, replace with 234
-        if (substr($phone, 0, 1) === '0') {
-            $phone = '234' . substr($phone, 1);
-        }
-
-        return $phone;
+        // Basic validation: Phone should start with + and contain only digits
+        return preg_match('/^\+[0-9]{10,15}$/', $phone);
     }
 
     /**
@@ -308,19 +295,25 @@ class ContactService
     }
 
     /**
-     * Normalize phone number format
+     * Normalize phone number format for HollaTags API
+     * Format required: 2348012345678 (no + sign)
      *
      * @param string $phone
      * @return string
      */
-    protected function normalizePhoneNumber(string $phone)
+    protected function normalizePhoneNumber(string $phone): string
     {
-        // Remove all non-digit characters except the + sign
-        $phone = preg_replace('/[^0-9+]/', '', $phone);
+        // Remove the + sign if present
+        if (substr($phone, 0, 1) === '+') {
+            $phone = substr($phone, 1);
+        }
 
-        // Add + if not present
-        if (substr($phone, 0, 1) !== '+') {
-            $phone = '+' . $phone;
+        // Remove any non-digit characters
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+
+        // Format for Nigerian numbers: if starts with 0, replace with 234
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '234' . substr($phone, 1);
         }
 
         return $phone;
