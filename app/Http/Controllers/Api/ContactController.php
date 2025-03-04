@@ -76,7 +76,7 @@ class ContactController extends Controller
             'last_name' => 'nullable|string|max:255',
             'phone_number' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
-            'custom_fields' => 'nullable|array',
+            'custom_fields' => 'nullable',
             'groups' => 'nullable|array',
             'groups.*' => 'integer|exists:contact_groups,id',
         ]);
