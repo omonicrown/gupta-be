@@ -83,15 +83,28 @@ class ContactService
     }
 
     /**
-     * Validate phone number format
+     * Normalize phone number format for HollaTags API
+     * Format required: 2348012345678 (no + sign)
      *
      * @param string $phone
-     * @return bool
+     * @return string
      */
     protected function validatePhoneNumber(string $phone)
     {
-        // Basic validation: Phone should start with + and contain only digits
-        return preg_match('/^\+[0-9]{10,15}$/', $phone);
+        // Remove the + sign if present
+        if (substr($phone, 0, 1) === '+') {
+            $phone = substr($phone, 1);
+        }
+
+        // Remove any non-digit characters
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+
+        // Format for Nigerian numbers: if starts with 0, replace with 234
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '234' . substr($phone, 1);
+        }
+
+        return $phone;
     }
 
     /**
