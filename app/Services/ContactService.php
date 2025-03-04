@@ -169,7 +169,7 @@ class ContactService
             }
 
             // Validate mapping
-            $requiredFields = ['first_name', 'phone'];
+            $requiredFields = ['first_name', 'phone_number'];
             foreach ($requiredFields as $field) {
                 if (!isset($mapping[$field]) || !in_array($mapping[$field], $headers)) {
                     fclose($file);

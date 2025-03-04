@@ -12,7 +12,7 @@ class Contact extends Model
         'user_id',
         'first_name',
         'last_name',
-        'phone',
+        'phone_number',
         'email',
         'custom_fields',
         'status'
