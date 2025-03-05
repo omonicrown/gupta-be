@@ -89,10 +89,10 @@ class HollaTagsWebhookController extends Controller
                 $message->increment('failed_sends');
             }
 
-            // If cost is provided, update the message cost
-            if ($cost !== null) {
-                $message->update(['cost' => $cost]);
-            }
+            // // If cost is provided, update the message cost
+            // if ($cost !== null) {
+            //     $message->update(['cost' => $cost]);
+            // }
 
             Log::info('Message status updated via webhook', [
                 'message_id' => $message->id,
