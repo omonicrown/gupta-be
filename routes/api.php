@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApiMessagingController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\HollaTagsWebhookController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\Payment\FlutterwaveWebhookController;
 use App\Http\Controllers\Api\Payment\PaymentController;
 use App\Http\Controllers\Api\SenderIdController;
 use App\Http\Controllers\Api\WalletController;
@@ -68,7 +69,11 @@ Route::get('market-links/get-market-products', [ProductController::class, 'getMa
 Route::get('/auth/test', [AuthController::class, 'testChunk']);
 
 // Flutterwave webhook (public)
-Route::post('/webhook/flutterwave', [WalletController::class, 'webhook']);
+// Route::post('/webhook/flutterwave', [WalletController::class, 'webhook']);
+
+ // Flutterwave webhook
+ Route::post('/webhook/flutterwave', [FlutterwaveWebhookController::class, 'handleWebhook']);
+    
 
 
 Route::get('get-products-by-link-name/{name}', [ProductController::class, 'getProductsByLinkName']);
@@ -253,12 +258,13 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Wallet
     Route::prefix('wallet')->group(function () {
-        Route::get('/', [WalletController::class, 'index']);
+        Route::get('/', action: [WalletController::class, 'index']);
+        Route::get('/balance', [WalletController::class, 'getBalance']);
         Route::get('/transactions', [WalletController::class, 'transactions']);
-        Route::post('/payment/initiate', [WalletController::class, 'initiatePayment']);
-        Route::post('/payment/verify', [WalletController::class, 'verifyPayment']);
         Route::get('/transactions/{id}', [WalletController::class, 'showTransaction']);
         Route::get('/transactions/{id}/invoice', [WalletController::class, 'generateInvoice']);
+        Route::post('/fund', [WalletController::class, 'initiatePayment']);
+        Route::post('/verify', [WalletController::class, 'verifyPayment']);
     });
     
     // Analytics

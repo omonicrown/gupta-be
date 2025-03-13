@@ -32,7 +32,7 @@ class Message extends Model
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',
         'delivery_status_time' => 'datetime',
-        'cost' => 'decimal:4',
+        'cost' => 'decimal:3.98',
     ];
 
     /**

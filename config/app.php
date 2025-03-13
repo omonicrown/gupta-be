@@ -161,6 +161,7 @@ return [
          */
         Illuminate\Auth\AuthServiceProvider::class,
         JD\Cloudder\CloudderServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -213,6 +214,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Cloudder' => JD\Cloudder\Facades\Cloudder::class,
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
     ])->toArray(),
 
 ];
