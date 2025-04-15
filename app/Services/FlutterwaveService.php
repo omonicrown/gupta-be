@@ -57,7 +57,7 @@ class FlutterwaveService
                 'amount' => $amount,
                 'currency' => $currency,
                 'payment_options' => 'card,banktransfer,ussd',
-                'redirect_url' => $redirectUrl ?? config('app.url') . '/api/wallet/verify',
+                'redirect_url' => $redirectUrl ?? 'https://www.mygupta.co/sms-wallet',
                 'customer' => [
                     'email' => $user->email,
                     'name' => $user->name,
