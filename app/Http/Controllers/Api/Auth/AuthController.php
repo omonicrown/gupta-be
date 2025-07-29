@@ -34,22 +34,17 @@ class AuthController extends Controller
 {
 
     protected $walletService;
-    
+
     public function __construct(WalletService $walletService)
     {
         $this->walletService = $walletService;
     }
-    
-
 
     /**
      * Create User
      * @param Request $request
      * @return User
      */
-
-
-
     public function createUser(Request $request)
     {
         try {
@@ -60,7 +55,8 @@ class AuthController extends Controller
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'phone_number' => 'string',
-                    'password' => 'required'
+                    'password' => 'required',
+                    'service_type' => 'required|in:whatsapp,sms,all' // NEW VALIDATION
                 ]
             );
 
@@ -74,36 +70,55 @@ class AuthController extends Controller
 
             $current = Carbon::now();
 
+            // Set service-specific limits based on selected service
+            $serviceLimits = $this->getServiceLimits($request->service_type);
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'user_ip' => $request->getClientIp(),
                 'phone_number' => $request->phone_number,
+                'service_type' => $request->service_type, // NEW FIELD
                 'sub_status' => 'trial',
                 'sub_type' => 'free',
                 'sub_start' => Carbon::today()->toDateString(),
                 'sub_end' => $current->addDays(14)->toDateString(),
-                'no_of_wlink' => '5',
+                'no_of_wlink' => $serviceLimits['wlink'],
                 'status' => 'active',
-                'no_of_rlink' => '5',
-                'no_of_mlink' => '3',
-                'no_of_mstore' => '10',
-                'no_of_malink' => '1',
+                'no_of_rlink' => $serviceLimits['rlink'],
+                'no_of_mlink' => $serviceLimits['mlink'],
+                'no_of_mstore' => $serviceLimits['mstore'],
+                'no_of_malink' => $serviceLimits['malink'],
                 'password' => Hash::make($request->password)
             ]);
 
+            // Create wallets based on service type
+            if (in_array($request->service_type, ['whatsapp', 'all'])) {
+                VendorWallet::create([
+                    'user_id' => $user->id,
+                    'total_amount' => '0',
+                    'previous_amount' => '0',
+                    'user_email' => $user->email,
+                    'user_phone_number' => $user->phone_number,
+                    'last_tnx_ref' => '0'
+                ]);
 
-            VendorWallet::create([
-                'user_id' => $user->id,
-                'total_amount' => '0',
-                'previous_amount' => '0',
-                'user_email' => $user->email,
-                'user_phone_number' => $user->phone_number,
-                'last_tnx_ref' => '0'
-            ]);
+                // Create marketplace wallet for user
+                $this->walletService->createWallet($user);
+            }
 
-            // Create wallet for user
-            $this->walletService->createWallet($user);
+            // Create SMS wallet if SMS service is selected
+            if (in_array($request->service_type, ['sms', 'all'])) {
+                // Create SMS wallet
+                \App\Models\SmsWallet::create([
+                    'user_id' => $user->id,
+                    'balance' => 0.00,
+                    'total_spent' => 0.00,
+                    'total_recharged' => 0.00,
+                    'currency' => 'NGN',
+                    'status' => 'active'
+                ]);
+            }
 
             $reveiverEmailAddress = $request->email;
             $details = [
@@ -117,6 +132,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'User Created Successfully',
                 'name' => $user->name,
+                'service_type' => $user->service_type,
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
         } catch (Exception $e) {
@@ -128,14 +144,58 @@ class AuthController extends Controller
     }
 
     /**
+     * Get service-specific limits based on selected service type
+     * @param string $serviceType
+     * @return array
+     */
+    private function getServiceLimits($serviceType)
+    {
+        switch ($serviceType) {
+            case 'whatsapp':
+                return [
+                    'wlink' => '5',
+                    'rlink' => '5',
+                    'mlink' => '3',
+                    'mstore' => '10',
+                    'malink' => '1'
+                ];
+
+            case 'sms':
+                return [
+                    'wlink' => '0',  // No WhatsApp features
+                    'rlink' => '0',  // No redirect links
+                    'mlink' => '0',  // No multi links
+                    'mstore' => '0', // No mini store
+                    'malink' => '0'  // No marketplace links
+                ];
+
+            case 'all':
+                return [
+                    'wlink' => '5',
+                    'rlink' => '5',
+                    'mlink' => '3',
+                    'mstore' => '10',
+                    'malink' => '1'
+                ];
+
+            default:
+                return [
+                    'wlink' => '0',
+                    'rlink' => '0',
+                    'mlink' => '0',
+                    'mstore' => '0',
+                    'malink' => '0'
+                ];
+        }
+    }
+
+    /**
      * verify email
      * @param Request $request
      * @return User
      */
-
     public function verifyEmail(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => 'required',
         ]);
@@ -156,9 +216,7 @@ class AuthController extends Controller
             $user->isVerified = 'true';
             $user->save();
 
-
             $reveiverEmailAddress = $user->email;
-            // return ($user->name);
             $details = [
                 'custname' => $user->name,
             ];
@@ -179,12 +237,10 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
-
-
     }
 
     /**
-     * Login The User
+     * Login The User - Updated to include service_type
      * @param Request $request
      * @return User
      */
@@ -215,23 +271,16 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            PersonalAccessToken::where('tokenable_id',$user->id)->delete();
+            PersonalAccessToken::where('tokenable_id', $user->id)->delete();
 
-          
-            
-                return response()->json([
-                    'status' => true,
-                    'message' => 'User Logged In Successfully',
-                    'name' => $user->name,
-                    'data' => $user,
-                    'token' => $user->createToken("API TOKEN")->plainTextToken
-                ], 200);
-           
-
-            // 'user_ip' => $request->getClientIp(),
-
-
-
+            return response()->json([
+                'status' => true,
+                'message' => 'User Logged In Successfully',
+                'name' => $user->name,
+                'service_type' => $user->service_type, // Include service type in response
+                'data' => $user,
+                'token' => $user->createToken("API TOKEN")->plainTextToken
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
@@ -240,22 +289,18 @@ class AuthController extends Controller
         }
     }
 
-
     public function forgot(ForgotPasswordRequest $request)
     {
-
         try {
             $user = ($query = User::query());
             $user = $user->where($query->qualifyColumn('email'), $request->input('email'))->first();
 
             if (!$user || !$user->email) {
-                return
-                response()->json([
+                return response()->json([
                     'status' => false,
                     'message' => 'No Record',
                     'data' => "Email does not match our records"
                 ], 200);
-                // $this->sendError('No Record', 'No Record Found');
             }
 
             $resetPasswordToken = str_pad(random_int(1, 999), 4, '0', STR_PAD_LEFT);
@@ -272,51 +317,35 @@ class AuthController extends Controller
                 ]);
             }
 
-            // $response = Http::post('https://api.ng.termii.com/api/sms/send', [
-            //     'api_key' => 'TLSrs8NBktDuABDpxfNYURRiBK7R15XnsHHDVwnp914eKSIJqLSYCDlIE4x1EU',
-            //     'type' => 'plain',
-            //     'to' => $user->phone_number,
-            //     'from' => 'Afriproedu',
-            //     'channel' => 'generic',
-            //     'sms' => "Hello,your OTP is " . $resetPasswordToken . ". This will expire in the next 30 minutes.",
-
-            // ]);
-
             $reveiverEmailAddress = $user->email;
             $details = [
                 'custname' => $user->name,
                 'otp' => $resetPasswordToken,
             ];
 
-
             Mail::to($reveiverEmailAddress)->send(new ResetPassword($details));
 
-
-            // dd($response);
-
-            // echo $response;
-
-            return $this->success('We sent an OTP to ' . $user->email . '', 'Password Reset Link Sent Successfully.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Password Reset Link Sent Successfully.',
+                'data' => 'We sent an OTP to ' . $user->email
+            ], 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
-
-
     }
 
     public function reset(ResetPasswordRequest $request)
     {
-
         try {
             $attribute = $request->validated();
             $user = User::where('email', $attribute['email'])->first();
-            // $user = ($query = User::query());
-            // $user = $user->where($query->qualifyColumn('email'),$request->input('email'))->first();
 
             if (!$user) {
-                return
-
-                response()->json([
+                return response()->json([
                     'status' => false,
                     'message' => 'No Record',
                     'data' => "Incorrect email address provided"
@@ -324,17 +353,13 @@ class AuthController extends Controller
             }
 
             $resetRequest = passwordReset::where('email', $user->email)->first();
-            // dd($resetRequest->token);
 
             if (!$resetRequest || $request->token != $resetRequest->token) {
-                return
-
-                response()->json([
+                return response()->json([
                     'status' => false,
                     'message' => 'An Error Occured',
                     'data' => "Incorrect 4 digit code,try again"
                 ], 200);
-                
             }
 
             $user->fill([
@@ -345,24 +370,27 @@ class AuthController extends Controller
 
             $user->tokens()->delete();
             $resetRequest->delete();
-            // $success['token'] = $user->createToken('MyAuth')->plainTextToken;
+
             $success['name'] = $user->name;
-            // $success['role'] =  $user->role;
             $success['account_id'] = $user->id;
 
-            return $this->success('Pasword Reset Successfully!', $success);
-
+            return response()->json([
+                'status' => true,
+                'message' => 'Password Reset Successfully!',
+                'data' => $success
+            ], 200);
         } catch (\Throwable $th) {
-            dd($th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
-
     }
 
     /**
      * @param Request $request
      * @return JsonResponse  
      */
-
     public function session(Request $request): JsonResponse
     {
         return response()->json(
@@ -389,7 +417,6 @@ class AuthController extends Controller
         return response()->json(
             $request->user()->load("link")
         );
-
     }
 
     public function getLinksAll(Request $request): JsonResponse

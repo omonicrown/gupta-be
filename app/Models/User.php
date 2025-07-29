@@ -20,8 +20,6 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-
-
     protected $fillable = [
         'name',
         'email',
@@ -44,7 +42,8 @@ class User extends Authenticatable
         'user_ip',
         'sub_type',
         'status',
-        'address'
+        'address',
+        'service_type', // NEW FIELD ADDED
     ];
 
     /**
@@ -68,6 +67,32 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // NEW METHODS TO CHECK SERVICE ACCESS
+    /**
+     * Check if user has access to WhatsApp services
+     */
+    public function hasWhatsAppAccess()
+    {
+        return in_array($this->service_type, ['whatsapp', 'all']);
+    }
+
+    /**
+     * Check if user has access to SMS services
+     */
+    public function hasSmsAccess()
+    {
+        return in_array($this->service_type, ['sms', 'all']);
+    }
+
+    /**
+     * Check if user has access to all services
+     */
+    public function hasAllServicesAccess()
+    {
+        return $this->service_type === 'all';
+    }
+
+    // EXISTING RELATIONSHIPS
     public function multiLink(): HasMany
     {
         return $this->hasMany(Link::class)->where('type', 'tiered');
@@ -94,7 +119,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the wallet associated with the user.
+     * Get the SMS wallet associated with the user.
      */
     public function sms_wallet()
     {
@@ -134,7 +159,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the transactions for the user.
+     * Get the SMS transactions for the user.
      */
     public function sms_transactions()
     {
