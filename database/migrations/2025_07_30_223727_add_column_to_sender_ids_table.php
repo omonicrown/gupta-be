@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sender_ids', function (Blueprint $table) {
-            $table->enum('message_type', ['transactional', 'promotional'])->after('sender_id');
-            $table->text('purpose')->after('message_type'); // What they'll be sending
+            $table->enum('message_type', ['transactional', 'promotional'])->nullable()->after('sender_id');
+            $table->text('purpose')->nullable()->after('message_type'); // What they'll be sending
             $table->enum('registration_option', ['useGupta', 'customSender', 'standard'])->nullable()->after('purpose');
             $table->text('notes')->nullable()->after('rejection_reason'); // Admin or system notes
         });
