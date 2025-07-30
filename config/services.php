@@ -60,7 +60,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'messaging' => [
-        'cost_per_segment' => env('MESSAGING_COST_PER_SEGMENT', 3.89),
+        'cost_per_segment' => env('MESSAGING_COST_PER_SEGMENT', 5.99),
         'max_segments_per_message' => env('MESSAGING_MAX_SEGMENTS', 10),
         'retry_attempts' => env('MESSAGING_RETRY_ATTEMPTS', 3),
         'retry_delay_seconds' => env('MESSAGING_RETRY_DELAY', 60),

@@ -41,7 +41,7 @@ class MessageService
         $segments = ceil($length / $segmentLength);
 
         // Get cost per segment from configuration
-        $costPerSegment = config('services.messaging.cost_per_segment', 3.89);
+        $costPerSegment = config('services.messaging.cost_per_segment', 5.99);
 
         // Calculate total cost
         return $segments * $recipientCount * $costPerSegment;
