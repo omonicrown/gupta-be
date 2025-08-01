@@ -57,8 +57,8 @@ class HollaTagsService
 
             // Prepare the payload
             $payload = [
-                'user' => $this->username,
-                'pass' => $this->password,
+                'user' => $sender->sender_id == 'gupta' ? $this->username : strtolower($sender->sender_id),
+                'pass' => $sender->sender_id == 'gupta' ? $this->password : strtolower($sender->sender_id),
                 'to' => $to,
                 'from' => $sender->sender_id,
                 'msg' => $message->content,
