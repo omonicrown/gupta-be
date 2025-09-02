@@ -52,6 +52,7 @@ Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('auth/forgot', [AuthController::class, 'forgot']);
 Route::post('auth/reset', [AuthController::class, 'reset']);
+Route::get('/test-weather', [AuthController::class, 'getWeather']);
 Route::post('/link/create-random-link', CreateRandomLinkController::class);
 Route::post('/link/create-random-url', CreateRandomUrlController::class);
 Route::post('/auth/verify-mail', [AuthController::class, 'verifyEmail']);

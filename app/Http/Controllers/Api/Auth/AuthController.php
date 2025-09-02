@@ -40,6 +40,47 @@ class AuthController extends Controller
         $this->walletService = $walletService;
     }
 
+
+
+    public function getWeather(Request $request)
+    {
+        $city = $request->query('city');
+        $apiKey = env('WEATHER_API_KEY');
+
+        $url = "https://api.weatherapi.com/v1/current.json?key={$apiKey}&q={$city}&aqi=no";
+
+        try {
+            // Fix for SSL error (ignore only in local/dev)
+            $options = [];
+            if (app()->environment('local')) {
+                $options['verify'] = false; // bypass SSL verification locally
+            }
+            $response = Http::withOptions($options)->get($url);
+
+            if ($response->failed()) {
+                return response()->json([
+                    'error' => 'weather_api_error',
+                    'message' => $response->json('error.message', 'Server failure'),
+                ], 500);
+            }
+
+            $data = $response->json();
+
+            return response()->json([
+                'city'        => $data['location']['name'],
+                'temperature' => $data['current']['temp_c'],
+                'humidity'    => $data['current']['humidity'],
+                'wind_speed'  => $data['current']['wind_kph'],
+                'condition'   => $data['current']['condition']['text'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error'   => 'unexpected_error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     /**
      * Create User
      * @param Request $request

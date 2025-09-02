@@ -60,6 +60,4 @@ class DashboardService extends BaseController
             'user_data' => $userDetails
         ], 'successful');
     }
-
-
 }
