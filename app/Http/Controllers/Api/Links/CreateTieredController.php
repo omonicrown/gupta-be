@@ -23,12 +23,12 @@ class CreateTieredController extends Controller
 
             DB::beginTransaction();
 
-            $links = Link::where('user_id', Auth::user()->id)->where('type','tiered')->count();
+            $links = Link::where('user_id', Auth::user()->id)->where('type', 'tiered')->count();
             if ($links >= Auth::user()->no_of_mlink) {
                 // return $links;
                 return response()->json([
                     'status' => false,
-                    'message' => 'Link exceeded '.Auth::user()->no_of_mlink,
+                    'message' => 'Link exceeded ' . Auth::user()->no_of_mlink,
                     'errors' => 'Unauthorized'
                 ], 500);
             }
@@ -41,14 +41,14 @@ class CreateTieredController extends Controller
             //     $uploadedFile2->move(public_path('TieredImages/'), $pics_2);
             // }
             $students = preg_split("/[,]/", $request->attach_links);
-           
+
 
             $link = Link::create([
                 'name' => str_replace(' ', '', $request->name),
                 'title' =>  $request->title,
                 'type' =>  'tiered',
-                'logo' =>  ($request->logo == 'No selected file' ? 'no image' : ($request->logo->storeOnCloudinaryAs('logo/'.Auth::user()->id, $request->logo->hashName()))->getPath()),
-                'logo_id' =>  ($request->logo == 'No selected file' ? 'no image path' : ($request->logo->storeOnCloudinaryAs('logo/'.Auth::user()->id, $request->logo->hashName()))->getPublicId()),
+                'logo' => ($request->logo == 'No selected file' ? 'no image' : ($request->logo->storeOnCloudinaryAs('logo/' . Auth::user()->id, $request->logo->hashName()))->getPath()),
+                'logo_id' => ($request->logo == 'No selected file' ? 'no image path' : ($request->logo->storeOnCloudinaryAs('logo/' . Auth::user()->id, $request->logo->hashName()))->getPublicId()),
                 'bio' => $request->bio,
                 'business_website' => $request->business_website,
                 'business_policy' => $request->business_policy,
@@ -60,7 +60,7 @@ class CreateTieredController extends Controller
                 MultiLink::create([
                     'link_id' => $link->id,
                     'attach_links' =>  $value,
-               ]);
+                ]);
             }
 
             //    MultiLink::create([

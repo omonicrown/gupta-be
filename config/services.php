@@ -66,4 +66,9 @@ return [
         'retry_delay_seconds' => env('MESSAGING_RETRY_DELAY', 60),
     ],
 
+
+    'cron' => [
+        'secret_token' => env('CRON_SECRET_TOKEN'),
+    ],
+
 ];

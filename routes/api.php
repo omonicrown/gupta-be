@@ -59,6 +59,8 @@ Route::post('/auth/verify-mail', [AuthController::class, 'verifyEmail']);
 
 //flutterwave webhook
 Route::post('/webhook/flutterwave', [PaymentController::class, 'webhook'])->name('webhook');
+// Cron endpoints (secured by token)
+Route::get('/cron/daily-sms-summary', [App\Http\Controllers\Api\CronController::class, 'dailySmsSummary']);
 
 Route::post('payment/pay-for-product', [PaymentController::class, 'makeOutsideProductPaymentWithFlutterwave']);
 Route::get('product-payment-callback', [PaymentController::class, 'paymentCallbackForProduct']);
